@@ -1,0 +1,64 @@
+{
+  "combinations": [
+    {
+      "element1": "fire",
+      "element2": "earth",
+      "result": "lava"
+    },
+    {
+      "element1": "air",
+      "element2": "water",
+      "result": "cloud"
+    },
+    {
+      "element1": "water",
+      "element2": "earth",
+      "result": "mud"
+    },
+    {
+      "element1": "water",
+      "element2": "fire",
+      "result": "steam"
+    },
+    {
+      "element1": "water",
+      "element2": "water",
+      "result": "ocean"
+    },
+    {
+      "element1": "fire",
+      "element2": "fire",
+      "result": "energy"
+    },
+    {
+      "element1": "earth",
+      "element2": "air",
+      "result": "dust"
+    },
+    {
+      "element1": "air",
+      "element2": "air",
+      "result": "pressure"
+    },
+    {
+      "element1": "dust",
+      "element2": "pressure",
+      "result": "moon"
+    },
+    {
+      "element1": "moon",
+      "element2": "energy",
+      "result": "sun"
+    },
+    {
+      "element1": "sun",
+      "element2": "moon",
+      "result": "solar-eclipse"
+    },
+    {
+      "element1": "cloud",
+      "element2": "energy",
+      "result": "thunderstorm"
+    }
+  ]
+}

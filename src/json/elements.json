@@ -1,0 +1,68 @@
+{
+  "elements": [
+    {
+      "id": "air",
+      "name": "Air"
+    },
+    {
+      "id": "earth",
+      "name": "Earth"
+    },
+    {
+      "id": "fire",
+      "name": "Fire"
+    },
+    {
+      "id": "water",
+      "name": "Water"
+    },
+    {
+      "id": "lava",
+      "name": "Lava"
+    },
+    {
+      "id": "thunderstorm",
+      "name": "Storm"
+    },
+    {
+      "id": "mud",
+      "name": "Mud"
+    },
+    {
+      "id": "steam",
+      "name": "Steam"
+    },
+    {
+      "id": "ocean",
+      "name": "Ocean"
+    },
+    {
+      "id": "dust",
+      "name": "Dust"
+    },
+    {
+      "id": "sun",
+      "name": "Sun"
+    },
+    {
+      "id": "moon",
+      "name": "Moon"
+    },
+    {
+      "id": "solar-eclipse",
+      "name": "Solar Eclipse"
+    },
+    {
+      "id": "cloud",
+      "name": "Cloud"
+    },
+    {
+      "id": "pressure",
+      "name": "Pressure"
+    },
+    {
+      "id": "energy",
+      "name": "Energy"
+    }
+  ]
+}
