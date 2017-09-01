@@ -1,11 +1,11 @@
 /**
- * @type {Element[]}
+ * @type {GameElement[]}
  * @description All elements
  */
 var elements = [];
 
 /**
- * @type {Element[]}
+ * @type {GameElement[]}
  * @description All known elements
  */
 var knownElements = [];
