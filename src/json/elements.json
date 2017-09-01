@@ -1,68 +1,52 @@
 {
   "elements": [
     {
-      "id": "air",
-      "name": "Air"
+      "id": "dot",
+      "name": "Dot"
     },
     {
-      "id": "earth",
-      "name": "Earth"
+      "id": "line",
+      "name": "Line"
     },
     {
-      "id": "fire",
-      "name": "Fire"
+      "id": "angle",
+      "name": "Angle"
     },
     {
-      "id": "water",
-      "name": "Water"
+      "id": "triangle",
+      "name": "Triangle"
     },
     {
-      "id": "lava",
-      "name": "Lava"
+      "id": "square",
+      "name": "Square"
     },
     {
-      "id": "thunderstorm",
-      "name": "Storm"
+      "id": "rectangle",
+      "name": "Rectangle"
     },
     {
-      "id": "mud",
-      "name": "Mud"
+      "id": "wall",
+      "name": "Wall"
     },
     {
-      "id": "steam",
-      "name": "Steam"
+      "id": "pentagon",
+      "name": "Pentagon"
     },
     {
-      "id": "ocean",
-      "name": "Ocean"
+      "id": "hexagon",
+      "name": "Hexagon"
     },
     {
-      "id": "dust",
-      "name": "Dust"
+      "id": "honeycomb",
+      "name": "Honeycomb"
     },
     {
-      "id": "sun",
-      "name": "Sun"
+      "id": "trapezoid",
+      "name": "Trapezoid"
     },
     {
-      "id": "moon",
-      "name": "Moon"
-    },
-    {
-      "id": "solar-eclipse",
-      "name": "Solar Eclipse"
-    },
-    {
-      "id": "cloud",
-      "name": "Cloud"
-    },
-    {
-      "id": "pressure",
-      "name": "Pressure"
-    },
-    {
-      "id": "energy",
-      "name": "Energy"
+      "id": "circle",
+      "name": "Circle"
     }
   ]
 }
