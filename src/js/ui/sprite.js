@@ -1,11 +1,11 @@
 /**
- *
- * @param x
- * @param y
- * @param width
- * @param height
- * @param src
- * @param data
+ * Creates a sprite.
+ * @param x {number} The top-left coordinate.
+ * @param y {number} The top-right coordinate.
+ * @param width {number} The pixel width.
+ * @param height {number} The pixel height.
+ * @param src {string} The source for the image.
+ * @param data {*} Any additional data to be stored.
  * @constructor
  */
 function Sprite(x, y, width, height, src, data) {
