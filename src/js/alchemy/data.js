@@ -53,7 +53,9 @@ function combine(element1, element2) {
     console.log(forwardMatch);
     console.log(backwardMatch);
     if (forwardMatch || backwardMatch) {
-      knownElements.push(combination.result);
+      if (knownElements.indexOf(combination.result) === -1) {
+        knownElements.push(combination.result);
+      }
       return combination.result;
     }
   }
