@@ -1,64 +1,64 @@
 {
   "combinations": [
     {
-      "element1": "fire",
-      "element2": "earth",
-      "result": "lava"
+      "element1": "dot",
+      "element2": "dot",
+      "result": "line"
     },
     {
-      "element1": "air",
-      "element2": "water",
-      "result": "cloud"
+      "element1": "dot",
+      "element2": "line",
+      "result": "circle"
     },
     {
-      "element1": "water",
-      "element2": "earth",
-      "result": "mud"
+      "element1": "line",
+      "element2": "line",
+      "result": "angle"
     },
     {
-      "element1": "water",
-      "element2": "fire",
-      "result": "steam"
+      "element1": "angle",
+      "element2": "line",
+      "result": "triangle"
     },
     {
-      "element1": "water",
-      "element2": "water",
-      "result": "ocean"
+      "element1": "angle",
+      "element2": "angle",
+      "result": "square"
     },
     {
-      "element1": "fire",
-      "element2": "fire",
-      "result": "energy"
+      "element1": "square",
+      "element2": "square",
+      "result": "rectangle"
     },
     {
-      "element1": "earth",
-      "element2": "air",
-      "result": "dust"
+      "element1": "triangle",
+      "element2": "angle",
+      "result": "square"
     },
     {
-      "element1": "air",
-      "element2": "air",
-      "result": "pressure"
+      "element1": "rectangle",
+      "element2": "rectangle",
+      "result": "wall"
     },
     {
-      "element1": "dust",
-      "element2": "pressure",
-      "result": "moon"
+      "element1": "square",
+      "element2": "angle",
+      "result": "pentagon"
     },
     {
-      "element1": "moon",
-      "element2": "energy",
-      "result": "sun"
+      "element1": "pentagon",
+      "element2": "angle",
+      "result": "hexagon"
     },
     {
-      "element1": "sun",
-      "element2": "moon",
-      "result": "solar-eclipse"
+      "element1": "square",
+      "element2": "triangle",
+      "result": "trapezoid"
     },
     {
-      "element1": "cloud",
-      "element2": "energy",
-      "result": "thunderstorm"
+      "element1": "hexagon",
+      "element2": "hexagon",
+      "result": "honeycomb"
     }
   ]
 }
