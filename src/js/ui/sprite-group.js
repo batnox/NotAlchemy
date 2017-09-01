@@ -55,8 +55,6 @@ function SpriteGroup() {
    */
   this.getSprite = function(x, y) {
     'use strict';
-    console.log('Get Sprite...');
-    console.log(JSON.stringify(this.sprites));
     for (var i = 0; i < this.sprites.length; i++) {
       var sprite = this.sprites[i];
       if (sprite.contains(x, y)) {
@@ -73,15 +71,9 @@ function SpriteGroup() {
    */
   this.getOverlap = function(sprite) {
     'use strict';
-    console.log('Get Overlap...');
-    console.log(JSON.stringify(this.sprites));
     for (var i = 0; i < this.sprites.length; i++) {
       var groupSprite = this.sprites[i];
-      console.log('-----------------------');
-      console.log(JSON.stringify(groupSprite));
-      console.log(JSON.stringify(sprite));
       if (groupSprite.overlaps(sprite)) {
-        console.log('Overlap!');
         return {
           sprite: groupSprite,
           index: i

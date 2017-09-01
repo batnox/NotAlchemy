@@ -23,7 +23,6 @@ var combinations = [];
  */
 function getElement(id) {
   'use strict';
-  console.log(JSON.stringify(elements));
   for (var i = 0; i < elements.length; i++) {
     var element = elements[i];
     if (element.id === id) {
@@ -41,17 +40,13 @@ function getElement(id) {
  */
 function combine(element1, element2) {
   'use strict';
-  console.log(JSON.stringify(combinations));
   for (var i = 0; i < combinations.length; i++) {
     var combination = combinations[i];
     var forwardMatch = element1 === combination.element1
       && element2 === combination.element2;
     var backwardMatch = element2 === combination.element1
       && element1 === combination.element2;
-    console.log(element1.id + ',' + element2.id);
-    console.log(combination.element1.id + ',' + combination.element2.id);
-    console.log(forwardMatch);
-    console.log(backwardMatch);
+
     if (forwardMatch || backwardMatch) {
       if (knownElements.indexOf(combination.result) === -1) {
         knownElements.push(combination.result);
@@ -80,7 +75,6 @@ function loadContent() {
  */
 function loadElements() {
   'use strict';
-  console.log('Loading elements...');
   return $.getJSON('json/elements.json', function(data) {
     data.elements.forEach(function(element) {
       elements.push(element);
@@ -95,7 +89,6 @@ function loadElements() {
  */
 function loadImages() {
   'use strict';
-  console.log('Loading images...');
   return $.getJSON('json/alchemy-icons.json')
     .then(function(data) {
       elements.forEach(function(element) {
@@ -110,7 +103,6 @@ function loadImages() {
  */
 function loadKnownElements() {
   'use strict';
-  console.log('Loading known elements...');
   return $.getJSON('json/known-elements.json', function(data) {
     data.elements.forEach(function(elementID) {
       knownElements.push(getElement(elementID));
@@ -124,7 +116,6 @@ function loadKnownElements() {
  */
 function loadCombinations() {
   'use strict';
-  console.log('Loading combinations...');
   return $.getJSON('json/combinations.json', function(data) {
     data.combinations.forEach(function(combination) {
       var e1 = getElement(combination.element1);

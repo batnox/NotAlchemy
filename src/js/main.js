@@ -107,17 +107,14 @@ $(function() {
     'use strict';
     var displaySprite = displaySprites.getSprite(x, y);
     if (displaySprite) {
-      console.log('Display Sprite: ' + JSON.stringify(displaySprite));
       return displaySprite;
     }
 
     var droppedSprite = droppedSprites.getSprite(x, y);
     if (droppedSprite) {
-      console.log('Dropped Sprite: ' + JSON.stringify(droppedSprite));
       return droppedSprite;
     }
 
-    console.log('R - Null');
     return null;
   }
 
@@ -128,10 +125,8 @@ $(function() {
   function onMouseDown(event) {
     'use strict';
     var pos = getMousePosition(event);
-    console.log('Click (' + pos.x + ', ' + pos.y + ')');
     heldSprite = getSprite(pos.x, pos.y);
     droppedSprites.removeSprite(heldSprite);
-    console.log('HS: ' + heldSprite);
   }
 
   /**
@@ -144,31 +139,22 @@ $(function() {
   function onMouseUp(event) {
     'use strict';
     var pos = getMousePosition(event);
-    console.log('*** MOUSE UP – Click (' + pos.x + ', ' + pos.y + ')');
 
     if (!heldSprite) {
-      console.log('*** No Held Sprite ***');
       return;
     }
 
     var displayOverlap = displaySprites.getOverlap(heldSprite);
     if (displayOverlap) {
-      console.log('*** Display Overlap ***');
       heldSprite = null;
       return;
     }
 
     var droppedOverlap = droppedSprites.getOverlap(heldSprite);
     if (droppedOverlap) {
-      console.log('*** Dropped Overlap ***');
-      console.log(JSON.stringify(droppedOverlap));
-
       var heldElement = getElement(heldSprite.data);
       var droppedElement = getElement(droppedOverlap.sprite.data);
-      console.log(heldElement);
-      console.log(droppedElement);
       var result = combine(heldElement, droppedElement);
-      console.log('Result: ' + JSON.stringify(result));
 
       if (result) {
         heldSprite = null;
@@ -186,7 +172,6 @@ $(function() {
       }
     }
 
-    console.log('*** No Restore / Combine ***');
     droppedSprites.add(heldSprite);
     heldSprite = null;
   }
@@ -219,10 +204,8 @@ $(function() {
   addEventListener('mousemove', onMouseMove);
 
   // Loads content and then sets the game loop
-  console.log('Loading...');
   loadContent()
     .then(function() {
-      console.log('Loaded.');
       setInterval(function() {
         update();
         draw();
