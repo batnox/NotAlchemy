@@ -1,4 +1,7 @@
 $(function() {
+  var IMAGE_SIZE = 80;
+  var TICK_PER_SECOND = 30;
+
   var canvas = document.getElementById('alchemy-canvas');
 
   var displaySprites = new SpriteGroup();
@@ -10,7 +13,6 @@ $(function() {
 
   var mouse = null;
 
-  var TICK_PER_SECOND = 30;
 
   function update() {
     'use strict';
@@ -18,19 +20,19 @@ $(function() {
     var y = 0;
     displaySprites = new SpriteGroup();
     knownElements.forEach(function(element) {
-      var sprite = new Sprite(x, y, 80, 80, element.imageSrc, element.id);
+      var sprite = new Sprite(x, y, IMAGE_SIZE, IMAGE_SIZE, element.imageSrc, element.id);
       displaySprites.add(sprite);
-      x += 80;
+      x += IMAGE_SIZE;
 
-      if (x + 80 > canvas.width) {
+      if (x + IMAGE_SIZE > canvas.width) {
         x = 0;
-        y += 80;
+        y += IMAGE_SIZE;
       }
     });
 
     if (heldSprite && mouse) {
-      heldSprite.x = mouse.x - heldSprite.image.width / 2;
-      heldSprite.y = mouse.y - heldSprite.image.height / 2;
+      heldSprite.x = mouse.x - heldSprite.width / 2;
+      heldSprite.y = mouse.y - heldSprite.height / 2;
     }
   }
 
