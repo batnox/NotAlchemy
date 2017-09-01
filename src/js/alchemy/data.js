@@ -1,20 +1,26 @@
 /**
+ * All possible elements.
  * @type {GameElement[]}
- * @description All elements
  */
 var elements = [];
 
 /**
+ * All known elements.
  * @type {GameElement[]}
- * @description All known elements
  */
 var knownElements = [];
 
 /**
+ * All combinations of elements.
  * @type {Combination[]}
  */
 var combinations = [];
 
+/**
+ * Returns the element with the given ID.
+ * @param id {string} The ID to match.
+ * @returns {GameElement} The corresponding element or <code>null</code> if none match.
+ */
 function getElement(id) {
   'use strict';
   console.log(JSON.stringify(elements));
@@ -27,6 +33,12 @@ function getElement(id) {
   return null;
 }
 
+/**
+ * Combines the two given elements and returns the resulting element. Order is ignored.
+ * @param element1 {GameElement} The first element in the combination.
+ * @param element2 {GameElement} The second element in the combination.
+ * @returns {GameElement} The resulting element or <code>null</code> if the two elements cannot be combined.
+ */
 function combine(element1, element2) {
   'use strict';
   console.log(JSON.stringify(combinations));
@@ -48,6 +60,10 @@ function combine(element1, element2) {
   return null;
 }
 
+/**
+ * Loads all content.
+ * @returns {*} A promise.
+ */
 function loadContent() {
   'use strict';
   return loadElements()
@@ -56,6 +72,25 @@ function loadContent() {
     .then(loadCombinations);
 }
 
+/**
+ * Loads all elements and adds them to the array.
+ * @returns {*} A promise.
+ */
+function loadElements() {
+  'use strict';
+  console.log('Loading elements...');
+  return $.getJSON('json/elements.json', function(data) {
+    data.elements.forEach(function(element) {
+      elements.push(element);
+    });
+  });
+}
+
+/**
+ * Loads all images. Goes through each element and gets the image
+ * associated with its ID.
+ * @returns {*} A promise.
+ */
 function loadImages() {
   'use strict';
   console.log('Loading images...');
@@ -67,16 +102,10 @@ function loadImages() {
     });
 }
 
-function loadElements() {
-  'use strict';
-  console.log('Loading elements...');
-  return $.getJSON('json/elements.json', function(data) {
-    data.elements.forEach(function(element) {
-      elements.push(element);
-    });
-  });
-}
-
+/**
+ * Loads all known elements and adds them to the array.
+ * @returns {*} A promise.
+ */
 function loadKnownElements() {
   'use strict';
   console.log('Loading known elements...');
@@ -87,6 +116,10 @@ function loadKnownElements() {
   });
 }
 
+/**
+ * Loads all combinations, converts IDs to the element objects, and adds the combinations to the array.
+ * @returns {*} A promise.
+ */
 function loadCombinations() {
   'use strict';
   console.log('Loading combinations...');
