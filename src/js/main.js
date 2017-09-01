@@ -1,5 +1,13 @@
 $(function() {
+  /**
+   * @description The pixel size of the displayed sprites.
+   * @type {number}
+   */
   var IMAGE_SIZE = 80;
+  /**
+   * @description The number of game loops every second.
+   * @type {number}
+   */
   var TICK_PER_SECOND = 30;
 
   var canvas = document.getElementById('alchemy-canvas');
