@@ -1,11 +1,13 @@
 /**
- * Creates a combination.
- * @param element1 {GameElement} The first element in the combination
- * @param element2 {GameElement} The second element in the combination
- * @param result {GameElement} The resulting element
- * @constructor
+ * A combination of two elements into a resulting element.
  */
 class Combination {
+  /**
+   * Creates a combination.
+   * @param element1 {GameElement} The first element in the combination
+   * @param element2 {GameElement} The second element in the combination
+   * @param result {GameElement} The resulting element
+   */
   constructor(element1, element2, result) {
     this.element1 = element1;
     this.element2 = element2;

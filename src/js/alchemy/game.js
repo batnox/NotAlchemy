@@ -1,4 +1,10 @@
+/**
+ * This contains all of the information needed for the game.
+ */
 class Game {
+  /**
+   * Creates the game instance.
+   */
   constructor() {
     /**
      * The pixel size of the displayed sprites.

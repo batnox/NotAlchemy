@@ -1,4 +1,10 @@
+/**
+ * This manages information on known elements, unknown elements, and their combinations.
+ */
 class Alchemy {
+  /**
+   * Creates an instance of alchemy information.
+   */
   constructor() {
     /**
      * All possible elements.
