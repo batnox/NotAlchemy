@@ -5,8 +5,10 @@
  * @param result {GameElement} The resulting element
  * @constructor
  */
-function Combination(element1, element2, result) {
-  this.element1 = element1;
-  this.element2 = element2;
-  this.result = result;
+class Combination {
+  constructor(element1, element2, result) {
+    this.element1 = element1;
+    this.element2 = element2;
+    this.result = result;
+  }
 }
