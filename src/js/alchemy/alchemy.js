@@ -40,6 +40,15 @@ class Alchemy {
     return null;
   }
 
+  isKnown(id) {
+    for (let element of this.knownElements) {
+      if (id === element.id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   /**
    * Combines the two given elements and returns the resulting element. Order is ignored.
    * @param element1 {GameElement} The first element in the combination.
@@ -47,18 +56,22 @@ class Alchemy {
    * @returns {GameElement} The resulting element or <code>null</code> if the two elements cannot be combined.
    */
   combine(element1, element2) {
+    console.log('E1: ' + JSON.stringify(element1));
+    console.log('E2: ' + JSON.stringify(element2));
     for (let i = 0; i < this.combinations.length; i++) {
       let combination = this.combinations[i];
-      let forwardMatch = element1 === combination.element1
-        && element2 === combination.element2;
-      let backwardMatch = element2 === combination.element1
-        && element1 === combination.element2;
+      let forwardMatch = element1.id === combination.element1
+        && element2.id === combination.element2;
+      let backwardMatch = element2.id === combination.element1
+        && element1.id === combination.element2;
 
+      console.log(forwardMatch + '/' + backwardMatch);
       if (forwardMatch || backwardMatch) {
-        if (this.knownElements.indexOf(combination.result) === -1) {
-          this.knownElements.push(combination.result);
+        let res = this.getElement(combination.result);
+        if (!this.isKnown(combination.result)) {
+          this.knownElements.push(Object.assign(Object.create(Object.getPrototypeOf(res)), res));
         }
-        return combination.result;
+        return Object.assign(Object.create(Object.getPrototypeOf(res)), res);
       }
     }
     return null;
@@ -82,7 +95,7 @@ class Alchemy {
   loadElements() {
     return $.getJSON('json/elements.json').then((data) => {
       data.elements.forEach((element) => {
-        this.elements.push(element);
+        this.elements.push(new GameElement(element.id, element.name));
       });
     });
   }
@@ -94,9 +107,9 @@ class Alchemy {
    */
   loadImages() {
     return $.getJSON('json/alchemy-icons.json').then((data) => {
-      this.elements.forEach((element) => {
-        element.imageSrc = 'data:image/png;base64,' + data[element.id];
-      });
+      for (let element of this.elements) {
+        element.setImage('data:image/png;base64,' + data[element.id]);
+      }
     });
   }
 
@@ -106,9 +119,9 @@ class Alchemy {
    */
   loadKnownElements() {
     return $.getJSON('json/known-elements.json').then((data) => {
-      data.elements.forEach((elementID) => {
+      for (let elementID of data.elements) {
         this.knownElements.push(this.getElement(elementID));
-      });
+      }
     });
   }
 
@@ -118,12 +131,15 @@ class Alchemy {
    */
   loadCombinations() {
     return $.getJSON('json/combinations.json').then((data) => {
-      data.combinations.forEach((combination) => {
-        let e1 = this.getElement(combination.element1);
-        let e2 = this.getElement(combination.element2);
-        let result = this.getElement(combination.result);
-        this.combinations.push(new Combination(e1, e2, result));
-      });
+      for (let combination of data.combinations) {
+        this.combinations.push(
+          new Combination(
+            combination.element1,
+            combination.element2,
+            combination.result
+          )
+        );
+      }
     });
   }
 }

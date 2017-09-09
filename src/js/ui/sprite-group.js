@@ -69,7 +69,7 @@ class SpriteGroup {
   getOverlap(sprite) {
     for (let i = 0; i < this.sprites.length; i++) {
       let groupSprite = this.sprites[i];
-      if (groupSprite.overlaps(sprite)) {
+      if (groupSprite.isCollision(sprite)) {
         return {
           sprite: groupSprite,
           index: i

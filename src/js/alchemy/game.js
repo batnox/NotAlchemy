@@ -76,23 +76,23 @@ class Game {
     let x = 0;
     let y = 0;
     this.displaySprites = new SpriteGroup();
-    this.alchemy.knownElements.forEach((element) => {
-      let sprite = new Sprite(x, y, this.IMAGE_SIZE, this.IMAGE_SIZE,
-        element.imageSrc, element.id);
-      this.displaySprites.add(sprite);
+    for (let element of this.alchemy.knownElements) {
+      element.setPosition(x, y);
+      element.setSize(this.IMAGE_SIZE, this.IMAGE_SIZE);
+      this.displaySprites.add(element);
       x += this.IMAGE_SIZE;
 
       if (x + this.IMAGE_SIZE > this.canvas.width) {
         x = 0;
         y += this.IMAGE_SIZE;
       }
-    });
+    }
 
     if (this.heldSprite && this.mouse) {
-      this.heldSprite.x = this.mouse.x -
-        this.heldSprite.width / 2;
-      this.heldSprite.y = this.mouse.y -
-        this.heldSprite.height / 2;
+      this.heldSprite.setPosition(
+        this.mouse.x - this.heldSprite.width / 2,
+        this.mouse.y - this.heldSprite.height / 2
+      );
     }
   }
 
@@ -109,48 +109,33 @@ class Game {
     ctx.strokeStyle = '#ffffff';
     ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
     this.displaySprites.sprites.forEach((sprite) => {
-      ctx.drawImage(sprite.image, sprite.x, sprite.y, sprite.width,
-        sprite.height);
+      sprite.draw(ctx);
       ctx.strokeRect(sprite.x, sprite.y, sprite.width, sprite.height);
     });
     this.droppedSprites.sprites.forEach((sprite) => {
-      ctx.drawImage(sprite.image, sprite.x, sprite.y, sprite.width,
-        sprite.height);
+      sprite.draw(ctx);
     });
     if (this.heldSprite) {
-      ctx.drawImage(this.heldSprite.image, this.heldSprite.x, this.heldSprite.y,
-        this.heldSprite.width, this.heldSprite.height);
+      this.heldSprite.draw(ctx);
     }
-  }
-
-  /**
-   * Returns the sprite located at the given coordinates.
-   * @param x {number} The x-coordinate.
-   * @param y {number} The y-coordinate.
-   * @returns {Sprite} The sprite at the given coordinates or <code>null<code> if none is found.
-   */
-  getSprite(x, y) {
-    let displaySprite = this.displaySprites.getSprite(x, y);
-    if (displaySprite) {
-      return displaySprite;
-    }
-
-    let droppedSprite = this.droppedSprites.getSprite(x, y);
-    if (droppedSprite) {
-      return droppedSprite;
-    }
-
-    return null;
   }
 
   /**
    * On the mouse being pressed, selects the element grabbed (if there is one).
-   * @param event {Event} The mouse event.
    */
-  onMouseDown(event) {
-    let pos = this.getMousePosition(event);
-    this.heldSprite = this.getSprite(pos.x, pos.y);
-    this.droppedSprites.removeSprite(this.heldSprite);
+  onMouseDown() {
+    let display = this.displaySprites.getSprite(this.mouse.x, this.mouse.y);
+    if (display) {
+      console.log('Display: ' + JSON.stringify(display));
+      this.heldSprite = Object.assign(Object.create(Object.getPrototypeOf(display)), display);
+      console.log('Held: ' + JSON.stringify(this.heldSprite));
+    } else {
+      let dropped = this.droppedSprites.getSprite(this.mouse.x, this.mouse.y);
+      if (dropped) {
+        this.heldSprite = dropped;
+        this.droppedSprites.removeSprite(dropped);
+      }
+    }
   }
 
   /**
@@ -158,40 +143,34 @@ class Game {
    * checks if the dropped element overlaps any other elements. If it overlaps one of
    * the display sprites, it is removed from the canvas. If it overlaps one of the
    * other dropped sprites, it attempts to combine the two elements.
-   * @param event {Event} The mouse event.
    */
-  onMouseUp(event) {
+  onMouseUp() {
     'use strict';
-    let pos = this.getMousePosition(event);
-
     if (!this.heldSprite) {
       return;
     }
 
     let displayOverlap = this.displaySprites.getOverlap(this.heldSprite);
     if (displayOverlap) {
+      console.log('Display Overlap');
       this.heldSprite = null;
       return;
     }
 
     let droppedOverlap = this.droppedSprites.getOverlap(this.heldSprite);
     if (droppedOverlap) {
-      let heldElement = this.alchemy.getElement(this.heldSprite.data);
-      let droppedElement = this.alchemy.getElement(droppedOverlap.sprite.data);
-      let result = this.alchemy.combine(heldElement, droppedElement);
+      console.log('Held: ' + JSON.stringify(this.heldSprite));
+      console.log('Dropped: ' + JSON.stringify(droppedOverlap.sprite));
+      let result = this.alchemy.combine(this.heldSprite, droppedOverlap.sprite);
 
       if (result) {
         this.heldSprite = null;
-        let resultSprite = new Sprite(
-          droppedOverlap.sprite.x,
-          droppedOverlap.sprite.y,
-          droppedOverlap.sprite.width,
-          droppedOverlap.sprite.height,
-          result.imageSrc,
-          result.id
-        );
+        result.setPosition(droppedOverlap.sprite.x, droppedOverlap.sprite.y);
+        result.setSize(droppedOverlap.sprite.width,
+          droppedOverlap.sprite.height);
         this.droppedSprites.removeIndex(droppedOverlap.index);
-        this.droppedSprites.add(resultSprite);
+        this.droppedSprites.add(result);
+        console.log('Result: ' + JSON.stringify(result));
         return;
       }
     }
@@ -201,22 +180,12 @@ class Game {
   }
 
   /**
-   * On the mouse being moved, the mouse position is updated.
+   * On the mouse being moved, the mouse position is updated. Converts the coordinates in the
+   * mouse event to the coordinates on the canvas.
    * @param event {Event} The mouse event.
    */
   onMouseMove(event) {
-    this.mouse = this.getMousePosition(event);
-  }
-
-  /**
-   * Converts the coordinates in the mouse event to the coordinates on the canvas.
-   * @param event {Event} The mouse event
-   * @returns {{x: number, y: number}}
-   */
-  getMousePosition(event) {
-    return {
-      x: event.x - this.canvas.getBoundingClientRect().left,
-      y: event.y - this.canvas.getBoundingClientRect().top
-    };
+    this.mouse.x = event.x - this.canvas.getBoundingClientRect().left;
+    this.mouse.y = event.y - this.canvas.getBoundingClientRect().top;
   }
 }

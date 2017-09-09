@@ -1,24 +1,26 @@
 class Sprite {
   /**
    * Creates a sprite.
-   * @param x {number} The top-left coordinate.
-   * @param y {number} The top-right coordinate.
-   * @param width {number} The pixel width.
-   * @param height {number} The pixel height.
-   * @param src {string} The source for the image.
-   * @param data {*} Any additional data to be stored.
    * @constructor
    */
-  constructor(x, y, width, height, src, data) {
+  constructor() {
+    this.image = new Image();
+  }
+
+  setPosition(x, y) {
     this.x = x;
     this.y = y;
+  }
+
+  setSize(width, height) {
     this.width = width;
     this.height = height;
-    this.image = new Image();
     this.image.width = width;
     this.image.height = height;
+  }
+
+  setImage(src) {
     this.image.src = src;
-    this.data = data;
   }
 
   contains(x, y) {
@@ -26,10 +28,22 @@ class Sprite {
       && this.y <= y && y < this.y + this.height;
   }
 
-  overlaps(sprite) {
+  isCollision(sprite) {
     return this.x < sprite.x + sprite.width
       && this.x + this.width > sprite.x
       && this.y < sprite.y + sprite.height
       && this.y + this.height > sprite.y;
+  }
+
+  /**
+   *
+   * @param context {CanvasRenderingContext2D}
+   */
+  draw(context) {
+    if (this.image.src) {
+      context.drawImage(this.image, this.x, this.y, this.width, this.height);
+    } else {
+      console.log('No source.');
+    }
   }
 }
