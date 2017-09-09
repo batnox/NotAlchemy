@@ -126,9 +126,7 @@ class Game {
   onMouseDown() {
     let display = this.displaySprites.getSprite(this.mouse.x, this.mouse.y);
     if (display) {
-      console.log('Display: ' + JSON.stringify(display));
       this.heldSprite = Object.assign(Object.create(Object.getPrototypeOf(display)), display);
-      console.log('Held: ' + JSON.stringify(this.heldSprite));
     } else {
       let dropped = this.droppedSprites.getSprite(this.mouse.x, this.mouse.y);
       if (dropped) {
@@ -152,15 +150,12 @@ class Game {
 
     let displayOverlap = this.displaySprites.getOverlap(this.heldSprite);
     if (displayOverlap) {
-      console.log('Display Overlap');
       this.heldSprite = null;
       return;
     }
 
     let droppedOverlap = this.droppedSprites.getOverlap(this.heldSprite);
     if (droppedOverlap) {
-      console.log('Held: ' + JSON.stringify(this.heldSprite));
-      console.log('Dropped: ' + JSON.stringify(droppedOverlap.sprite));
       let result = this.alchemy.combine(this.heldSprite, droppedOverlap.sprite);
 
       if (result) {
@@ -170,7 +165,6 @@ class Game {
           droppedOverlap.sprite.height);
         this.droppedSprites.removeIndex(droppedOverlap.index);
         this.droppedSprites.add(result);
-        console.log('Result: ' + JSON.stringify(result));
         return;
       }
     }

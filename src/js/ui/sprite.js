@@ -42,8 +42,6 @@ class Sprite {
   draw(context) {
     if (this.image.src) {
       context.drawImage(this.image, this.x, this.y, this.width, this.height);
-    } else {
-      console.log('No source.');
     }
   }
 }

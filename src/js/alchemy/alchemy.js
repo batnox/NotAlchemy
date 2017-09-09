@@ -56,8 +56,6 @@ class Alchemy {
    * @returns {GameElement} The resulting element or <code>null</code> if the two elements cannot be combined.
    */
   combine(element1, element2) {
-    console.log('E1: ' + JSON.stringify(element1));
-    console.log('E2: ' + JSON.stringify(element2));
     for (let i = 0; i < this.combinations.length; i++) {
       let combination = this.combinations[i];
       let forwardMatch = element1.id === combination.element1
@@ -65,7 +63,6 @@ class Alchemy {
       let backwardMatch = element2.id === combination.element1
         && element1.id === combination.element2;
 
-      console.log(forwardMatch + '/' + backwardMatch);
       if (forwardMatch || backwardMatch) {
         let res = this.getElement(combination.result);
         if (!this.isKnown(combination.result)) {
