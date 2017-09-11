@@ -1,4 +1,4 @@
-let game;
+let alchemy;
 $(function() {
-  game = new Game();
+  alchemy = new Alchemy();
 });
