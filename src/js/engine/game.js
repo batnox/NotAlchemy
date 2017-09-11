@@ -19,6 +19,7 @@ class Game {
     this.mouse = {};
 
     this.sprites = [];
+    this.content = [];
 
     addEventListener('mousemove', event => this.onMouseMove(event));
   }
@@ -46,12 +47,38 @@ class Game {
     }
   }
 
+  addContent(name, path) {
+    for (let content of this.content) {
+      if (content.name === name) {
+        throw Error(`Name \'${name}\' is taken by \'${content.path}\'.`);
+      }
+    }
+    this.content.push({
+      name: name,
+      path: path
+    });
+  }
+
   /**
    * Loads all content.
    * @returns {*} A promise.
    */
   loadContent() {
-
+    return new Promise((resolve, reject) => {
+      let loaded = {};
+      let running = 0;
+      for (let content of this.content) {
+        running++;
+        $.getJSON(content.path).then(data => {
+          running--;
+          console.log(content.name + ': ' + JSON.stringify(data));
+          loaded[content.name] = data;
+          if (running === 0) {
+            resolve(loaded);
+          }
+        });
+      }
+    });
   }
 
   /**
