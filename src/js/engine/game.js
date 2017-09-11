@@ -71,7 +71,6 @@ class Game {
         running++;
         $.getJSON(content.path).then(data => {
           running--;
-          console.log(content.name + ': ' + JSON.stringify(data));
           loaded[content.name] = data;
           if (running === 0) {
             resolve(loaded);
