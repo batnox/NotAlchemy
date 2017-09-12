@@ -36,11 +36,11 @@ class Game {
   }
 
   draw() {
-    this.canvas.width = $(window).width();
-    this.canvas.height = $(window).height();
-    this.canvas.style.width = $(window).width();
-    this.canvas.style.height = $(window).height();
     let ctx = this.canvas.getContext('2d');
+    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    ctx.strokeStyle = '#fff';
+    ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
 
     for (let sprite of this.sprites) {
       sprite.draw(ctx);
