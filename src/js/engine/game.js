@@ -64,6 +64,14 @@ class Game {
    * @returns {*} A promise.
    */
   loadContent() {
+    $.ajaxSetup({
+      beforeSend: (xhr) => {
+        if (xhr.overrideMimeType) {
+          xhr.overrideMimeType('application/json');
+        }
+      }
+    });
+
     return new Promise((resolve, reject) => {
       let loaded = {};
       let running = 0;
