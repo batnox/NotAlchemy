@@ -5,6 +5,13 @@ class Sprite {
    */
   constructor() {
     this.image = new Image();
+    this.x = 0;
+    this.y = 0;
+    this.originX = 0;
+    this.originY = 0;
+    this.width = 0;
+    this.height = 0;
+    this.rotation = 0;
   }
 
   setPosition(x, y) {
@@ -12,11 +19,20 @@ class Sprite {
     this.y = y;
   }
 
+  setOrigin(originX, originY) {
+    this.originX = originX;
+    this.originY = originY;
+  }
+
   setSize(width, height) {
     this.width = width;
     this.height = height;
     this.image.width = width;
     this.image.height = height;
+  }
+
+  setRotation(rotation) {
+    this.rotation = rotation;
   }
 
   setImage(src) {
@@ -36,12 +52,16 @@ class Sprite {
   }
 
   /**
-   *
    * @param context {CanvasRenderingContext2D}
    */
   draw(context) {
     if (this.image.src) {
-      context.drawImage(this.image, this.x, this.y, this.width, this.height);
+      context.save();
+      context.translate(this.x, this.y);
+      context.rotate(this.rotation * Math.PI / 180);
+      context.translate(-this.originX, -this.originY);
+      context.drawImage(this.image, 0, 0, this.width, this.height);
+      context.restore();
     }
   }
 }
