@@ -153,6 +153,12 @@ class Alchemy extends Game {
     super.update();
     let x = 0;
     let y = 0;
+
+    this.canvas.width = $(window).width();
+    this.canvas.style.width = $(window).width();
+    this.canvas.height = $(window).height();
+    this.canvas.style.height = $(window).height();
+
     this.displaySprites = new SpriteGroup();
     for (let element of this.knownElements) {
       element.setPosition(x, y);
@@ -173,15 +179,15 @@ class Alchemy extends Game {
       );
     }
 
-    this.sprites = [];
+    this.spriteLayer.clear();
     for (let sprite of this.droppedSprites.sprites || []) {
-      this.sprites.push(sprite);
+      this.spriteLayer.addDrawable(sprite);
     }
     for (let sprite of this.displaySprites.sprites || []) {
-      this.sprites.push(sprite);
+      this.spriteLayer.addDrawable(sprite);
     }
     if (this.heldSprite) {
-      this.sprites.push(this.heldSprite);
+      this.spriteLayer.addDrawable(this.heldSprite);
     }
   }
 
