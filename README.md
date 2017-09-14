@@ -1,5 +1,5 @@
-# Not Alchemy
-Game #1 for CSC481.
+# CSC 481 Game Engine
+This repository includes the game engine created for CSC 481 and eventually will hold four games built using that engine. Currently there is a game based on Alchemy and another based on Snake.
 
 ## Setup
-Clone the repository and open `src/index.html` in your browser.
+Clone the repository and open `src/[GAME]/web/index.html` in your browser. If using Chrome, you may have to allow cross origin requests for file as this is usually disabled.
