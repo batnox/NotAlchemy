@@ -19,13 +19,22 @@ class Game {
     this.mouse = {};
 
     /**
-     *
+     * All layers to be drawn, starting with index 0. This results in the highest
+     * indexed layer being drawn last, and therefore on top of all other layers.
      * @type {Layer[]}
      */
     this.layers = [];
 
+    /**
+     * The sprite layer for in-game objects.
+     * @type {Layer}
+     */
     this.spriteLayer = new Layer();
     this.layers[0] = this.spriteLayer;
+    /**
+     * The overlay layer for HUD objects.
+     * @type {Layer}
+     */
     this.overlayLayer = new Layer();
     this.layers[1] = this.overlayLayer;
 
