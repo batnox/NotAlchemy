@@ -7,10 +7,28 @@ class Snake {
     this.snakeHead.setSize(segmentSize, segmentSize);
     this.snakeTail = this.snakeHead;
     this.direction = Direction.RIGHT;
+    this.alive = true;
+  }
+
+  isBodyCollision() {
+    let current = this.snakeHead;
+    while (current.nextCell) {
+      current = current.nextCell;
+      if (current.isCollision(this.snakeHead)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   setPosition(x, y) {
     this.snakeHead.setPosition(x, y);
+  }
+
+  update() {
+    if (this.alive) {
+      this.moveSnake();
+    }
   }
 
   //moves snake

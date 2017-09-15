@@ -34,7 +34,7 @@ class SnakeGame extends Game {
     this.loadContent()
       .then(() => {
         this.buildMap();
-        this.worm.setPosition(50, 50);
+        this.worm.setPosition(60, 60);
         this.start();
       });
   }
@@ -157,23 +157,26 @@ class SnakeGame extends Game {
 
   update() {
     super.update();
-    this.worm.moveSnake();
+    this.worm.update();
     let foodCollision = this.foodSprites.getOverlap(this.worm.snakeHead) !==
       null;
     let wallCollision = this.wallSprites.getOverlap(this.worm.snakeHead) !==
       null;
-    let bodyCollision = this.snakeSprites.getOverlap(this.worm.snakeHead) !==
-      null;
+    let bodyCollision = this.worm.isBodyCollision();
     let tempCell = new SnakeCell(null, null, null);
     if (foodCollision) {
-      tempCell = this.worm.addLink(stepsize);
+      tempCell = this.worm.addLink();
       this.spriteLayer.addDrawable(tempCell);
       this.snakeSprites.add(tempCell);
       this.score += 100;
     } else if (wallCollision || bodyCollision) {
-      //snek is ded
-      //bye snek
-      //u will b missed snek
+      this.worm.alive = false;
+      let gameOver = new TextDisplay(10, 10, this.canvas.width);
+      gameOver.text = 'Game Over';
+      gameOver.fontName = 'Courier';
+      gameOver.fontSize = 32;
+      gameOver.fontColor = '#fff';
+      this.overlayLayer.addDrawable(gameOver)
     }
   }
 
