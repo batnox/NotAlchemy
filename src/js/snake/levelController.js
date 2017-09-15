@@ -45,7 +45,7 @@ class Level extends Game{
                     this.MAP1[x][y] = 1;
                     let s = Object.assign(Object.create(Object.getPrototypeOf(this.wallMaterial[0])), this.wallMaterial[0]);
                     s.setPosition(x*this.GRID_SIZE, y*this.GRID_SIZE);//error here
-                    this.sprites.push(s);
+                    this.spriteLayer.addDrawable(s);
                     /*{
                         let tmpSprite = this.wallMaterial[0][Math.floor(Math.random() * 4)];
                         tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
