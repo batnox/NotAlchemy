@@ -1,4 +1,4 @@
 let snake;
 $(function() {
-    snake = new Snake();
+    snake = new SnakeGame();
 });
