@@ -18,7 +18,26 @@ class Game {
      */
     this.mouse = {};
 
-    this.sprites = [];
+    /**
+     * All layers to be drawn, starting with index 0. This results in the highest
+     * indexed layer being drawn last, and therefore on top of all other layers.
+     * @type {Layer[]}
+     */
+    this.layers = [];
+
+    /**
+     * The sprite layer for in-game objects.
+     * @type {Layer}
+     */
+    this.spriteLayer = new Layer();
+    this.layers[0] = this.spriteLayer;
+    /**
+     * The overlay layer for HUD objects.
+     * @type {Layer}
+     */
+    this.overlayLayer = new Layer();
+    this.layers[1] = this.overlayLayer;
+
     this.content = [];
 
     addEventListener('mousemove', event => this.onMouseMove(event));
@@ -42,8 +61,8 @@ class Game {
     ctx.strokeStyle = '#fff';
     ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
 
-    for (let sprite of this.sprites) {
-      sprite.draw(ctx);
+    for (let i = 0; i < this.layers.length; i++) {
+      this.layers[i].draw(ctx);
     }
   }
 
