@@ -1,6 +1,7 @@
 class SnakeGame extends Game {
   constructor() {
     super();
+    this.TICK_PER_SECOND = 10;
     this.GRID_NUMBER = 30;
     this.GRID_SIZE = 20;
     this.STEP_SIZE = 20;
@@ -110,6 +111,7 @@ class SnakeGame extends Game {
             this.snakeSprites.add(currentCell);
             currentCell = currentCell.nextCell;
           }
+          this.worm.setBodyImage(data['images'].snakes[1].img);
 
           //load all wall material
           for (let i in data['images'].walls) {
@@ -127,8 +129,8 @@ class SnakeGame extends Game {
           tmp.setImage(data['images'].food);
           console.log(data['images'].food);
           tmp.setSize(this.GRID_SIZE, this.GRID_SIZE);
-          tmp.setPosition(2 * this.GRID_SIZE, 2 * this.GRID_SIZE);
-          this.spriteLayer.addDrawable(tmp);
+          tmp.setPosition(8 * this.GRID_SIZE, 8 * this.GRID_SIZE);
+          this.foodSprites.add(tmp);
         }
       );
   }
@@ -158,25 +160,28 @@ class SnakeGame extends Game {
   update() {
     super.update();
     this.worm.update();
-    let foodCollision = this.foodSprites.getOverlap(this.worm.snakeHead) !==
-      null;
-    let wallCollision = this.wallSprites.getOverlap(this.worm.snakeHead) !==
-      null;
-    let bodyCollision = this.worm.isBodyCollision();
-    let tempCell = new SnakeCell(null, null, null);
-    if (foodCollision) {
-      tempCell = this.worm.addLink();
-      this.spriteLayer.addDrawable(tempCell);
-      this.snakeSprites.add(tempCell);
-      this.score += 100;
-    } else if (wallCollision || bodyCollision) {
-      this.worm.alive = false;
-      let gameOver = new TextDisplay(10, 10, this.canvas.width);
-      gameOver.text = 'Game Over';
-      gameOver.fontName = 'Courier';
-      gameOver.fontSize = 32;
-      gameOver.fontColor = '#fff';
-      this.overlayLayer.addDrawable(gameOver)
+
+    if (this.worm.alive) {
+      let foodCollision = this.foodSprites.getOverlap(this.worm.snakeHead);
+      let wallCollision = this.wallSprites.getOverlap(this.worm.snakeHead);
+      let bodyCollision = this.worm.isBodyCollision();
+
+      let tempCell = new SnakeCell(null, null, null);
+      if (foodCollision) {
+        tempCell = this.worm.addLink();
+        this.spriteLayer.addDrawable(tempCell);
+        this.snakeSprites.add(tempCell);
+        this.score += 100;
+        this.foodSprites.removeSprite(foodCollision);
+      } else if (wallCollision || bodyCollision) {
+        this.worm.alive = false;
+        let gameOver = new TextDisplay(10, 10, this.canvas.width);
+        gameOver.text = wallCollision ? 'Game Over' : 'Om Nom';
+        gameOver.fontName = 'Courier';
+        gameOver.fontSize = 32;
+        gameOver.fontColor = '#fff';
+        this.overlayLayer.addDrawable(gameOver)
+      }
     }
   }
 

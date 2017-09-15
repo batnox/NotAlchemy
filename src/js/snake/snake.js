@@ -8,6 +8,7 @@ class Snake {
     this.snakeTail = this.snakeHead;
     this.direction = Direction.RIGHT;
     this.alive = true;
+    this.bodyImage = null;
   }
 
   isBodyCollision() {
@@ -49,24 +50,27 @@ class Snake {
         dy = this.cellSize;
         break;
     }
-    this.snakeHead.setPosition(this.snakeHead.x + dx, this.snakeHead.y + dy);
 
-    if (this.direction !== this.snakeHead.relativeDirection) {
-      this.snakeHead.setRotation(90);
-    }
-    let temp = this.snakeHead.nextCell;
-    while (temp !== null) {
-      temp.setPosition(temp.previousCell.x, temp.previousCell.y);
-      if (temp.previousCell.isRotated) {
-        temp.setRotation(90);
-        temp.rotationStatus(true);
-        temp.previousCell.rotationStatus(false);
-      }
-      temp = temp.nextCell;
-    }
+    this.snakeHead.updatePosition(this.snakeHead.x + dx, this.snakeHead.y + dy);
+    // if (this.direction !== this.snakeHead.relativeDirection) {
+    //   this.snakeHead.setRotation(90);
+    // }
+    // let current = this.snakeHead.nextCell;
+    // while (current !== null) {
+    //   previous.x = current.x;
+    //   previous.y = current.y;
+    //   current.setPosition(current.previousCell.x, current.previousCell.y);
+      // if (current.previousCell.isRotated) {
+        // current.setRotation(90);
+        // current.rotationStatus(true);
+        // current.previousCell.rotationStatus(false);
+      // }
+      // current = current.nextCell;
+    // }
   }
 
   addLink() {
+    console.log('Add Link');
     let tailX = this.snakeTail.x;
     let tailY = this.snakeTail.y;
     let tailDirection = this.snakeTail.relativeDirection;
@@ -83,17 +87,19 @@ class Snake {
       tailY = tailY - this.cellSize;
     }
 
-    let newCell = new SnakeCell(body, this.snakeTail, this.snakeTail.direction);
+    console.log(`H (${this.snakeHead.x}, ${this.snakeHead.y})`);
+    console.log(`T (${tailX}, ${tailY})`);
+    let newCell = new SnakeCell('body', this.snakeTail, this.snakeTail.direction);
     newCell.setPosition(tailX, tailY);
+    newCell.setSize(this.cellSize, this.cellSize);
+    newCell.setImage(this.bodyImage);
     this.snakeTail.setNextCell(newCell);
-    this.setBodyImage(this.snakeTail);
     this.snakeTail = newCell;
     return newCell;
-
   }
 
-  setBodyImage(currentCell) {
-    currentCell.setImage(data['images'].snakes[1].img);
+  setBodyImage(bodyImage) {
+    this.bodyImage = bodyImage;
   }
 
   draw(context) {
