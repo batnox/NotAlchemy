@@ -6,6 +6,7 @@ class Snake extends Game {
     this.scorecount = 0;
     this.snakeSprites = new SpriteGroup();
     this.wallSprites = new SpriteGroup();
+    this.foodSprites = new SpriteGroup();
     this.stepsize=10;
     /**
      * Determines the direction that the Snake will go
@@ -57,7 +58,7 @@ class Snake extends Game {
   
   update() {
     super.update();
-    worm.moveSegment(currentDirection, 10);
+    worm.moveSegment(currentDirection, stepsize);
     let foodcheck = foodSprites.isCollision();
     let wallcheck = wallSprites.isCollision();
     let bodycheck = snakeSprites.isCollision();
@@ -66,6 +67,7 @@ class Snake extends Game {
       scorecount++;
     } else if(wallcheck || bodycheck) {
       scorecount = scorecount * 100;
+      
     }
   }
   
