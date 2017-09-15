@@ -5,6 +5,7 @@ class SnakeSegment {
         snakeHead.setPosition(20,20);
     }
 
+    //moves snake
     moveSnake(direction, stepsize){
         if(direction=="right"){
             if(snakeHead.relativeDirection!="left") {
