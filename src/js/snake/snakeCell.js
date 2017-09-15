@@ -13,7 +13,17 @@ class SnakeCell extends Sprite {
         this.nextCell=nextCell;
     }
 
-    set roationStatus(status){
+    set rotationStatus(status){
         this.isRotated = status;
     }
+
+  draw(context) {
+    super.draw(context);
+    console.log(`Cell (${this.x}, ${this.y})`);
+    context.fillStyle = '#f0f';
+    context.fillRect(this.x, this.y, this.width, this.height);
+    if (this.nextCell) {
+        this.nextCell.draw(context);
+    }
+  }
 }

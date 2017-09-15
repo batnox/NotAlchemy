@@ -102,6 +102,10 @@ class Game {
           if (running === 0) {
             resolve(loaded);
           }
+        }).catch((jqxhr, textStatus, error) => {
+          console.log('jqxhr: ' + JSON.stringify(jqxhr));
+          console.log('ts: ' + JSON.stringify(textStatus));
+          console.log('err: ' + JSON.stringify(error));
         });
       }
     });

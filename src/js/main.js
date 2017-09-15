@@ -1,7 +1,4 @@
-let alchemy;
+let snake;
 $(function() {
-  //alchemy = new Alchemy();
-    level = new Level();
-    //level.drawWall();
-
+    snake = new Snake();
 });
