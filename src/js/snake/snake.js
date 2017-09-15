@@ -1,5 +1,3 @@
-class Snake {
-  constructor() {
+class Snake extends Game {
 
-  }
 }
