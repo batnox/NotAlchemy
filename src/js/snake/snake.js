@@ -11,6 +11,7 @@ class Snake extends Game {
     LEFT:  Symbol("left"),
     RIGHT: Symbol("right")
   });
+    this.setDirection(Direction.RIGHT);
   }
   
 
