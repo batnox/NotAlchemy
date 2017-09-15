@@ -58,11 +58,14 @@ class Snake extends Game {
   update() {
     super.update();
     worm.moveSegment(currentDirection, 10);
-    if(/*Collides with food*/) {
-      worm.addlink(10);
+    let foodcheck = foodSprites.isCollision();
+    let wallcheck = wallSprites.isCollision();
+    let bodycheck = snakeSprites.isCollision();
+    if(foodcheck) {
+      worm.addlink(stepsize);
       scorecount++;
-    } else if(/*collides with wall or collides with self */) {
-      //Score message
+    } else if(wallcheck || bodycheck) {
+      scorecount = scorecount * 100;
     }
   }
   
