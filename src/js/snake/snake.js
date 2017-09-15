@@ -33,4 +33,16 @@ class Snake extends Game {
       this.setDirection(Directions.RIGHT);
     }
   }
+  
+  update() {
+    super.update();
+    this.canvas.width = $(window).width();
+    this.canvas.style.width = $(window).width();
+    this.canvas.height = $(window).height();
+    this.canvas.style.height = $(window).height();
+  }
+  
+  draw() {
+   super.draw(); 
+  }
 }
