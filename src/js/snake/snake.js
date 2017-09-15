@@ -1,16 +1,11 @@
 class Snake extends Game {
   constructor() {
     super();
+    this.worm = new SnakeSegment();
     /**
      * Determines the direction that the Snake will go
      */
     addEventListener('keydown', event => this.onKeyDown(event));
-    const Directions = Object.freeze({
-      UP:    Symbol("up"),
-      DOWN:  Symbol("down"),
-      LEFT:  Symbol("left"),
-      RIGHT: Symbol("right")
-    });
   }
   
 
@@ -36,6 +31,7 @@ class Snake extends Game {
   
   update() {
     super.update();
+    worm.moveSegment();
   }
   
   draw() {
