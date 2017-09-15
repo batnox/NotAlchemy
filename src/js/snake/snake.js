@@ -33,7 +33,7 @@ class Snake extends Game {
   }
 
   /**
-   * Handles changing the snake's direction based on user input. 
+   * Handles changing the snake's direction based on user input.
    */
   onKeyDown(event) {
     'use strict';
@@ -55,7 +55,7 @@ class Snake extends Game {
       this.currentDirection = "right";
     }
   }
-  
+
   update() {
     super.update();
     worm.moveSegment(currentDirection, stepsize);
@@ -73,8 +73,8 @@ class Snake extends Game {
       //u will b missed snek
     }
   }
-  
+
   draw() {
-   super.draw(); 
+   super.draw();
   }
 }
