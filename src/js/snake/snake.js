@@ -50,46 +50,25 @@ class Snake {
         dy = this.cellSize;
         break;
     }
-
-    this.snakeHead.updatePosition(this.snakeHead.x + dx, this.snakeHead.y + dy);
-    // if (this.direction !== this.snakeHead.relativeDirection) {
-    //   this.snakeHead.setRotation(90);
-    // }
-    // let current = this.snakeHead.nextCell;
-    // while (current !== null) {
-    //   previous.x = current.x;
-    //   previous.y = current.y;
-    //   current.setPosition(current.previousCell.x, current.previousCell.y);
-      // if (current.previousCell.isRotated) {
-        // current.setRotation(90);
-        // current.rotationStatus(true);
-        // current.previousCell.rotationStatus(false);
-      // }
-      // current = current.nextCell;
-    // }
+    this.snakeHead.updatePosition(this.snakeHead.x + dx, this.snakeHead.y + dy, this.direction);
   }
 
   addLink() {
-    console.log('Add Link');
     let tailX = this.snakeTail.x;
     let tailY = this.snakeTail.y;
-    let tailDirection = this.snakeTail.relativeDirection;
-    if (tailDirection === 'right') {
+    let tailDirection = this.snakeTail.direction;
+    if (tailDirection === Direction.RIGHT) {
       tailX = tailX - this.cellSize;
-    }
-    else if (tailDirection === 'left') {
+    } else if (tailDirection === Direction.LEFT) {
       tailX = tailX + this.cellSize;
-    }
-    else if (tailDirection === 'up') {
+    } else if (tailDirection === Direction.RIGHT) {
       tailY = tailY + this.cellSize;
-    }
-    else {
+    } else {
       tailY = tailY - this.cellSize;
     }
 
-    console.log(`H (${this.snakeHead.x}, ${this.snakeHead.y})`);
-    console.log(`T (${tailX}, ${tailY})`);
-    let newCell = new SnakeCell('body', this.snakeTail, this.snakeTail.direction);
+    let newCell = new SnakeCell('body', this.snakeTail,
+      this.snakeTail.direction);
     newCell.setPosition(tailX, tailY);
     newCell.setSize(this.cellSize, this.cellSize);
     newCell.setImage(this.bodyImage);

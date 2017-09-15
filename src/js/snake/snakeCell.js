@@ -1,20 +1,13 @@
 class SnakeCell extends Sprite {
-  constructor(cellType, previousCell, direction) {
+  constructor() {
     super();
-    this.cellType = cellType;
-    this.previousCell = previousCell;
     this.nextCell = null;
-    this.relativeDirection = direction;
-    this.isRotated = false;
+    this.direction = Direction.RIGHT;
 
   }
 
   setNextCell(nextCell) {
     this.nextCell = nextCell;
-  }
-
-  set rotationStatus(status) {
-    this.isRotated = status;
   }
 
   draw(context) {
@@ -26,13 +19,16 @@ class SnakeCell extends Sprite {
     }
   }
 
-  updatePosition(x, y) {
+  updatePosition(x, y, dir) {
     let prevX = this.x;
     let prevY = this.y;
+    let prevDir = this.direction;
+
     this.x = x;
     this.y = y;
+    this.direction = dir;
     if (this.nextCell) {
-      this.nextCell.updatePosition(prevX, prevY);
+      this.nextCell.updatePosition(prevX, prevY, prevDir);
     }
   }
 }

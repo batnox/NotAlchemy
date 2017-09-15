@@ -140,7 +140,6 @@ class SnakeGame extends Game {
    */
   onKeyDown(event) {
     'use strict';
-    console.log(event.keyCode);
     switch (event.keyCode) {
       case 37: // Left
         this.worm.direction = Direction.LEFT;
