@@ -12,8 +12,11 @@ class Level extends Game{
         this.MAP2 = [];
         this.canvas.width = this.GRID_NUMBER* this.GRID_SIZE;
         this.canvas.height = this.GRID_NUMBER* this.GRID_SIZE;
-        this.loadContent().then(()=>this.map());
+        this.food = new SpriteGroup();
+        this.loadContent().then(()=>this.buildMap());
     }
+
+
 
     returnAllSprites(){
         console.log(this.sprites);
@@ -38,7 +41,7 @@ class Level extends Game{
         }
     }
 
-    map(){
+    buildMap(){
         //this.wallSprites.push( new SpriteGroup());
         for (let x = 0; x < this.GRID_NUMBER; x++) {
             this.MAP1[x] = [];
@@ -47,12 +50,12 @@ class Level extends Game{
                     this.MAP1[x][y] = 1;
                     //let s = Object.assign(Object.create(Object.getPrototypeOf(this.wallMaterial[0])), this.wallMaterial[0]);
                     //s.setPosition(x*this.GRID_SIZE, y*this.GRID_SIZE);//error here
-                    //this.sprites.push(s);
+                    //this.spriteLayer.addDrawable(s);
                     {
                         let random = Math.floor(Math.random() * 4);
                         let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(this.wallMaterial[this.currentLevel][random])), (this.wallMaterial[this.currentLevel][random]));
                         tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
-                        this.sprites.push(tmpSprite);
+                        this.spriteLayer.addDrawable(tmpSprite);
                     }
                 } else {
                     this.MAP1[x][y] = 0;
@@ -71,26 +74,26 @@ class Level extends Game{
                         let random = Math.floor(Math.random() * 4);
                         let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(this.wallMaterial[this.currentLevel][random])), (this.wallMaterial[this.currentLevel][random]));
                         tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
-                        this.sprites.push(tmpSprite);
+                        this.spriteLayer.addDrawable(tmpSprite);
                     }
-                } else if (x > Math.floor((this.GRID_NUMBER-1)/3) && x < Math.floor((this.GRID_NUMBER-1)*2/3) &&
+                } else if (x > Math.floor(this.GRID_NUMBER/3) && x < Math.floor(this.GRID_NUMBER*2/3) &&
                     y === Math.floor((this.GRID_NUMBER)/2)){
                     this.MAP2[x][y] = 1;
                     {
                         let random = Math.floor(Math.random() * 4);
                         let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(this.wallMaterial[this.currentLevel][random])), (this.wallMaterial[this.currentLevel][random]));
                         tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
-                        this.sprites.push(tmpSprite);
+                        this.spriteLayer.addDrawable(tmpSprite);
                     }
                 }
-                else if (y > Math.floor((this.GRID_NUMBER-1)/3) && y < Math.floor((this.GRID_NUMBER-1)*2/3) &&
+                else if (y > Math.floor(this.GRID_NUMBER/3) && y < Math.floor(this.GRID_NUMBER*2/3) &&
                     x === Math.floor((this.GRID_NUMBER)/2)){
                     this.MAP2[x][y] = 1;
                     {
                         let random = Math.floor(Math.random() * 4);
                         let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(this.wallMaterial[this.currentLevel][random])), (this.wallMaterial[this.currentLevel][random]));
                         tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
-                        this.sprites.push(tmpSprite);
+                        this.spriteLayer.addDrawable(tmpSprite);
                     }
                 }
                 else {
@@ -102,7 +105,7 @@ class Level extends Game{
                 let s = this.wallMaterial[0];
                 console.log(JSON.stringify(this.wallMaterial));
                 s.setSize(5, 5);//error here
-                this.sprites.push(s);
+                this.spriteLayer.addDrawable(s);
                 */
         this.draw();
 
@@ -116,6 +119,7 @@ class Level extends Game{
     loadContent() {
         return super.loadContent()
             .then(data => {
+                //load all wall material
                 for ( let i in data['snake_elements'].walls){
                     this.wallMaterial[i] = [];
                     for (let j in  data['snake_elements'].walls[i].material) {
@@ -125,14 +129,21 @@ class Level extends Game{
                         tmp.setSize(this.GRID_SIZE, this.GRID_SIZE);
                         this.wallMaterial.push(tmp);
                         */
-                        //console.log(JSON.stringify(this.wallMaterial));
-                        //console.log(data['snake_elements'].walls[i].material[j]);
                         this.wallMaterial[i][j] = new Sprite();
                         this.wallMaterial[i][j].setImage(data['snake_elements'].walls[i].material[j]);
                         this.wallMaterial[i][j].setSize(this.GRID_SIZE, this.GRID_SIZE);
-                        //console.log(data['snake_elements'].walls[i].material[j]);
                     }
                 }
+                //load food material
+
+                let tmp = new Sprite();
+                tmp.setImage(data['snake_elements'].food);
+                console.log(data['snake_elements'].food);
+                tmp.setSize(this.GRID_SIZE, this.GRID_SIZE);
+                tmp.setPosition(2*this.GRID_SIZE, 2*this.GRID_SIZE);
+                console.log(tmp);
+                //this.food.add(tmp);
+                this.spriteLayer.addDrawable(tmp);
             });
     }
 }
