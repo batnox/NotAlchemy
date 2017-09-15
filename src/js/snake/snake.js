@@ -26,20 +26,16 @@ class Snake extends Game {
     } else if (event.keyCode == '40') {
      this.setDirection(Directions.DOWN);
     //left
-    } else if (event.keyCode == '36') {
+    } else if (event.keyCode == '37') {
       this.setDirection(Directions.LEFT);
     //right
-    } else if (event.keyCode == '37') {
+    } else if (event.keyCode == '39') {
       this.setDirection(Directions.RIGHT);
     }
   }
   
   update() {
     super.update();
-    this.canvas.width = $(window).width();
-    this.canvas.style.width = $(window).width();
-    this.canvas.height = $(window).height();
-    this.canvas.style.height = $(window).height();
   }
   
   draw() {
