@@ -6,12 +6,11 @@ class Snake extends Game {
      */
     addEventListener('keydown', event => this.onKeyDown(event));
     const Directions = Object.freeze({
-    UP:    Symbol("up"),
-    DOWN:  Symbol("down"),
-    LEFT:  Symbol("left"),
-    RIGHT: Symbol("right")
-  });
-    this.setDirection(Direction.RIGHT);
+      UP:    Symbol("up"),
+      DOWN:  Symbol("down"),
+      LEFT:  Symbol("left"),
+      RIGHT: Symbol("right")
+    });
   }
   
 
