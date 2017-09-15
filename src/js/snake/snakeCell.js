@@ -19,7 +19,6 @@ class SnakeCell extends Sprite {
 
   draw(context) {
     super.draw(context);
-    console.log(`Cell (${this.x}, ${this.y})`);
     context.fillStyle = '#f0f';
     context.fillRect(this.x, this.y, this.width, this.height);
     if (this.nextCell) {

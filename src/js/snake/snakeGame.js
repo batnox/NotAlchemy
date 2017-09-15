@@ -1,13 +1,13 @@
 class SnakeGame extends Game {
   constructor() {
     super();
-    this.worm = new Snake();
-    this.currentDirection = 'right';
+    this.worm = new Snake(20);
     this.score = 0;
     this.snakeSprites = new SpriteGroup();
     this.wallSprites = new SpriteGroup();
     this.foodSprites = new SpriteGroup();
-    this.stepsize = 10;
+    this.STEP_SIZE = 10;
+
     /**
      * Determines the direction that the Snake will go
      */
@@ -16,11 +16,11 @@ class SnakeGame extends Game {
 
     this.GRID_NUMBER = 30;
     this.GRID_SIZE = 20;
-    this.currentLevel = 1; //0 and 1
+    this.currentLevel = 1; // 0 and 1
     this.wallMaterial = [];
 
-    this.MAP1 = [];
-    this.MAP2 = [];
+    this.MAP_1 = [];
+    this.MAP_2 = [];
     this.canvas.width = this.GRID_NUMBER * this.GRID_SIZE;
     this.canvas.height = this.GRID_NUMBER * this.GRID_SIZE;
 
@@ -29,19 +29,18 @@ class SnakeGame extends Game {
     this.loadContent()
       .then(() => {
         this.buildMap();
-        this.worm.x = 100;
-        this.worm.y = 100;
+        this.worm.setPosition(50, 50);
         this.start();
       });
   }
 
   buildMap() {
     for (let x = 0; x < this.GRID_NUMBER; x++) {
-      this.MAP1[x] = [];
+      this.MAP_1[x] = [];
       for (let y = 0; y < this.GRID_NUMBER; y++) {
         if (x === 0 || y === 0 || x === this.GRID_NUMBER - 1 ||
           y === this.GRID_NUMBER - 1) {
-          this.MAP1[x][y] = 1;
+          this.MAP_1[x][y] = 1;
           let random = Math.floor(Math.random() * 4);
           let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(
             this.wallMaterial[this.currentLevel][random])),
@@ -49,17 +48,17 @@ class SnakeGame extends Game {
           tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
           this.spriteLayer.addDrawable(tmpSprite);
         } else {
-          this.MAP1[x][y] = 0;
+          this.MAP_1[x][y] = 0;
         }
       }
     }
 
     for (let x = 0; x < this.GRID_NUMBER; x++) {
-      this.MAP2[x] = [];
+      this.MAP_2[x] = [];
       for (let y = 0; y < this.GRID_NUMBER; y++) {
         if (x === 0 || y === 0 || x === (this.GRID_NUMBER - 1) ||
           y === (this.GRID_NUMBER - 1)) {
-          this.MAP2[x][y] = 1;
+          this.MAP_2[x][y] = 1;
           let random = Math.floor(Math.random() * 4);
           let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(
             this.wallMaterial[this.currentLevel][random])),
@@ -69,7 +68,7 @@ class SnakeGame extends Game {
         } else if (x > Math.floor(this.GRID_NUMBER / 3) &&
           x < Math.floor(this.GRID_NUMBER * 2 / 3) &&
           y === Math.floor((this.GRID_NUMBER) / 2)) {
-          this.MAP2[x][y] = 1;
+          this.MAP_2[x][y] = 1;
           let random = Math.floor(Math.random() * 4);
           let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(
             this.wallMaterial[this.currentLevel][random])),
@@ -80,7 +79,7 @@ class SnakeGame extends Game {
         else if (y > Math.floor(this.GRID_NUMBER / 3) &&
           y < Math.floor(this.GRID_NUMBER * 2 / 3) &&
           x === Math.floor((this.GRID_NUMBER) / 2)) {
-          this.MAP2[x][y] = 1;
+          this.MAP_2[x][y] = 1;
           let random = Math.floor(Math.random() * 4);
           let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(
             this.wallMaterial[this.currentLevel][random])),
@@ -89,7 +88,7 @@ class SnakeGame extends Game {
           this.spriteLayer.addDrawable(tmpSprite);
         }
         else {
-          this.MAP2[x][y] = 0;
+          this.MAP_2[x][y] = 0;
         }
       }
     }
@@ -111,12 +110,6 @@ class SnakeGame extends Game {
           for (let i in data['images'].walls) {
             this.wallMaterial[i] = [];
             for (let j in  data['images'].walls[i].material) {
-              /*
-              let tmp = new Sprite();
-              tmp.setImage(data['snake_elements'].walls[i].material[j]);
-              tmp.setSize(this.GRID_SIZE, this.GRID_SIZE);
-              this.wallMaterial.push(tmp);
-              */
               this.wallMaterial[i][j] = new Sprite();
               this.wallMaterial[i][j].setImage(
                 data['images'].walls[i].material[j]);
@@ -140,38 +133,39 @@ class SnakeGame extends Game {
    */
   onKeyDown(event) {
     'use strict';
-    //up
-    if (event.keyCode === '38') {
-      // this.setDirection(Directions.UP);
-      this.currentDirection = 'up';
-      //down
-    } else if (event.keyCode === '40') {
-      // this.setDirection(Directions.DOWN);
-      this.currentDirection = 'down';
-      //left
-    } else if (event.keyCode === '37') {
-      // this.setDirection(Directions.LEFT);
-      this.currentDirection = 'left';
-      //right
-    } else if (event.keyCode === '39') {
-      // this.setDirection(Directions.RIGHT);
-      this.currentDirection = 'right';
+    console.log(event.keyCode);
+    switch (event.keyCode) {
+      case 37: // Left
+        this.worm.direction = Direction.LEFT;
+        break;
+      case 38: // Up
+        this.worm.direction = Direction.UP;
+        break;
+      case 39: // Right
+        this.worm.direction = Direction.RIGHT;
+        break;
+      case 40: // Down
+        this.worm.direction = Direction.DOWN;
+        break;
     }
   }
 
   update() {
     super.update();
-    this.worm.moveSnake(this.currentDirection, this.stepsize);
-    let foodcheck = this.foodSprites.getOverlap(this.worm.snakeHead) !== null;
-    let wallcheck = this.wallSprites.getOverlap(this.worm.snakeHead) !== null;
-    let bodycheck = this.snakeSprites.getOverlap(this.worm.snakeHead) !== null;
+    this.worm.moveSnake();
+    let foodCollision = this.foodSprites.getOverlap(this.worm.snakeHead) !==
+      null;
+    let wallCollision = this.wallSprites.getOverlap(this.worm.snakeHead) !==
+      null;
+    let bodyCollision = this.snakeSprites.getOverlap(this.worm.snakeHead) !==
+      null;
     let tempCell = new SnakeCell(null, null, null);
-    if (foodcheck) {
-      tempCell = this.worm.addlink(stepsize);
+    if (foodCollision) {
+      tempCell = this.worm.addLink(stepsize);
       this.spriteLayer.addDrawable(tempCell);
       this.snakeSprites.add(tempCell);
       this.score += 100;
-    } else if (wallcheck || bodycheck) {
+    } else if (wallCollision || bodyCollision) {
       //snek is ded
       //bye snek
       //u will b missed snek

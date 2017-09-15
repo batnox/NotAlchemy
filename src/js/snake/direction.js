@@ -1,4 +1,4 @@
-const Directions = Object.freeze({
+const Direction = Object.freeze({
   UP:    Symbol("up"),
   DOWN:  Symbol("down"),
   LEFT:  Symbol("left"),
