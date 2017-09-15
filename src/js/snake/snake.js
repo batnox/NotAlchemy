@@ -62,6 +62,7 @@ class Snake extends Game {
     let foodcheck = foodSprites.isCollision();
     let wallcheck = wallSprites.isCollision();
     let bodycheck = snakeSprites.isCollision();
+    let tempCell = new SnakeCell(null, null, null);
     if(foodcheck) {
       tempCell = worm.addlink(stepsize);
       this.snakeSprites.add(tempCell);
@@ -69,7 +70,7 @@ class Snake extends Game {
     } else if(wallcheck || bodycheck) {
       //snek is ded
       //bye snek
-      //RIP snek
+      //u will b missed snek
     }
   }
   
