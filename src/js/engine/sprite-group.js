@@ -78,4 +78,11 @@ class SpriteGroup {
     }
     return null;
   }
+
+  draw(context) {
+    for (let sprite of this.sprites) {
+      sprite.draw(context);
+    }
+  }
+
 }

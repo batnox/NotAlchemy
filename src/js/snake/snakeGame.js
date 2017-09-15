@@ -1,12 +1,16 @@
 class SnakeGame extends Game {
   constructor() {
     super();
-    this.worm = new Snake(20);
-    this.score = 0;
+    this.GRID_NUMBER = 30;
+    this.GRID_SIZE = 20;
+    this.STEP_SIZE = 20;
+
     this.snakeSprites = new SpriteGroup();
     this.wallSprites = new SpriteGroup();
     this.foodSprites = new SpriteGroup();
-    this.STEP_SIZE = 10;
+
+    this.score = 0;
+    this.worm = new Snake(this.STEP_SIZE);
 
     /**
      * Determines the direction that the Snake will go
@@ -14,8 +18,6 @@ class SnakeGame extends Game {
     addEventListener('keydown', event => this.onKeyDown(event));
     this.addContent('images', 'json/snake_elements.json');
 
-    this.GRID_NUMBER = 30;
-    this.GRID_SIZE = 20;
     this.currentLevel = 1; // 0 and 1
     this.wallMaterial = [];
 
@@ -25,6 +27,9 @@ class SnakeGame extends Game {
     this.canvas.height = this.GRID_NUMBER * this.GRID_SIZE;
 
     this.spriteLayer.addDrawable(this.worm);
+    this.spriteLayer.addDrawable(this.snakeSprites);
+    this.spriteLayer.addDrawable(this.wallSprites);
+    this.spriteLayer.addDrawable(this.foodSprites);
 
     this.loadContent()
       .then(() => {
@@ -46,7 +51,7 @@ class SnakeGame extends Game {
             this.wallMaterial[this.currentLevel][random])),
             this.wallMaterial[this.currentLevel][random]);
           tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
-          this.spriteLayer.addDrawable(tmpSprite);
+          this.wallSprites.add(tmpSprite);
         } else {
           this.MAP_1[x][y] = 0;
         }
@@ -64,7 +69,7 @@ class SnakeGame extends Game {
             this.wallMaterial[this.currentLevel][random])),
             (this.wallMaterial[this.currentLevel][random]));
           tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
-          this.spriteLayer.addDrawable(tmpSprite);
+          this.wallSprites.add(tmpSprite);
         } else if (x > Math.floor(this.GRID_NUMBER / 3) &&
           x < Math.floor(this.GRID_NUMBER * 2 / 3) &&
           y === Math.floor((this.GRID_NUMBER) / 2)) {
@@ -74,7 +79,7 @@ class SnakeGame extends Game {
             this.wallMaterial[this.currentLevel][random])),
             (this.wallMaterial[this.currentLevel][random]));
           tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
-          this.spriteLayer.addDrawable(tmpSprite);
+          this.wallSprites.add(tmpSprite);
         }
         else if (y > Math.floor(this.GRID_NUMBER / 3) &&
           y < Math.floor(this.GRID_NUMBER * 2 / 3) &&
@@ -85,7 +90,7 @@ class SnakeGame extends Game {
             this.wallMaterial[this.currentLevel][random])),
             (this.wallMaterial[this.currentLevel][random]));
           tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
-          this.spriteLayer.addDrawable(tmpSprite);
+          this.wallSprites.add(tmpSprite);
         }
         else {
           this.MAP_2[x][y] = 0;
