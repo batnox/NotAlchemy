@@ -9,40 +9,25 @@ class SnakeSegment {
     //moves snake
     moveSnake(direction, stepsize){
         if(direction=="right"){
-            if(snakeHead.relativeDirection!="left") {
-                snakeHead.setPosition(x + stepsize, y);
-            }
-            else{
                 snakeHead.setPosition(x-stepsize, y);
                 direction = "left";
-            }
+
         }
         else if(direction=="left"){
-            if(snakeHead.relativeDirection!="right") {
-                snakeHead.setPosition(x - stepsize, y);
-            }
-            else {
                 snakeHead.setPosition(x + stepsize, y);
                 direction = "right";
-            }
+
         }
         else if(direction == "up"){
-            if(snakeHead.relativeDirection!="down") {
-                snakeHead.setPosition(x, y - stepsize);
-            }
-            else{
                 snakeHead.setPosition(x, y + stepsize);
                 direction = "down";
-            }
+
         }
         else if(direction == "down"){
-            if(snakeHead.relativeDirection!="up") {
-                snakeHead.setPosition(x, y + stepsize);
-            }
-            else{
+
                 snakeHead.setPosition(x, y - stepsize);
                 direction = "up";
-            }
+
         }
 
         if(direction!=snakeHead.relativeDirection) {
@@ -80,6 +65,7 @@ class SnakeSegment {
         newCell = new SnakeCell(body, snakeTail, snakeTail.direction);
         newCell.setPosition(tailx, taily);
         snakeTail.setNextCell(newCell);
+        this.setBodyImage(snakeTail);
         snakeTail = newCell;
 
     }
