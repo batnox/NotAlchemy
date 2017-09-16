@@ -67,6 +67,7 @@ class SnakeSegment {
         snakeTail.setNextCell(newCell);
         this.setBodyImage(snakeTail);
         snakeTail = newCell;
+        return newCell;
 
     }
 

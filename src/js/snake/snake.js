@@ -63,7 +63,8 @@ class Snake extends Game {
     let wallcheck = wallSprites.isCollision();
     let bodycheck = snakeSprites.isCollision();
     if(foodcheck) {
-      worm.addlink(stepsize);
+      tempCell = worm.addlink(stepsize);
+      this.snakeSprites.add(tempCell);
       scorecount += 100;
     } else if(wallcheck || bodycheck) {
       //snek is ded
