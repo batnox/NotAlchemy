@@ -4,12 +4,31 @@ class Snake extends Game {
     this.worm = new SnakeSegment();
     this.currentDirection = "right";
     this.scorecount = 0;
+    this.snakeSprites = new SpriteGroup();
+    this.stepsize=10;
     /**
      * Determines the direction that the Snake will go
      */
     addEventListener('keydown', event => this.onKeyDown(event));
+    this.addContent('images','json/snake_elements.json');
+    this.loadContent()
+        .this(() => this.start());
   }
-  
+
+  loadContent(){
+      return super.loadContent()
+          .then(data => {
+              snakeHead.setImage(data['images'].snakes[0].img);
+              this.snakeSprites.add(snakeHead);
+              currentCell = snakeHead.nextCell;
+              while(currentCell!=null){
+                currentCell.setImage(data[['images'].snakes[1].img]);
+                  this.snakeSprites.add(currentCell);
+                  currentCell = currentCell.nextCell;
+              }
+              }
+          );
+  }
 
   /**
    * Handles changing the snake's direction based on user input. 
@@ -38,10 +57,10 @@ class Snake extends Game {
   update() {
     super.update();
     worm.moveSegment(currentDirection, 10);
-    if(//Collides with food) {
+    if(/*Collides with food*/) {
       worm.addlink(10);
       scorecount++;
-    } else if( //collides with wall or collides with self // ) {
+    } else if(/*collides with wall or collides with self */) {
       //Score message
     }
   }

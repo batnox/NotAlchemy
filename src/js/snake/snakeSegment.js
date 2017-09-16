@@ -3,6 +3,7 @@ class SnakeSegment {
         this.snakeHead = new SnakeCell("head", null, right);
         this.snakeTail = snakeHead;
         snakeHead.setPosition(20,20);
+
     }
 
     //moves snake
@@ -83,5 +84,8 @@ class SnakeSegment {
 
     }
 
+    setBodyImage(currentCell){
+        currentCell.setImage()
+    }
 
 }
