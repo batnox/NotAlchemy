@@ -85,7 +85,7 @@ class SnakeSegment {
     }
 
     setBodyImage(currentCell){
-        currentCell.setImage()
+        currentCell.setImage(data['images'].snakes[1].img);
     }
 
 }

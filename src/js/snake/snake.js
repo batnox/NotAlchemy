@@ -5,6 +5,7 @@ class Snake extends Game {
     this.currentDirection = "right";
     this.scorecount = 0;
     this.snakeSprites = new SpriteGroup();
+    this.wallSprites = new SpriteGroup();
     this.stepsize=10;
     /**
      * Determines the direction that the Snake will go
@@ -18,11 +19,11 @@ class Snake extends Game {
   loadContent(){
       return super.loadContent()
           .then(data => {
-              snakeHead.setImage(data['images'].snakes[0].img);
-              this.snakeSprites.add(snakeHead);
-              currentCell = snakeHead.nextCell;
+              this.worm.snakeHead.setImage(data['images'].snakes[0].img);
+              this.snakeSprites.add(this.worm.snakeHead);
+              currentCell = this.worm.snakeHead.nextCell;
               while(currentCell!=null){
-                currentCell.setImage(data[['images'].snakes[1].img]);
+                currentCell.setImage(data['images'].snakes[1].img);
                   this.snakeSprites.add(currentCell);
                   currentCell = currentCell.nextCell;
               }
