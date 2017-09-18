@@ -2,7 +2,7 @@ class SnakeGame extends Game {
   constructor() {
     super();
     this.TICK_PER_SECOND = 10;
-    this.GRID_NUMBER = 20;
+    this.GRID_NUMBER = 30;
     this.GRID_SIZE = 30;
     //this.STEP_SIZE = 30;
 
@@ -20,11 +20,11 @@ class SnakeGame extends Game {
     this.addContent('images', 'json/snake_elements.json');
 
     this.currentLevel = 0; // 0 and 1
+    this.maximumLevel = 1;
+    this.condition = [500];
     this.wallMaterial = [];
     this.foodMaterial = [];
 
-    this.MAP_1 = [];
-    this.MAP_2 = [];
     this.canvas.width = this.GRID_NUMBER * this.GRID_SIZE;
     this.canvas.height = this.GRID_NUMBER * this.GRID_SIZE;
 
@@ -40,98 +40,79 @@ class SnakeGame extends Game {
         this.start();
       });
 
-      //this.newLevel();
   }
 
   newLevel(){
-
       this.snakeSprites = new SpriteGroup();
       this.wallSprites = new SpriteGroup();
-      this.foodSprites = new SpriteGroup();
 
       this.score = 0;
-      this.worm = new Snake(this.GRID_SIZE);
+      //this.worm = new Snake(this.GRID_SIZE);
+      this.worm.setPosition(60, 60);
+      this.worm.direction = Direction.RIGHT;
+      //this.worm.snakeTail = this.worm.snakeHead;
 
       this.currentLevel++;
-      this.wallMaterial = [];
 
-      this.MAP_1 = [];
-      this.MAP_2 = [];
-      this.canvas.width = this.GRID_NUMBER * this.GRID_SIZE;
-      this.canvas.height = this.GRID_NUMBER * this.GRID_SIZE;
-
+      this.buildMap();
       this.spriteLayer.addDrawable(this.worm);
       this.spriteLayer.addDrawable(this.snakeSprites);
       this.spriteLayer.addDrawable(this.wallSprites);
       this.spriteLayer.addDrawable(this.foodSprites);
 
-      this.loadContent()
-          .then(() => {
-              this.buildMap();
-              this.worm.setPosition(60, 60);
-              this.start();
-          });
-
+      this.canvas.width = this.GRID_NUMBER * this.GRID_SIZE;
+      this.canvas.height = this.GRID_NUMBER * this.GRID_SIZE;
   }
 
 
   buildMap() {
-      if(this.currentLevel == 0) {
+      if(this.currentLevel === 0) {
+          this.foodSprites.add(this.foodMaterial[this.currentLevel]);
+
           for (let x = 0; x < this.GRID_NUMBER; x++) {
-              this.MAP_1[x] = [];
               for (let y = 0; y < this.GRID_NUMBER; y++) {
                   if (x === 0 || y === 0 || x === this.GRID_NUMBER - 1 ||
                       y === this.GRID_NUMBER - 1) {
-                      this.MAP_1[x][y] = 1;
                       let random = Math.floor(Math.random() * 4);
                       let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(
                           this.wallMaterial[this.currentLevel][random])),
                           this.wallMaterial[this.currentLevel][random]);
                       tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
                       this.wallSprites.add(tmpSprite);
-                  } else {
-                      this.MAP_1[x][y] = 0;
                   }
               }
           }
       }else {
-
+          console.log("level" + this.currentLevel);
           for (let x = 0; x < this.GRID_NUMBER; x++) {
-              this.MAP_2[x] = [];
               for (let y = 0; y < this.GRID_NUMBER; y++) {
                   if (x === 0 || y === 0 || x === (this.GRID_NUMBER - 1) ||
                       y === (this.GRID_NUMBER - 1)) {
-                      this.MAP_2[x][y] = 1;
                       let random = Math.floor(Math.random() * 4);
                       let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(
                           this.wallMaterial[this.currentLevel][random])),
-                          (this.wallMaterial[this.currentLevel][random]));
+                          this.wallMaterial[this.currentLevel][random]);
                       tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
                       this.wallSprites.add(tmpSprite);
                   } else if (x > Math.floor(this.GRID_NUMBER / 3) &&
                       x < Math.floor(this.GRID_NUMBER * 2 / 3) &&
                       y === Math.floor((this.GRID_NUMBER) / 2)) {
-                      this.MAP_2[x][y] = 1;
                       let random = Math.floor(Math.random() * 4);
                       let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(
                           this.wallMaterial[this.currentLevel][random])),
-                          (this.wallMaterial[this.currentLevel][random]));
+                          this.wallMaterial[this.currentLevel][random]);
                       tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
                       this.wallSprites.add(tmpSprite);
                   }
                   else if (y > Math.floor(this.GRID_NUMBER / 3) &&
                       y < Math.floor(this.GRID_NUMBER * 2 / 3) &&
                       x === Math.floor((this.GRID_NUMBER) / 2)) {
-                      this.MAP_2[x][y] = 1;
                       let random = Math.floor(Math.random() * 4);
                       let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(
                           this.wallMaterial[this.currentLevel][random])),
-                          (this.wallMaterial[this.currentLevel][random]));
+                          this.wallMaterial[this.currentLevel][random]);
                       tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
                       this.wallSprites.add(tmpSprite);
-                  }
-                  else {
-                      this.MAP_2[x][y] = 0;
                   }
               }
           }
@@ -142,6 +123,7 @@ class SnakeGame extends Game {
   loadContent() {
     return super.loadContent()
       .then(data => {
+          //load snake images
           this.worm.snakeHead.setImage(data['images'].snakes[0].img);
           this.snakeSprites.add(this.worm.snakeHead);
           let currentCell = this.worm.snakeHead.nextCell;
@@ -160,17 +142,16 @@ class SnakeGame extends Game {
               this.wallMaterial[i][j].setImage(
                 data['images'].walls[i].material[j]);
               this.wallMaterial[i][j].setSize(this.GRID_SIZE, this.GRID_SIZE);
+              console.log(i + ", " + j);
             }
           }
 
           //load food material
           let tmp = new Sprite();
           tmp.setImage(data['images'].food);
-          console.log(data['images'].food);
           tmp.setSize(this.GRID_SIZE, this.GRID_SIZE);
           tmp.setPosition(8 * this.GRID_SIZE, 8 * this.GRID_SIZE);
           this.foodMaterial.push(tmp);
-          this.foodSprites.add(tmp);
         }
       );
   }
@@ -230,6 +211,10 @@ class SnakeGame extends Game {
     super.update();
     this.worm.update();
 
+    if (this.currentLevel === 1){
+        console.log()
+    }
+
     if (this.worm.alive) {
       let foodCollision = this.foodSprites.getOverlap(this.worm.snakeHead);
       let wallCollision = this.wallSprites.getOverlap(this.worm.snakeHead);
@@ -237,12 +222,16 @@ class SnakeGame extends Game {
 
       let tempCell = new SnakeCell(null, null, null);
       if (foodCollision) {
+        this.score += 100;
+        if (this.score >= this.condition[this.currentLevel] && this.currentLevel < this.maximumLevel){
+            this.newLevel();
+        }
         tempCell = this.worm.addLink();
         this.spriteLayer.addDrawable(tempCell);
         this.snakeSprites.add(tempCell);
-        this.score += 100;
         this.foodSprites.removeSprite(foodCollision);
         this.replaceFood();
+        console.log(this.snakeSprites.length);//undefine
       } else if (wallCollision || bodyCollision) {
         this.worm.alive = false;
         let gameOver = new TextDisplay(10, 10, this.canvas.width);
