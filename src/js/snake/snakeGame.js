@@ -273,7 +273,7 @@ class SnakeGame extends Game {
       }
       else if (wallCollision || bodyCollision) {
         this.worm.alive = false;
-        let gameOver = new TextDisplay(10, 10, this.canvas.width);
+        let gameOver = new TextDisplay(this.GRID_SIZE * 2, this.GRID_SIZE * 2, this.canvas.width);
         gameOver.text = wallCollision ? 'Game Over' : 'Om Nom';
         gameOver.fontName = 'Courier';
         gameOver.fontSize = 32;
