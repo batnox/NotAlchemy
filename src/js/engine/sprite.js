@@ -55,6 +55,5 @@ class Sprite {
       context.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
       context.restore();
     }
-    context.strokeRect(this.x, this.y, this.width, this.height);
   }
 }
