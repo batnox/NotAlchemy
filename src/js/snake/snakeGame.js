@@ -261,8 +261,7 @@ class SnakeGame extends Game {
         this.score += 100;
         this.worm.addLink();
         this.replaceFood();
-        if (this.score >= this.condition[this.currentLevel] &&
-          this.currentLevel < this.maximumLevel) {
+        if (this.currentLevel < this.maximumLevel && this.score >= this.condition[this.currentLevel]) {
           this.newLevel();
         }
       } else if (spoiledCollision) {

@@ -24,6 +24,10 @@ class SpriteGroup {
     return this.sprites.splice(index, 1)[0];
   }
 
+  clear() {
+    this.sprites = [];
+  }
+
   /**
    * Removes the sprite from the group.
    * @param sprite {Sprite} The sprite to remove.

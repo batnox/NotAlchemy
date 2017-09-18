@@ -89,6 +89,7 @@ class Snake {
 
   killBody() {
     this.snakeHead.nextCell = null;
+    this.snakeTail = this.snakeHead;
   }
 
   setHeadImage(headImage) {
