@@ -2,7 +2,7 @@ class Snake {
   constructor(segmentSize) {
     this.cellSize = segmentSize;
 
-    this.snakeHead = new SnakeCell('head', null, 'right');
+    this.snakeHead = new SnakeCell('head', null, Direction.RIGHT);
     this.snakeHead.setSize(segmentSize, segmentSize);
     this.snakeTail = this.snakeHead;
     this.direction = Direction.RIGHT;
