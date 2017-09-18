@@ -7,8 +7,6 @@ class Sprite {
     this.image = new Image();
     this.x = 0;
     this.y = 0;
-    this.originX = 0;
-    this.originY = 0;
     this.width = 0;
     this.height = 0;
     this.rotation = 0;
@@ -17,11 +15,6 @@ class Sprite {
   setPosition(x, y) {
     this.x = x;
     this.y = y;
-  }
-
-  setOrigin(originX, originY) {
-    this.originX = originX;
-    this.originY = originY;
   }
 
   setSize(width, height) {
@@ -57,14 +50,11 @@ class Sprite {
   draw(context) {
     if (this.image.src) {
       context.save();
-      context.translate(this.x, this.y);
+      context.translate(this.x + this.width / 2, this.y + this.height / 2);
       context.rotate(this.rotation * Math.PI / 180);
-      context.translate(-this.originX, -this.originY);
-      context.drawImage(this.image, 0, 0, this.width, this.height);
+      context.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
       context.restore();
-    } else {
-      context.fillStyle = '#f0f';
-      context.fillRect(this.x - this.originX, this.y - this.originY, this.width, this.height);
     }
+    context.strokeRect(this.x, this.y, this.width, this.height);
   }
 }

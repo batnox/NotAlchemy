@@ -39,6 +39,11 @@ class Snake {
   update() {
     if (this.alive) {
       this.moveSnake();
+      let current = this.snakeHead;
+      while (current.nextCell) {
+        current.update();
+        current = current.nextCell;
+      }
     }
   }
 

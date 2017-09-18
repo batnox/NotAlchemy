@@ -3,7 +3,23 @@ class SnakeCell extends Sprite {
     super();
     this.nextCell = null;
     this.direction = Direction.RIGHT;
+  }
 
+  update() {
+    switch (this.direction) {
+      case Direction.LEFT:
+        this.rotation = 270;
+        break;
+      case Direction.RIGHT:
+        this.rotation = 90;
+        break;
+      case Direction.UP:
+        this.rotation = 0;
+        break;
+      case Direction.DOWN:
+        this.rotation = 180;
+        break;
+    }
   }
 
   draw(context) {
