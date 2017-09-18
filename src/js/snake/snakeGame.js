@@ -33,8 +33,8 @@ class SnakeGame extends Game {
     this.spriteLayer.addDrawable(this.wallSprites);
     this.spriteLayer.addDrawable(this.foodSprites);
 
-    this.scoreDisplay = new TextDisplay(this.canvas.width - 140, this.canvas.height - 28, 100);
-    this.scoreDisplay.fontSize = 20;
+    this.scoreDisplay = new TextDisplay(this.GRID_SIZE, this.canvas.height - 18, this.canvas.width - this.GRID_SIZE / 2);
+    this.scoreDisplay.fontSize = 14;
     this.scoreDisplay.fontName = 'Courier';
     this.scoreDisplay.fontColor = '#fff';
     this.scoreDisplay.text = `Score: ${this.score}`;
