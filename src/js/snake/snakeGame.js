@@ -11,6 +11,9 @@ class SnakeGame extends Game {
     this.spoiledSprites = new SpriteGroup();
 
     this.score = 0;
+    if (!localStorage.getItem('high-score')) {
+      localStorage.setItem('high-score', 0);
+    }
     this.worm = new Snake(this.GRID_SIZE);
 
     /**
@@ -33,12 +36,22 @@ class SnakeGame extends Game {
     this.spriteLayer.addDrawable(this.wallSprites);
     this.spriteLayer.addDrawable(this.foodSprites);
 
-    this.scoreDisplay = new TextDisplay(this.GRID_SIZE, this.canvas.height - 18, this.canvas.width - this.GRID_SIZE / 2);
+    this.scoreDisplay = new TextDisplay(this.GRID_SIZE, this.canvas.height -
+      18, this.canvas.width - this.GRID_SIZE / 2);
     this.scoreDisplay.fontSize = 14;
     this.scoreDisplay.fontName = 'Courier';
     this.scoreDisplay.fontColor = '#fff';
     this.scoreDisplay.text = `Score: ${this.score}`;
     this.overlayLayer.addDrawable(this.scoreDisplay);
+
+    this.highScoreDisplay = new TextDisplay(this.canvas.width /
+      2, this.canvas.height -
+      18, this.canvas.width / 2 - this.GRID_SIZE);
+    this.highScoreDisplay.fontSize = 14;
+    this.highScoreDisplay.fontName = 'Courier';
+    this.highScoreDisplay.fontColor = '#fff';
+    this.highScoreDisplay.text = `High Score: ${this.score}`;
+    this.overlayLayer.addDrawable(this.highScoreDisplay);
 
     this.loadContent()
       .then(() => {
@@ -261,7 +274,8 @@ class SnakeGame extends Game {
         this.score += 100;
         this.worm.addLink();
         this.replaceFood();
-        if (this.currentLevel < this.maximumLevel && this.score >= this.condition[this.currentLevel]) {
+        if (this.currentLevel < this.maximumLevel &&
+          this.score >= this.condition[this.currentLevel]) {
           this.newLevel();
         }
       } else if (spoiledCollision) {
@@ -273,7 +287,8 @@ class SnakeGame extends Game {
       }
       else if (wallCollision || bodyCollision) {
         this.worm.alive = false;
-        let gameOver = new TextDisplay(this.GRID_SIZE * 2, this.GRID_SIZE * 2, this.canvas.width);
+        let gameOver = new TextDisplay(this.GRID_SIZE * 2, this.GRID_SIZE * 2,
+          this.canvas.width);
         gameOver.text = wallCollision ? 'Game Over' : 'Om Nom';
         gameOver.fontName = 'Courier';
         gameOver.fontSize = 32;
@@ -282,6 +297,13 @@ class SnakeGame extends Game {
       }
     }
     this.scoreDisplay.text = `Score: ${this.score}`;
+
+    let highScore = localStorage.getItem('high-score');
+    if (this.score > highScore) {
+      highScore = this.score;
+      localStorage.setItem('high-score', this.score);
+    }
+    this.highScoreDisplay.text = `High Score: ${highScore}`;
   }
 
   draw() {
