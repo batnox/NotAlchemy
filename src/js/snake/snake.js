@@ -96,6 +96,7 @@ class Snake {
   }
 
   setBodyImage(bodyImage) {
+    this.bodyImage = bodyImage;
     let current = this.snakeHead.nextCell;
     while (current) {
       current.setImage(bodyImage);
