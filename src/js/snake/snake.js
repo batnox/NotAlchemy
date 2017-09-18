@@ -10,6 +10,17 @@ class Snake {
     this.bodyImage = null;
   }
 
+  isCollision(sprite) {
+    let current = this.snakeHead;
+    while (current) {
+      if (current.isCollision(sprite)) {
+        return true;
+      }
+      current = current.nextCell;
+    }
+    return false;
+  }
+
   isBodyCollision() {
     let current = this.snakeHead;
     while (current.nextCell) {
@@ -71,13 +82,21 @@ class Snake {
     newCell.setPosition(tailX, tailY);
     newCell.setSize(this.cellSize, this.cellSize);
     newCell.setImage(this.bodyImage);
-    this.snakeTail.setNextCell(newCell);
+    this.snakeTail.nextCell = newCell;
     this.snakeTail = newCell;
     return newCell;
   }
 
+  setHeadImage(headImage) {
+    this.snakeHead.setImage(headImage);
+  }
+
   setBodyImage(bodyImage) {
-    this.bodyImage = bodyImage;
+    let current = this.snakeHead.nextCell;
+    while (current) {
+      current.setImage(bodyImage);
+      current = current.nextCell;
+    }
   }
 
   draw(context) {

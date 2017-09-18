@@ -6,14 +6,10 @@ class SnakeCell extends Sprite {
 
   }
 
-  setNextCell(nextCell) {
-    this.nextCell = nextCell;
-  }
-
   draw(context) {
     super.draw(context);
-    context.fillStyle = '#f0f';
-    context.fillRect(this.x, this.y, this.width, this.height);
+    // context.fillStyle = '#f0f';
+    // context.fillRect(this.x, this.y, this.width, this.height);
     if (this.nextCell) {
       this.nextCell.draw(context);
     }

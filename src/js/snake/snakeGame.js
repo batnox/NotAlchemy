@@ -6,7 +6,6 @@ class SnakeGame extends Game {
         this.GRID_SIZE = 30;
         //this.STEP_SIZE = 30;
 
-        this.snakeSprites = new SpriteGroup();
         this.wallSprites = new SpriteGroup();
         this.foodSprites = new SpriteGroup();
         this.spoiledSprites = new SpriteGroup();
@@ -31,7 +30,6 @@ class SnakeGame extends Game {
         this.canvas.height = this.GRID_NUMBER * this.GRID_SIZE;
 
         this.spriteLayer.addDrawable(this.worm);
-        this.spriteLayer.addDrawable(this.snakeSprites);
         this.spriteLayer.addDrawable(this.wallSprites);
         this.spriteLayer.addDrawable(this.foodSprites);
 
@@ -45,8 +43,7 @@ class SnakeGame extends Game {
     }
 
     newLevel() {
-        this.snakeSprites = new SpriteGroup();
-        this.wallSprites = new SpriteGroup();
+        this.wallSprites.clear();
 
         this.score = 0;
         //this.worm = new Snake(this.GRID_SIZE); //
@@ -59,7 +56,6 @@ class SnakeGame extends Game {
 
         this.buildMap();
         this.spriteLayer.addDrawable(this.worm);
-        this.spriteLayer.addDrawable(this.snakeSprites);
         this.spriteLayer.addDrawable(this.wallSprites);
         this.spriteLayer.addDrawable(this.foodSprites);
         this.spriteLayer.addDrawable(this.spoiledSprites);
@@ -128,14 +124,7 @@ class SnakeGame extends Game {
         return super.loadContent()
             .then(data => {
                     //load snake images
-                    this.worm.snakeHead.setImage(data['images'].snakes[0].img);
-                    this.snakeSprites.add(this.worm.snakeHead);
-                    let currentCell = this.worm.snakeHead.nextCell;
-                    while (currentCell !== null) {
-                        currentCell.setImage(data['images'].snakes[1].img);
-                        this.snakeSprites.add(currentCell);
-                        currentCell = currentCell.nextCell;
-                    }
+                    this.worm.setHeadImage(data['images'].snakes[0].img);
                     this.worm.setBodyImage(data['images'].snakes[1].img);
 
                     //load all wall material
@@ -186,10 +175,11 @@ class SnakeGame extends Game {
             }
         }
 
-        for (let checkSnake of this.snakeSprites.sprites) {
-            if (checkSnake.x === position[0] && checkSnake.y === position[1]) {
-                return this.emptyCheck();
-            }
+        let sprite = new Sprite();
+        sprite.setPosition(position[0], position[1]);
+        sprite.setSize(this.GRID_SIZE, this.GRID_SIZE);
+        if (this.worm.isCollision(sprite)) {
+          return this.emptyCheck();
         }
         return position;
     }
@@ -268,10 +258,10 @@ class SnakeGame extends Game {
                 }
                 tempCell = this.worm.addLink();
                 this.spriteLayer.addDrawable(tempCell);
-                this.snakeSprites.add(tempCell);
+                // this.snakeSprites.add(tempCell);
 
                 this.replaceFood();
-                console.log(this.snakeSprites.length);//undefine??
+                // console.log(this.snakeSprites.length);//undefine??
 
             } else if (spoiledCollision) {
                 //BONUS 1-2  When eaten this causes the snake to shrink.
