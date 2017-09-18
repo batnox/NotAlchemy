@@ -3,7 +3,7 @@ class SnakeGame extends Game {
     super();
     this.TICK_PER_SECOND = 10;
     this.GRID_NUMBER = 30;
-    this.GRID_SIZE = 30;
+    this.GRID_SIZE = 20;
     //this.STEP_SIZE = 30;
 
     this.wallSprites = new SpriteGroup();
