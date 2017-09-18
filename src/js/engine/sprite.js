@@ -62,6 +62,9 @@ class Sprite {
       context.translate(-this.originX, -this.originY);
       context.drawImage(this.image, 0, 0, this.width, this.height);
       context.restore();
+    } else {
+      context.fillStyle = '#f0f';
+      context.fillRect(this.x - this.originX, this.y - this.originY, this.width, this.height);
     }
   }
 }

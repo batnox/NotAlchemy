@@ -54,6 +54,7 @@ class SnakeGame extends Game {
 
     this.score = 0;
     //this.worm = new Snake(this.GRID_SIZE); //
+    this.worm.killBody();
     this.worm.setPosition(60, 60);
     this.worm.direction = Direction.RIGHT;
     //this.spriteLayer.removeDrawable(1); //
@@ -62,10 +63,10 @@ class SnakeGame extends Game {
     this.currentLevel++;
 
     this.buildMap();
-    this.spriteLayer.addDrawable(this.worm);
-    this.spriteLayer.addDrawable(this.wallSprites);
-    this.spriteLayer.addDrawable(this.foodSprites);
-    this.spriteLayer.addDrawable(this.spoiledSprites);
+    // this.spriteLayer.addDrawable(this.worm);
+    // this.spriteLayer.addDrawable(this.wallSprites);
+    // this.spriteLayer.addDrawable(this.foodSprites);
+    // this.spriteLayer.addDrawable(this.spoiledSprites);
 
     this.canvas.width = this.GRID_NUMBER * this.GRID_SIZE;
     this.canvas.height = this.GRID_NUMBER * this.GRID_SIZE;

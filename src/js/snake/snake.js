@@ -87,11 +87,17 @@ class Snake {
     return newCell;
   }
 
+  killBody() {
+    this.snakeHead.nextCell = null;
+  }
+
   setHeadImage(headImage) {
+    console.log(headImage);
     this.snakeHead.setImage(headImage);
   }
 
   setBodyImage(bodyImage) {
+    console.log(bodyImage);
     let current = this.snakeHead.nextCell;
     while (current) {
       current.setImage(bodyImage);
