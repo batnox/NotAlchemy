@@ -2,7 +2,7 @@ class Snake {
   constructor(segmentSize) {
     this.cellSize = segmentSize;
 
-    this.snakeHead = new SnakeCell('head', null, Direction.RIGHT);
+    this.snakeHead = new SnakeCell();
     this.snakeHead.setSize(segmentSize, segmentSize);
     this.snakeTail = this.snakeHead;
     this.direction = Direction.RIGHT;
@@ -82,8 +82,7 @@ class Snake {
       tailY = tailY - this.cellSize;
     }
 
-    let newCell = new SnakeCell('body', this.snakeTail,
-      this.snakeTail.direction);
+    let newCell = new SnakeCell();
     newCell.setPosition(tailX, tailY);
     newCell.setSize(this.cellSize, this.cellSize);
     newCell.setImage(this.bodyImage);
