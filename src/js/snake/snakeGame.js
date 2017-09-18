@@ -240,7 +240,6 @@ class SnakeGame extends Game {
       let bodyCollision = this.worm.isBodyCollision();
       let spoiledCollision = this.spoiledSprites.getOverlap(
         this.worm.snakeHead);
-      let tempCell = new SnakeCell(null, null, null);
 
       //BONUS 1-1 Spoiled food that stays on the level for some amount of time
       if (this.currentLevel === 1) {
@@ -260,17 +259,12 @@ class SnakeGame extends Game {
 
       if (foodCollision) {
         this.score += 100;
+        this.worm.addLink();
+        this.replaceFood();
         if (this.score >= this.condition[this.currentLevel] &&
           this.currentLevel < this.maximumLevel) {
           this.newLevel();
         }
-        tempCell = this.worm.addLink();
-        this.spriteLayer.addDrawable(tempCell);
-        // this.snakeSprites.add(tempCell);
-
-        this.replaceFood();
-        // console.log(this.snakeSprites.length);//undefine??
-
       } else if (spoiledCollision) {
         //BONUS 1-2  When eaten this causes the snake to shrink.
         //do shrink here
