@@ -2,3 +2,17 @@ body {
     color: #fff;
     background-color: #333;
 }
+
+#game-options button {
+    font: 15pt Arial;
+    width: 120px;
+    line-height: 30px;
+    border: solid #000000;
+    border-radius: 10px;
+    color: #000000;
+    background: #CCCCCC;
+}
+
+#game-options button:hover {
+    background: #FFFFFF;
+}
