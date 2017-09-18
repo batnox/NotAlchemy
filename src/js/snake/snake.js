@@ -87,6 +87,22 @@ class Snake {
     return newCell;
   }
 
+  removeLink() {
+    if (this.snakeHead === this.snakeTail) {
+      this.alive = false;
+      return;
+    }
+
+    let current = this.snakeHead;
+    while (current) {
+      if (current.nextCell === this.snakeTail) {
+        current.nextCell = null;
+        this.snakeTail = current;
+        return;
+      }
+    }
+  }
+
   killBody() {
     this.snakeHead.nextCell = null;
     this.snakeTail = this.snakeHead;

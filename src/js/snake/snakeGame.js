@@ -267,8 +267,8 @@ class SnakeGame extends Game {
       } else if (spoiledCollision) {
         //BONUS 1-2  When eaten this causes the snake to shrink.
         //do shrink here
-
         this.score -= 100;
+        this.worm.removeLink();
         this.replaceSpoiled();
       }
       else if (wallCollision || bodyCollision) {
