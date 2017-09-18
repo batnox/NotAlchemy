@@ -65,7 +65,7 @@ class SnakeGame extends Game {
   newLevel() {
     this.wallSprites.clear();
 
-    this.score = 0;
+    // this.score = 0;
     //this.worm = new Snake(this.GRID_SIZE); //
     this.worm.killBody();
     this.worm.setPosition(60, 60);
