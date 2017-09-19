@@ -24,6 +24,10 @@ class SpriteGroup {
     return this.sprites.splice(index, 1)[0];
   }
 
+  clear() {
+    this.sprites = [];
+  }
+
   /**
    * Removes the sprite from the group.
    * @param sprite {Sprite} The sprite to remove.
@@ -78,4 +82,11 @@ class SpriteGroup {
     }
     return null;
   }
+
+  draw(context) {
+    for (let sprite of this.sprites) {
+      sprite.draw(context);
+    }
+  }
+
 }

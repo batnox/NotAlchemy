@@ -44,7 +44,7 @@ class Game {
   }
 
   start() {
-    setInterval(() => {
+    this.loop = setInterval(() => {
       this.update();
       this.draw();
     }, 1000 / this.TICK_PER_SECOND);
@@ -78,6 +78,11 @@ class Game {
     });
   }
 
+  stop() {
+    console.log('Stopping...');
+    clearInterval(this.loop);
+  }
+
   /**
    * Loads all content.
    * @returns {*} A promise.
@@ -102,6 +107,10 @@ class Game {
           if (running === 0) {
             resolve(loaded);
           }
+        }).catch((jqxhr, textStatus, error) => {
+          console.log('jqxhr: ' + JSON.stringify(jqxhr));
+          console.log('ts: ' + JSON.stringify(textStatus));
+          console.log('err: ' + JSON.stringify(error));
         });
       }
     });
