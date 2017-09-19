@@ -20,7 +20,7 @@ class SnakeGame extends Game {
      * Determines the direction that the Snake will go
      */
     addEventListener('keydown', event => this.onKeyDown(event));
-    this.addContent('images', 'json/snake_elements.json');
+    this.addContent('images', 'snake/json/snake_elements.json');
 
     this.currentLevel = 0; // 0 and 1
     this.maximumLevel = 1;
