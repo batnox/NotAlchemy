@@ -1,20 +1,22 @@
+let GRID_NUMBER = 30;
+let GRID_SIZE = 20;
+let SCORE_PER_FOOD = 500;
+let TICKS_PER_SECOND = 10;
+let FOOD_LIFE = 10 * TICKS_PER_SECOND;
+
 class SnakeGame extends Game {
   constructor() {
     super();
-    this.TICK_PER_SECOND = 10;
-    this.GRID_NUMBER = 30;
-    this.GRID_SIZE = 20;
-    //this.STEP_SIZE = 30;
+    this.TICK_PER_SECOND = TICKS_PER_SECOND;
 
     this.wallSprites = new SpriteGroup();
     this.foodSprites = new SpriteGroup();
-    this.spoiledSprites = new SpriteGroup();
 
     this.score = 0;
     if (!localStorage.getItem('high-score')) {
       localStorage.setItem('high-score', 0);
     }
-    this.worm = new Snake(this.GRID_SIZE);
+    this.worm = new Snake(GRID_SIZE);
 
     /**
      * Determines the direction that the Snake will go
@@ -26,15 +28,15 @@ class SnakeGame extends Game {
     this.maximumLevel = 1;
     this.condition = [500];//condition for go to next level
 
-    this.canvas.width = this.GRID_NUMBER * this.GRID_SIZE;
-    this.canvas.height = this.GRID_NUMBER * this.GRID_SIZE;
+    this.canvas.width = GRID_NUMBER * GRID_SIZE;
+    this.canvas.height = GRID_NUMBER * GRID_SIZE;
 
     this.spriteLayer.addDrawable(this.worm);
     this.spriteLayer.addDrawable(this.wallSprites);
     this.spriteLayer.addDrawable(this.foodSprites);
 
-    this.scoreDisplay = new TextDisplay(this.GRID_SIZE, this.canvas.height -
-      18, this.canvas.width - this.GRID_SIZE / 2);
+    this.scoreDisplay = new TextDisplay(GRID_SIZE, this.canvas.height -
+      18, this.canvas.width - GRID_SIZE / 2);
     this.scoreDisplay.fontSize = 14;
     this.scoreDisplay.fontName = 'Courier';
     this.scoreDisplay.fontColor = '#fff';
@@ -43,12 +45,18 @@ class SnakeGame extends Game {
 
     this.highScoreDisplay = new TextDisplay(this.canvas.width /
       2, this.canvas.height -
-      18, this.canvas.width / 2 - this.GRID_SIZE);
+      18, this.canvas.width / 2 - GRID_SIZE);
     this.highScoreDisplay.fontSize = 14;
     this.highScoreDisplay.fontName = 'Courier';
     this.highScoreDisplay.fontColor = '#fff';
     this.highScoreDisplay.text = `High Score: ${this.score}`;
     this.overlayLayer.addDrawable(this.highScoreDisplay);
+
+    this.gameOver = new TextDisplay(GRID_SIZE * 2, GRID_SIZE * 2,
+      this.canvas.width);
+    this.gameOver.fontName = 'Courier';
+    this.gameOver.fontSize = 32;
+    this.gameOver.fontColor = '#fff';
 
     this.loadContent()
       .then(() => {
@@ -69,64 +77,52 @@ class SnakeGame extends Game {
     this.currentLevel++;
 
     this.buildMap();
-    this.canvas.width = this.GRID_NUMBER * this.GRID_SIZE;
-    this.canvas.height = this.GRID_NUMBER * this.GRID_SIZE;
+    this.canvas.width = GRID_NUMBER * GRID_SIZE;
+    this.canvas.height = GRID_NUMBER * GRID_SIZE;
   }
 
   buildMap() {
     if (this.currentLevel === 0) {
-      for (let x = 0; x < this.GRID_NUMBER; x++) {
-        for (let y = 0; y < this.GRID_NUMBER; y++) {
-          if (x === 0 || y === 0 || x === this.GRID_NUMBER - 1 ||
-            y === this.GRID_NUMBER - 1) {
+      for (let x = 0; x < GRID_NUMBER; x++) {
+        for (let y = 0; y < GRID_NUMBER; y++) {
+          if (x === 0 || y === 0 || x === GRID_NUMBER - 1 ||
+            y === GRID_NUMBER - 1) {
             let random = Math.floor(Math.random() * 4);
-            let wall = new Sprite();
-            wall.setImage('wall-0-' + random);
-            wall.setSize(this.GRID_SIZE, this.GRID_SIZE);
-            wall.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
+            let wall = new Wall(random);
+            wall.setPosition(x * GRID_SIZE, y * GRID_SIZE);
             this.wallSprites.add(wall);
           }
         }
       }
     } else {
-      for (let x = 0; x < this.GRID_NUMBER; x++) {
-        for (let y = 0; y < this.GRID_NUMBER; y++) {
-          if (x === 0 || y === 0 || x === (this.GRID_NUMBER - 1) ||
-            y === (this.GRID_NUMBER - 1)) {
-            let random = Math.floor(Math.random() * 4);
-            let wall = new Sprite();
-            wall.setImage('wall-1-' + random);
-            wall.setSize(this.GRID_SIZE, this.GRID_SIZE);
-            wall.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
+      for (let x = 0; x < GRID_NUMBER; x++) {
+        for (let y = 0; y < GRID_NUMBER; y++) {
+          let random = Math.floor(Math.random() * 4) + 4;
+          if (x === 0 || y === 0 || x === (GRID_NUMBER - 1) ||
+            y === (GRID_NUMBER - 1)) {
+            let wall = new Wall(random);
+            wall.setPosition(x * GRID_SIZE, y * GRID_SIZE);
             this.wallSprites.add(wall);
-          } else if (x > Math.floor(this.GRID_NUMBER / 3) &&
-            x < Math.floor(this.GRID_NUMBER * 2 / 3) &&
-            y === Math.floor((this.GRID_NUMBER) / 2)) {
-            let random = Math.floor(Math.random() * 4);
-            let wall = new Sprite();
-            wall.setImage('wall-1-' + random);
-            wall.setSize(this.GRID_SIZE, this.GRID_SIZE);
-            wall.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
+          } else if (x > Math.floor(GRID_NUMBER / 3) &&
+            x < Math.floor(GRID_NUMBER * 2 / 3) &&
+            y === Math.floor((GRID_NUMBER) / 2)) {
+            let wall = new Wall(random);
+            wall.setPosition(x * GRID_SIZE, y * GRID_SIZE);
             this.wallSprites.add(wall);
           }
-          else if (y > Math.floor(this.GRID_NUMBER / 3) &&
-            y < Math.floor(this.GRID_NUMBER * 2 / 3) &&
-            x === Math.floor((this.GRID_NUMBER) / 2)) {
-            let random = Math.floor(Math.random() * 4);
-            let wall = new Sprite();
-            wall.setImage('wall-1-' + random);
-            wall.setSize(this.GRID_SIZE, this.GRID_SIZE);
-            wall.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
+          else if (y > Math.floor(GRID_NUMBER / 3) &&
+            y < Math.floor(GRID_NUMBER * 2 / 3) &&
+            x === Math.floor((GRID_NUMBER) / 2)) {
+            let wall = new Wall(random);
+            wall.setPosition(x * GRID_SIZE, y * GRID_SIZE);
             this.wallSprites.add(wall);
           }
         }
       }
     }
 
-    let food = new Sprite();
-    food.setImage('food');
-    food.setSize(this.GRID_SIZE, this.GRID_SIZE);
-    food.setPosition(8 * this.GRID_SIZE, 8 * this.GRID_SIZE);
+    let food = new Food();
+    food.setPosition(8 * GRID_SIZE, 8 * GRID_SIZE);
     this.foodSprites.add(food);
   }
 
@@ -136,14 +132,14 @@ class SnakeGame extends Game {
         .then(data => {
           imageManager.addImage('head', data['images'].snake.head);
           imageManager.addImage('body', data['images'].snake.body);
-          imageManager.addImage('wall-0-0', data['images'].walls[0][0]);
-          imageManager.addImage('wall-0-1', data['images'].walls[0][1]);
-          imageManager.addImage('wall-0-2', data['images'].walls[0][2]);
-          imageManager.addImage('wall-0-3', data['images'].walls[0][3]);
-          imageManager.addImage('wall-1-0', data['images'].walls[1][0]);
-          imageManager.addImage('wall-1-1', data['images'].walls[1][1]);
-          imageManager.addImage('wall-1-2', data['images'].walls[1][2]);
-          imageManager.addImage('wall-1-3', data['images'].walls[1][3]);
+          imageManager.addImage('wall-0', data['images'].walls[0][0]);
+          imageManager.addImage('wall-1', data['images'].walls[0][1]);
+          imageManager.addImage('wall-2', data['images'].walls[0][2]);
+          imageManager.addImage('wall-3', data['images'].walls[0][3]);
+          imageManager.addImage('wall-4', data['images'].walls[1][0]);
+          imageManager.addImage('wall-5', data['images'].walls[1][1]);
+          imageManager.addImage('wall-6', data['images'].walls[1][2]);
+          imageManager.addImage('wall-7', data['images'].walls[1][3]);
           imageManager.addImage('food', data['images'].food.normal);
           imageManager.addImage('spoiled', data['images'].food.spoiled);
           resolve();
@@ -151,20 +147,18 @@ class SnakeGame extends Game {
     });
   }
 
-  replaceFood() {
-    this.foodSprites.removeIndex(0);
-    let food = new Sprite();
+  replaceFood(deadFood) {
+    this.foodSprites.removeSprite(deadFood);
+    let food = new Food();
     let position = this.emptyCheck();
-    food.setImage('food');
-    food.setSize(this.GRID_SIZE, this.GRID_SIZE);
     food.setPosition(position[0], position[1]);
     this.foodSprites.add(food);
   }
 
   emptyCheck() {
     let position = [
-      Math.floor(Math.random() * this.GRID_NUMBER) * this.GRID_SIZE,
-      Math.floor(Math.random() * this.GRID_NUMBER) * this.GRID_SIZE];
+      Math.floor(Math.random() * GRID_NUMBER) * GRID_SIZE,
+      Math.floor(Math.random() * GRID_NUMBER) * GRID_SIZE];
 
     for (let checkWall of this.wallSprites.sprites) {
       if (checkWall.x === position[0] && checkWall.y === position[1]) {
@@ -172,31 +166,10 @@ class SnakeGame extends Game {
       }
     }
 
-    let sprite = new Sprite();
-    sprite.setPosition(position[0], position[1]);
-    sprite.setSize(this.GRID_SIZE, this.GRID_SIZE);
-    if (this.worm.isCollision(sprite)) {
-      return this.emptyCheck();
-    }
-    return position;
-  }
-
-  replaceSpoiled() {
-    this.foodSprites.removeIndex(0);
-    let food = new Sprite();
-    let position = this.spoiledEmptyCheck();
-    food.setImage('spoiled');
-    food.setSize(this.GRID_SIZE, this.GRID_SIZE);
+    let food = new Food();
     food.setPosition(position[0], position[1]);
-    this.spoiledSprites.add(food);
-  }
-
-  spoiledEmptyCheck() {
-    let position = this.emptyCheck();
-    for (let checkFood of this.foodSprites.sprites) {
-      if (checkFood.x === position[0] && checkFood.y === position[1]) {
-        return this.spoiledEmptyCheck();
-      }
+    if (this.worm.isCollision(food)) {
+      return this.emptyCheck();
     }
     return position;
   }
@@ -230,51 +203,33 @@ class SnakeGame extends Game {
       let foodCollision = this.foodSprites.getOverlap(this.worm.snakeHead);
       let wallCollision = this.wallSprites.getOverlap(this.worm.snakeHead);
       let bodyCollision = this.worm.isBodyCollision();
-      let spoiledCollision = this.spoiledSprites.getOverlap(
-        this.worm.snakeHead);
 
-      //BONUS 1-1 Spoiled food that stays on the level for some amount of time
-      if (this.currentLevel === 1) {
-        if (this.spoiledSprites.size() > 0) {
-          let time = Math.random();
-          if (time > 0.96) {
-            this.spoiledSprites.removeIndex(this.spoiledSprites.size() - 1);
-          }
-        }
-        else {
-          let time = Math.random();
-          if (time > 0.96) {
-            this.replaceSpoiled();
-          }
-        }
+      for (let food of this.foodSprites.sprites) {
+        food.update();
       }
 
       if (foodCollision) {
-        this.score += 100;
-        this.worm.addLink();
-        this.replaceFood();
+        let food = foodCollision.sprite;
+        if (food.spoiled) {
+          this.score -= SCORE_PER_FOOD;
+          this.worm.removeLink();
+        } else {
+          this.score += SCORE_PER_FOOD;
+          this.worm.addLink();
+        }
+        this.replaceFood(food);
         if (this.currentLevel < this.maximumLevel &&
           this.score >= this.condition[this.currentLevel]) {
           this.newLevel();
         }
-      } else if (spoiledCollision) {
-        //BONUS 1-2  When eaten this causes the snake to shrink.
-        //do shrink here
-        this.score -= 100;
-        this.worm.removeLink();
-        this.replaceSpoiled();
-      }
-      else if (wallCollision || bodyCollision) {
+      } else if (wallCollision || bodyCollision) {
         this.worm.alive = false;
-        let gameOver = new TextDisplay(this.GRID_SIZE * 2, this.GRID_SIZE * 2,
-          this.canvas.width);
-        gameOver.text = wallCollision ? 'Game Over' : 'Om Nom';
-        gameOver.fontName = 'Courier';
-        gameOver.fontSize = 32;
-        gameOver.fontColor = '#fff';
-        this.overlayLayer.addDrawable(gameOver);
       }
+    } else if (!this.gameOver.text) {
+      this.gameOver.text = 'Game Over';
+      this.overlayLayer.addDrawable(this.gameOver);
     }
+
     this.scoreDisplay.text = `Score: ${this.score}`;
 
     let highScore = localStorage.getItem('high-score');

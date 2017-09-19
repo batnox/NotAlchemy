@@ -69,6 +69,7 @@ class Snake {
   }
 
   addLink() {
+    console.log('Adding...');
     let tailX = this.snakeTail.x;
     let tailY = this.snakeTail.y;
     let tailDirection = this.snakeTail.direction;
@@ -92,6 +93,7 @@ class Snake {
   }
 
   removeLink() {
+    console.log('Removing...');
     if (this.snakeHead === this.snakeTail) {
       this.alive = false;
       return;
