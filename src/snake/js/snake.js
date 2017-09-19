@@ -106,6 +106,7 @@ class Snake {
         this.snakeTail = current;
         return;
       }
+      current = current.nextCell;
     }
   }
 
