@@ -25,9 +25,6 @@ class SnakeGame extends Game {
     this.currentLevel = 0; // 0 and 1
     this.maximumLevel = 1;
     this.condition = [500];//condition for go to next level
-    this.wallMaterial = [];
-    this.foodMaterial = [];
-    this.spoiledMaterial = [];
 
     this.canvas.width = this.GRID_NUMBER * this.GRID_SIZE;
     this.canvas.height = this.GRID_NUMBER * this.GRID_SIZE;
@@ -65,123 +62,103 @@ class SnakeGame extends Game {
   newLevel() {
     this.wallSprites.clear();
 
-    // this.score = 0;
-    //this.worm = new Snake(this.GRID_SIZE); //
     this.worm.killBody();
     this.worm.setPosition(60, 60);
     this.worm.direction = Direction.RIGHT;
-    //this.spriteLayer.removeDrawable(1); //
-    //this.worm.snakeTail = this.worm.snakeHead; //
 
     this.currentLevel++;
 
     this.buildMap();
-    // this.spriteLayer.addDrawable(this.worm);
-    // this.spriteLayer.addDrawable(this.wallSprites);
-    // this.spriteLayer.addDrawable(this.foodSprites);
-    // this.spriteLayer.addDrawable(this.spoiledSprites);
-
     this.canvas.width = this.GRID_NUMBER * this.GRID_SIZE;
     this.canvas.height = this.GRID_NUMBER * this.GRID_SIZE;
   }
 
   buildMap() {
     if (this.currentLevel === 0) {
-      this.foodSprites.add(this.foodMaterial[this.currentLevel]);
-
       for (let x = 0; x < this.GRID_NUMBER; x++) {
         for (let y = 0; y < this.GRID_NUMBER; y++) {
           if (x === 0 || y === 0 || x === this.GRID_NUMBER - 1 ||
             y === this.GRID_NUMBER - 1) {
             let random = Math.floor(Math.random() * 4);
-            let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(
-              this.wallMaterial[this.currentLevel][random])),
-              this.wallMaterial[this.currentLevel][random]);
-            tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
-            this.wallSprites.add(tmpSprite);
+            let wall = new Sprite();
+            wall.setImage('wall-0-' + random);
+            wall.setSize(this.GRID_SIZE, this.GRID_SIZE);
+            wall.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
+            this.wallSprites.add(wall);
           }
         }
       }
     } else {
-      this.spoiledSprites.add(this.spoiledMaterial[0]);
-
       for (let x = 0; x < this.GRID_NUMBER; x++) {
         for (let y = 0; y < this.GRID_NUMBER; y++) {
           if (x === 0 || y === 0 || x === (this.GRID_NUMBER - 1) ||
             y === (this.GRID_NUMBER - 1)) {
             let random = Math.floor(Math.random() * 4);
-            let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(
-              this.wallMaterial[this.currentLevel][random])),
-              this.wallMaterial[this.currentLevel][random]);
-            tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
-            this.wallSprites.add(tmpSprite);
+            let wall = new Sprite();
+            wall.setImage('wall-1-' + random);
+            wall.setSize(this.GRID_SIZE, this.GRID_SIZE);
+            wall.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
+            this.wallSprites.add(wall);
           } else if (x > Math.floor(this.GRID_NUMBER / 3) &&
             x < Math.floor(this.GRID_NUMBER * 2 / 3) &&
             y === Math.floor((this.GRID_NUMBER) / 2)) {
             let random = Math.floor(Math.random() * 4);
-            let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(
-              this.wallMaterial[this.currentLevel][random])),
-              this.wallMaterial[this.currentLevel][random]);
-            tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
-            this.wallSprites.add(tmpSprite);
+            let wall = new Sprite();
+            wall.setImage('wall-1-' + random);
+            wall.setSize(this.GRID_SIZE, this.GRID_SIZE);
+            wall.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
+            this.wallSprites.add(wall);
           }
           else if (y > Math.floor(this.GRID_NUMBER / 3) &&
             y < Math.floor(this.GRID_NUMBER * 2 / 3) &&
             x === Math.floor((this.GRID_NUMBER) / 2)) {
             let random = Math.floor(Math.random() * 4);
-            let tmpSprite = Object.assign(Object.create(Object.getPrototypeOf(
-              this.wallMaterial[this.currentLevel][random])),
-              this.wallMaterial[this.currentLevel][random]);
-            tmpSprite.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
-            this.wallSprites.add(tmpSprite);
+            let wall = new Sprite();
+            wall.setImage('wall-1-' + random);
+            wall.setSize(this.GRID_SIZE, this.GRID_SIZE);
+            wall.setPosition(x * this.GRID_SIZE, y * this.GRID_SIZE);
+            this.wallSprites.add(wall);
           }
         }
       }
     }
+
+    let food = new Sprite();
+    food.setImage('food');
+    food.setSize(this.GRID_SIZE, this.GRID_SIZE);
+    food.setPosition(8 * this.GRID_SIZE, 8 * this.GRID_SIZE);
+    this.foodSprites.add(food);
   }
 
   loadContent() {
-    return super.loadContent()
-      .then(data => {
-          //load snake images
-          this.worm.setHeadImage(data['images'].snakes[0].img);
-          this.worm.setBodyImage(data['images'].snakes[1].img);
-
-          //load all wall material
-          for (let i in data['images'].walls) {
-            this.wallMaterial[i] = [];
-            for (let j in  data['images'].walls[i].material) {
-              this.wallMaterial[i][j] = new Sprite();
-              this.wallMaterial[i][j].setImage(
-                data['images'].walls[i].material[j]);
-              this.wallMaterial[i][j].setSize(this.GRID_SIZE, this.GRID_SIZE);
-            }
-          }
-
-          //load food material
-          let tmp = new Sprite();
-          tmp.setImage(data['images'].food);
-          tmp.setSize(this.GRID_SIZE, this.GRID_SIZE);
-          tmp.setPosition(8 * this.GRID_SIZE, 8 * this.GRID_SIZE);
-          this.foodMaterial.push(tmp);
-
-          //load spoiled food material
-          let spoiled = new Sprite();
-          spoiled.setImage(data['images'].spoiled);
-          spoiled.setSize(this.GRID_SIZE, this.GRID_SIZE);
-          spoiled.setPosition(5 * this.GRID_SIZE, 10 * this.GRID_SIZE);
-          this.spoiledMaterial.push(spoiled);
-        }
-      );
+    return new Promise((resolve, reject) => {
+      super.loadContent()
+        .then(data => {
+          imageManager.addImage('head', data['images'].snake.head);
+          imageManager.addImage('body', data['images'].snake.body);
+          imageManager.addImage('wall-0-0', data['images'].walls[0][0]);
+          imageManager.addImage('wall-0-1', data['images'].walls[0][1]);
+          imageManager.addImage('wall-0-2', data['images'].walls[0][2]);
+          imageManager.addImage('wall-0-3', data['images'].walls[0][3]);
+          imageManager.addImage('wall-1-0', data['images'].walls[1][0]);
+          imageManager.addImage('wall-1-1', data['images'].walls[1][1]);
+          imageManager.addImage('wall-1-2', data['images'].walls[1][2]);
+          imageManager.addImage('wall-1-3', data['images'].walls[1][3]);
+          imageManager.addImage('food', data['images'].food.normal);
+          imageManager.addImage('spoiled', data['images'].food.spoiled);
+          resolve();
+        });
+    });
   }
 
   replaceFood() {
     this.foodSprites.removeIndex(0);
-    for (let tmpFood of this.foodMaterial) {
-      let position = this.emptyCheck();
-      tmpFood.setPosition(position[0], position[1]);
-      this.foodSprites.add(tmpFood);
-    }
+    let food = new Sprite();
+    let position = this.emptyCheck();
+    food.setImage('food');
+    food.setSize(this.GRID_SIZE, this.GRID_SIZE);
+    food.setPosition(position[0], position[1]);
+    this.foodSprites.add(food);
   }
 
   emptyCheck() {
@@ -205,11 +182,13 @@ class SnakeGame extends Game {
   }
 
   replaceSpoiled() {
-    for (let tmpSpoiled of this.spoiledMaterial) {
-      let position = this.spoiledEmptyCheck();
-      tmpSpoiled.setPosition(position[0], position[1]);
-      this.spoiledSprites.add(tmpSpoiled);
-    }
+    this.foodSprites.removeIndex(0);
+    let food = new Sprite();
+    let position = this.spoiledEmptyCheck();
+    food.setImage('spoiled');
+    food.setSize(this.GRID_SIZE, this.GRID_SIZE);
+    food.setPosition(position[0], position[1]);
+    this.spoiledSprites.add(food);
   }
 
   spoiledEmptyCheck() {

@@ -122,26 +122,44 @@ class Alchemy extends Game {
    * @returns {*} A promise.
    */
   loadContent() {
-    return super.loadContent()
-      .then(data => {
-        for (let element of data['elements'].elements) {
-          let gameElement = new GameElement(element.id, element.name);
-          gameElement.setImage('data:image/png;base64,' + data.images[element.id]);
-          this.elements.push(gameElement);
-        }
+    return new Promise((resolve, reject) => {
+      super.loadContent()
+        .then(data => {
+          for (let element of data['elements'].elements) {
+            let gameElement = new GameElement(element.id, element.name);
+            gameElement.setImage(element.id);
+            this.elements.push(gameElement);
+          }
 
-        for (let elementID of data['known-elements'].elements) {
-          this.knownElements.push(this.getElement(elementID));
-        }
+          for (let elementID of data['known-elements'].elements) {
+            this.knownElements.push(this.getElement(elementID));
+          }
 
-        for (let combination of data['combinations'].combinations) {
-          this.combinations.push(new Combination(
-            combination.element1,
-            combination.element2,
-            combination.result
-          ));
-        }
-      });
+          for (let combination of data['combinations'].combinations) {
+            this.combinations.push(new Combination(
+              combination.element1,
+              combination.element2,
+              combination.result
+            ));
+          }
+
+          let loading = 0;
+          let done = false;
+          for (let key in data['images']) {
+            if (data['images'].hasOwnProperty(key)) {
+              loading++;
+              imageManager.addImage(key, data.images[key])
+                .then(() => {
+                  loading--;
+                  if (done && loading === 0) {
+                    resolve();
+                  }
+                });
+            }
+          }
+          done = true;
+        });
+    });
   }
 
   /**
