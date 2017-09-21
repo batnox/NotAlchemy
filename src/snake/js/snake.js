@@ -115,19 +115,6 @@ class Snake {
     this.snakeTail = this.snakeHead;
   }
 
-  setHeadImage(headImage) {
-    this.snakeHead.setImage(headImage);
-  }
-
-  setBodyImage(bodyImage) {
-    this.bodyImage = bodyImage;
-    let current = this.snakeHead.nextCell;
-    while (current) {
-      current.setImage(bodyImage);
-      current = current.nextCell;
-    }
-  }
-
   draw(context) {
     this.snakeHead.draw(context);
   }
