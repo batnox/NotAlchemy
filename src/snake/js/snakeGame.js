@@ -1,5 +1,5 @@
 let GRID_NUMBER = 30;
-let GRID_SIZE = 20;
+let GRID_SIZE = 30;
 let SCORE_PER_FOOD = 500;
 let TICKS_PER_SECOND = 10;
 let FOOD_LIFE = 10 * TICKS_PER_SECOND;
@@ -61,7 +61,7 @@ class SnakeGame extends Game {
     this.loadContent()
       .then(() => {
         this.buildMap();
-        this.worm.setPosition(60, 60);
+        this.worm.setPosition(3*GRID_SIZE, 3*GRID_SIZE);
         this.start();
       });
 
@@ -71,7 +71,7 @@ class SnakeGame extends Game {
     this.wallSprites.clear();
 
     this.worm.killBody();
-    this.worm.setPosition(60, 60);
+    this.worm.setPosition(3*GRID_SIZE, 3*GRID_SIZE);
     this.worm.direction = Direction.RIGHT;
 
     this.currentLevel++;
