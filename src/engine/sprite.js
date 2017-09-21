@@ -4,7 +4,7 @@ class Sprite {
    * @constructor
    */
   constructor() {
-    this.image = new Image();
+    this.image = null;
     this.x = 0;
     this.y = 0;
     this.width = 0;
@@ -20,8 +20,6 @@ class Sprite {
   setSize(width, height) {
     this.width = width;
     this.height = height;
-    this.image.width = width;
-    this.image.height = height;
   }
 
   setRotation(rotation) {
@@ -29,7 +27,7 @@ class Sprite {
   }
 
   setImage(src) {
-    this.image.src = src;
+    this.image = src;
   }
 
   contains(x, y) {
@@ -48,11 +46,11 @@ class Sprite {
    * @param context {CanvasRenderingContext2D}
    */
   draw(context) {
-    if (this.image.src) {
+    if (this.image) {
       context.save();
       context.translate(this.x + this.width / 2, this.y + this.height / 2);
       context.rotate(this.rotation * Math.PI / 180);
-      context.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
+      context.drawImage(imageManager.getImage(this.image), -this.width / 2, -this.height / 2, this.width, this.height);
       context.restore();
     }
   }

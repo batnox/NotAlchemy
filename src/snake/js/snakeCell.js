@@ -1,11 +1,14 @@
 class SnakeCell extends Sprite {
-  constructor() {
+  constructor(head) {
     super();
+    this.head = head;
     this.nextCell = null;
     this.direction = Direction.RIGHT;
   }
 
   update() {
+    this.setImage(this.head ? 'head' : 'body');
+
     switch (this.direction) {
       case Direction.LEFT:
         this.rotation = 270;
@@ -24,8 +27,6 @@ class SnakeCell extends Sprite {
 
   draw(context) {
     super.draw(context);
-    // context.fillStyle = '#f0f';
-    // context.fillRect(this.x, this.y, this.width, this.height);
     if (this.nextCell) {
       this.nextCell.draw(context);
     }
