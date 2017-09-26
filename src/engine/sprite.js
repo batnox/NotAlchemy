@@ -50,7 +50,11 @@ class Sprite {
       context.save();
       context.translate(this.x + this.width / 2, this.y + this.height / 2);
       context.rotate(this.rotation * Math.PI / 180);
-      context.drawImage(imageManager.getImage(this.image), -this.width / 2, -this.height / 2, this.width, this.height);
+      let image = imageManager.getImage(this.image);
+      if (!image) {
+        throw Error(`No image \'${this.image}\'.`)
+      }
+      context.drawImage(image, -this.width / 2, -this.height / 2, this.width, this.height);
       context.restore();
     }
   }
