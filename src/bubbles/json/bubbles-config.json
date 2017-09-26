@@ -1,0 +1,10 @@
+{
+  "bubbles": {
+    "blue": "bubbles/assets/bubble-blue.png",
+    "green": "bubbles/assets/bubble-green.png",
+    "purple": "bubbles/assets/bubble-purple.png",
+    "red": "bubbles/assets/bubble-red.png",
+    "yellow": "bubbles/assets/bubble-yellow.png"
+  },
+  "guide": "bubbles/assets/guide.png"
+}
