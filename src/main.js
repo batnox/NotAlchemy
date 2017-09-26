@@ -10,6 +10,11 @@ function startSnake() {
   game = new SnakeGame();
 }
 
+function startBubbleShooter() {
+  stopGame();
+  game = new BubbleGame();
+}
+
 function stopGame() {
   if (game) {
     game.stop();
