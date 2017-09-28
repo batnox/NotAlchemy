@@ -10,6 +10,7 @@ class Sprite {
     this.width = 0;
     this.height = 0;
     this.rotation = 0;
+    this.visible = true;
   }
 
   setPosition(x, y) {
@@ -30,6 +31,10 @@ class Sprite {
     this.image = src;
   }
 
+  setVisible(visible) {
+    this.visible = visible;
+  }
+
   contains(x, y) {
     return this.x <= x && x < this.x + this.width
       && this.y <= y && y < this.y + this.height;
@@ -46,7 +51,7 @@ class Sprite {
    * @param context {CanvasRenderingContext2D}
    */
   draw(context) {
-    if (this.image) {
+    if (this.visible && this.image) {
       context.save();
       context.translate(this.x + this.width / 2, this.y + this.height / 2);
       context.rotate(this.rotation * Math.PI / 180);
