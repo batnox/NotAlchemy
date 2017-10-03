@@ -12,7 +12,7 @@ class GameElement extends Sprite {
     this.id = id;
     this.name = name;
 
-    this.bounds = new BoundsComponent();
+    this.bounds = new RectangleBounds();
     this.image = new ImageComponent();
     this.image.bounds = this.bounds;
     this.image.name = this.id;

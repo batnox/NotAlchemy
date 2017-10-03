@@ -1,10 +1,10 @@
-class BoundsComponent {
+class RectangleBounds extends BoundsComponent {
   constructor() {
+    super();
     this.x = 0;
     this.y = 0;
     this.width = 0;
     this.height = 0;
-    this.rotation = 0;
   }
 
   setPosition(x, y) {
@@ -15,10 +15,6 @@ class BoundsComponent {
   setSize(width, height) {
     this.width = width;
     this.height = height;
-  }
-
-  setRotation(rotation) {
-    this.rotation = rotation;
   }
 
   contains(x, y) {
