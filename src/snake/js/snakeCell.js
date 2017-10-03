@@ -1,7 +1,7 @@
 class SnakeCell extends Sprite {
   constructor(head) {
     super();
-    this.bounds = new BoundsComponent();
+    this.bounds = new RectangleBounds();
     this.image = new ImageComponent();
     this.image.bounds = this.bounds;
     this.head = head;
