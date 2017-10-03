@@ -58,7 +58,7 @@ class SpriteGroup {
   getSprite(x, y) {
     for (let i = 0; i < this.sprites.length; i++) {
       let sprite = this.sprites[i];
-      if (sprite.contains(x, y)) {
+      if (sprite.bounds.contains(x, y)) {
         return sprite;
       }
     }
@@ -73,7 +73,7 @@ class SpriteGroup {
   getOverlap(sprite) {
     for (let i = 0; i < this.sprites.length; i++) {
       let groupSprite = this.sprites[i];
-      if (groupSprite.isCollision(sprite)) {
+      if (groupSprite.bounds.isCollision(sprite)) {
         return {
           sprite: groupSprite,
           index: i

@@ -3,7 +3,7 @@ class Snake {
     this.cellSize = segmentSize;
 
     this.snakeHead = new SnakeCell(true);
-    this.snakeHead.setSize(segmentSize, segmentSize);
+    this.snakeHead.bounds.setSize(segmentSize, segmentSize);
     this.snakeTail = this.snakeHead;
     this.direction = Direction.RIGHT;
     this.alive = true;
@@ -13,7 +13,7 @@ class Snake {
   isCollision(sprite) {
     let current = this.snakeHead;
     while (current) {
-      if (current.isCollision(sprite)) {
+      if (current.bounds.isCollision(sprite)) {
         return true;
       }
       current = current.nextCell;
@@ -25,7 +25,7 @@ class Snake {
     let current = this.snakeHead;
     while (current.nextCell) {
       current = current.nextCell;
-      if (current.isCollision(this.snakeHead)) {
+      if (current.bounds.isCollision(this.snakeHead)) {
         return true;
       }
     }
@@ -33,7 +33,7 @@ class Snake {
   }
 
   setPosition(x, y) {
-    this.snakeHead.setPosition(x, y);
+    this.snakeHead.bounds.setPosition(x, y);
   }
 
   update() {
@@ -65,13 +65,14 @@ class Snake {
         dy = this.cellSize;
         break;
     }
-    this.snakeHead.updatePosition(this.snakeHead.x + dx, this.snakeHead.y + dy, this.direction);
+    this.snakeHead.updatePosition(this.snakeHead.bounds.x + dx, this.snakeHead.bounds.y + dy,
+      this.direction);
   }
 
   addLink() {
     console.log('Adding...');
-    let tailX = this.snakeTail.x;
-    let tailY = this.snakeTail.y;
+    let tailX = this.snakeTail.bounds.x;
+    let tailY = this.snakeTail.bounds.y;
     let tailDirection = this.snakeTail.direction;
     if (tailDirection === Direction.RIGHT) {
       tailX = tailX - this.cellSize;
@@ -84,9 +85,9 @@ class Snake {
     }
 
     let newCell = new SnakeCell(false);
-    newCell.setPosition(tailX, tailY);
-    newCell.setSize(this.cellSize, this.cellSize);
-    newCell.setImage(this.bodyImage);
+    newCell.bounds.setPosition(tailX, tailY);
+    newCell.bounds.setSize(this.cellSize, this.cellSize);
+    newCell.image.setImage(this.bodyImage);
     this.snakeTail.nextCell = newCell;
     this.snakeTail = newCell;
     return newCell;
