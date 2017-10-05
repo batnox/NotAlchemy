@@ -6,5 +6,8 @@
     "red": "bubbles/assets/bubble-red.png",
     "yellow": "bubbles/assets/bubble-yellow.png"
   },
+  "walls": {
+    "stone": "bubbles/assets/stonewall3.png"
+  },
   "guide": "bubbles/assets/guide.png"
 }
