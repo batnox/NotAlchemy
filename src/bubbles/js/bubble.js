@@ -1,27 +1,40 @@
 class Bubble extends Sprite {
-  constructor(bubbleType) {
+  constructor(radius, bubbleType) {
     super();
-    this.setSize(20, 20); // TODO Set a bubble size somewhere
+    this.bounds = new CircleBounds();
+    this.image = new ImageComponent();
+    this.image.bounds = new RectangleBounds();
+    this.setRadius(radius);
     this.type = bubbleType;
+  }
+
+  setPosition(x, y) {
+    this.bounds.setPosition(x, y);
+    this.image.bounds.setPosition(x, y);
+  }
+
+  setRadius(radius) {
+    this.bounds.radius = radius;
+    this.image.bounds.setSize(radius * 2, radius * 2);
   }
 
   set type(type) {
     this._type = type;
     switch (this._type) {
       case BubbleType.BLUE:
-        this.setImage('bubble-blue');
+        this.image.setImage('bubble-blue');
         break;
       case BubbleType.GREEN:
-        this.setImage('bubble-green');
+        this.image.setImage('bubble-green');
         break;
       case BubbleType.PURPLE:
-        this.setImage('bubble-purple');
+        this.image.setImage('bubble-purple');
         break;
       case BubbleType.RED:
-        this.setImage('bubble-red');
+        this.image.setImage('bubble-red');
         break;
       case BubbleType.YELLOW:
-        this.setImage('bubble-yellow');
+        this.image.setImage('bubble-yellow');
         break;
     }
   }

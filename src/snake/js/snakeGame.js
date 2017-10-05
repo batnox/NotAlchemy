@@ -89,7 +89,7 @@ class SnakeGame extends Game {
             y === GRID_NUMBER - 1) {
             let random = Math.floor(Math.random() * 4);
             let wall = new Wall(random);
-            wall.setPosition(x * GRID_SIZE, y * GRID_SIZE);
+            wall.bounds.setPosition(x * GRID_SIZE, y * GRID_SIZE);
             this.wallSprites.add(wall);
           }
         }
@@ -101,20 +101,20 @@ class SnakeGame extends Game {
           if (x === 0 || y === 0 || x === (GRID_NUMBER - 1) ||
             y === (GRID_NUMBER - 1)) {
             let wall = new Wall(random);
-            wall.setPosition(x * GRID_SIZE, y * GRID_SIZE);
+            wall.bounds.setPosition(x * GRID_SIZE, y * GRID_SIZE);
             this.wallSprites.add(wall);
           } else if (x > Math.floor(GRID_NUMBER / 3) &&
             x < Math.floor(GRID_NUMBER * 2 / 3) &&
             y === Math.floor((GRID_NUMBER) / 2)) {
             let wall = new Wall(random);
-            wall.setPosition(x * GRID_SIZE, y * GRID_SIZE);
+            wall.bounds.setPosition(x * GRID_SIZE, y * GRID_SIZE);
             this.wallSprites.add(wall);
           }
           else if (y > Math.floor(GRID_NUMBER / 3) &&
             y < Math.floor(GRID_NUMBER * 2 / 3) &&
             x === Math.floor((GRID_NUMBER) / 2)) {
             let wall = new Wall(random);
-            wall.setPosition(x * GRID_SIZE, y * GRID_SIZE);
+            wall.bounds.setPosition(x * GRID_SIZE, y * GRID_SIZE);
             this.wallSprites.add(wall);
           }
         }
@@ -122,7 +122,7 @@ class SnakeGame extends Game {
     }
 
     let food = new Food();
-    food.setPosition(8 * GRID_SIZE, 8 * GRID_SIZE);
+    food.bounds.setPosition(8 * GRID_SIZE, 8 * GRID_SIZE);
     this.foodSprites.add(food);
   }
 
@@ -151,7 +151,7 @@ class SnakeGame extends Game {
     this.foodSprites.removeSprite(deadFood);
     let food = new Food();
     let position = this.emptyCheck();
-    food.setPosition(position[0], position[1]);
+    food.bounds.setPosition(position[0], position[1]);
     this.foodSprites.add(food);
   }
 
@@ -161,13 +161,13 @@ class SnakeGame extends Game {
       Math.floor(Math.random() * GRID_NUMBER) * GRID_SIZE];
 
     for (let checkWall of this.wallSprites.sprites) {
-      if (checkWall.x === position[0] && checkWall.y === position[1]) {
+      if (checkWall.bounds.x === position[0] && checkWall.bounds.y === position[1]) {
         return this.emptyCheck();
       }
     }
 
     let food = new Food();
-    food.setPosition(position[0], position[1]);
+    food.bounds.setPosition(position[0], position[1]);
     if (this.worm.isCollision(food)) {
       return this.emptyCheck();
     }
