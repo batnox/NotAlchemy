@@ -1,8 +1,15 @@
 class Bubble extends Sprite {
-  constructor(bubbleType) {
+  constructor(x, y, r, bubbleType) {
     super();
-    this.setSize(20, 20); // TODO Set a bubble size somewhere
+    this.setSize(r*2, r*2); // TODO Set a bubble size somewhere
     this.type = bubbleType;
+    this.velocityX = 0;
+    this.velocityY = 0;
+    this.neighbors = [];
+    this.x = x;
+    this.y = y;
+    this.r = r;
+
   }
 
   set type(type) {
@@ -25,4 +32,40 @@ class Bubble extends Sprite {
         break;
     }
   }
+
+  move(){
+    if (this.velocityX !=0 || this.velocityY != 0){
+      this.wallRebound();
+      this.x += this.velocityX;
+      this.y += this.velocityY;
+    }
+  }
+
+  wallRebound(){
+      let canvas = document.getElementById('alchemy-canvas');
+      let cWidth = canvas.width;
+
+      if (this.x < 0 || this.x + this.width > cWidth ) {
+          this.velocityX = -this.velocityX;
+      }
+  }
+
+  resetVelocity(){
+      this.velocityX = 0;
+      this.velocityY = 0;
+  }
+
+  setStayPosition(){
+
+    //this.x =  Math.floor(this.x/20)*20 + this.r;
+    //this.y =  Math.floor(this.y/20)*20 + this.r;
+    /*
+    if (this.y%2 !== 0){
+      this.y += this.height;
+    }
+    */
+    this.velocityX = 0;
+    this.velocityY = 0;
+  }
+
 }

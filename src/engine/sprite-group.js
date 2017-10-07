@@ -83,6 +83,10 @@ class SpriteGroup {
     return null;
   }
 
+  getSpriteByIndex(index){
+    return this.sprites[index];
+  }
+
   draw(context) {
     for (let sprite of this.sprites) {
       sprite.draw(context);
