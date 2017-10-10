@@ -55,6 +55,7 @@ class BubbleGame extends Game {
             //this.current.resetVelocity();
             //this.current.setPosition(this.launcher.bubbleX, this.launcher.bubbleY);
             this.current = new Bubble(this.launcher.bubbleX, this.launcher.bubbleY, this.bubbleR, BubbleType.BLUE);
+            this.spriteLayer.addDrawable(this.current);
             this.launcher.isShooting = false;
         }
     }
