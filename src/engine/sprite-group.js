@@ -83,8 +83,8 @@ class SpriteGroup {
     return null;
   }
 
-  getSpriteByIndex(index){
-    return this.sprites[index];
+  update() {
+    this.sprites.forEach(sprite => sprite.update());
   }
 
   draw(context) {
