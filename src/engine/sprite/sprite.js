@@ -16,6 +16,12 @@ class Sprite {
     this.image = null;
   }
 
+  update() {
+    if (this.image) {
+      this.image.update();
+    }
+  }
+
   /**
    * @param context {CanvasRenderingContext2D}
    */
