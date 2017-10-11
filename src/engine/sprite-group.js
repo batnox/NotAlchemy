@@ -83,6 +83,10 @@ class SpriteGroup {
     return null;
   }
 
+  update() {
+    this.sprites.forEach(sprite => sprite.update());
+  }
+
   draw(context) {
     for (let sprite of this.sprites) {
       sprite.draw(context);
