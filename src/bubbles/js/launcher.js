@@ -39,6 +39,8 @@ class Launcher extends Sprite {
         console.log('space detected');
         this.isShooting = true;
         break;
+      default:
+        break;
     }
     this.bounds.setRotation(this.degree);
     this.bubbleX = this.bounds.x + Math.sin(this.toRadians(this.bounds.rotation)) * this.radius;
