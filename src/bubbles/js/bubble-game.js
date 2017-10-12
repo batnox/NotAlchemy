@@ -7,7 +7,7 @@ class BubbleGame extends Game {
     this.canvas.height = 800;
     this.bubbleR = 20;
 
-    this.bubbles = new SpriteGroup();
+    this.bubbles = new BubbleGrid();
     this.walls = new SpriteGroup();
 
     let redBubble = new Bubble(20, BubbleType.RED);
@@ -17,7 +17,7 @@ class BubbleGame extends Game {
     let wallTop = new BubblesWall(0, 0, this.canvas.width, 20);
     let wallBottom = new BubblesWall(0, this.canvas.height - 20, this.canvas.width, 20);
 
-    this.bubbles.add(redBubble);
+    this.bubbles.addBubble(redBubble);
     this.walls.add(wallLeft);
     this.walls.add(wallRight);
     this.walls.add(wallTop);
