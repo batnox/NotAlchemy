@@ -10,8 +10,6 @@ class Bubble extends Sprite {
     this.velocityX = 0;
     this.velocityY = 0;
     this.neighbors = [];
-    this.animateFrame = 0;
-
   }
 
   setPosition(x, y) {
@@ -43,7 +41,7 @@ class Bubble extends Sprite {
         this.image.setImage('bubble-yellow');
         break;
       case BubbleType.BATTY:
-        this.image.setImage('assets/SpriteSheetBatty.png');
+        this.image.setImage('batty');
         break;
     }
   }
@@ -78,7 +76,25 @@ class Bubble extends Sprite {
   }
 
   doExplosion(){
-    return imageManager.canOffsetIncrease(this.image);
+    // return imageManager.canOffsetIncrease(this.image);
+    this.image = new AnimationComponent();
+    this.image.bounds = new RectangleBounds();
+    this.image.bounds.setPosition(
+      this.bounds.x,
+      this.bounds.y
+    );
+    this.image.bounds.setSize(
+      this.bounds.radius * 2,
+      this.bounds.radius * 2
+    );
+    this.image.addImage('batty', 15);
+    this.image.addImage('batty-1', 15);
+    this.image.addImage('batty-2', 15);
+    this.image.addImage('batty-3', 15);
+    this.image.addImage('batty-4', 15);
+    this.image.addImage('batty-3', 15);
+    this.image.addImage('batty-2', 15);
+    this.image.addImage('batty-1', 15);
   }
 
 }

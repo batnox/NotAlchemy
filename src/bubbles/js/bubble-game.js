@@ -39,9 +39,8 @@ class BubbleGame extends Game {
     this.spriteLayer.addDrawable(this.bubbleGroup);
 
     this.explosionTest = new Bubble(200, 200, this.bubbleR, BubbleType.BATTY);
-    this.explosionTest.image.setImage('batty');
     this.spriteLayer.addDrawable(this.explosionTest);
-
+    this.explosionTest.doExplosion();
   }
 
   loadContent() {
@@ -55,7 +54,11 @@ class BubbleGame extends Game {
           imageManager.addImage('bubble-red', data['images'].bubbles.red);
           imageManager.addImage('bubble-yellow', data['images'].bubbles.yellow);
           imageManager.addImage('guide', data['images'].guide);
-          imageManager.addImage('batty', "bubbles/assets/SpriteSheetBatty.png");
+          imageManager.addSpritesheet(
+            ['batty', 'batty-1', 'batty-2', 'batty-3', 'batty-4'],
+            64,
+            "bubbles/assets/SpriteSheetBatty.png"
+          );
           resolve();
         });
     });
@@ -64,7 +67,7 @@ class BubbleGame extends Game {
   update() {
     super.update();
 
-    //this.explosionTest.doExplosion();
+    this.explosionTest.update();
 
     if (this.launcher.isShooting){
 
