@@ -9,6 +9,7 @@ class Bubble extends Sprite {
     this.x = x;
     this.y = y;
     this.r = r;
+    this.animateFrame = 0;
 
   }
 
@@ -30,6 +31,9 @@ class Bubble extends Sprite {
       case BubbleType.YELLOW:
         this.setImage('bubble-yellow');
         break;
+        case BubbleType.BATTY:
+          this.setImage('assets/SpriteSheetBatty.png');
+          break;
     }
   }
 
@@ -50,11 +54,6 @@ class Bubble extends Sprite {
       }
   }
 
-  resetVelocity(){
-      this.velocityX = 0;
-      this.velocityY = 0;
-  }
-
   setStayPosition(){
 
     //this.x =  Math.floor(this.x/20)*20 + this.r;
@@ -66,6 +65,10 @@ class Bubble extends Sprite {
     */
     this.velocityX = 0;
     this.velocityY = 0;
+  }
+
+  doExplosion(){
+    return imageManager.canOffsetIncrease(this.image);
   }
 
 }

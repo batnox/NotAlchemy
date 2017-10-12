@@ -3,5 +3,7 @@ const BubbleType = Object.freeze({
   GREEN:  Symbol('green'),
   PURPLE:  Symbol('purple'),
   RED: Symbol('red'),
-  YELLOW: Symbol('yellow')
+  YELLOW: Symbol('yellow'),
+  BATTY: Symbol('batty')
+
 });

@@ -1,7 +1,7 @@
 class BubbleGame extends Game {
   constructor() {
     super();
-    this.TICK_PER_SECOND = 100;
+    this.TICK_PER_SECOND = 30;
     this.addContent('images', 'bubbles/json/bubbles-config.json');
     this.canvas.width = 800;
     this.canvas.height = 800;
@@ -11,9 +11,7 @@ class BubbleGame extends Game {
       .then(this.start());
 
     this.launcher = new Launcher(this.canvas.width/2, this.canvas.height);
-    this.launcher.setImage(imageManager.getImage('guide'));
-    console.log(imageManager.getImage('guide'));
-    console.log(this.launcher.image);
+    this.launcher.setImage('guide');
 
 
     this.current = new Bubble(this.launcher.bubbleX, this.launcher.bubbleY, this.bubbleR, BubbleType.YELLOW);
@@ -22,6 +20,10 @@ class BubbleGame extends Game {
     this.spriteLayer.addDrawable(this.launcher);
     this.spriteLayer.addDrawable(this.current);
     this.spriteLayer.addDrawable(this.bubbleGroup);
+
+    this.explosionTest = new Bubble(200, 200, this.bubbleR, BubbleType.BATTY);
+    this.explosionTest.setImage('batty');
+    this.spriteLayer.addDrawable(this.explosionTest);
 
   }
 
@@ -35,6 +37,7 @@ class BubbleGame extends Game {
           imageManager.addImage('bubble-red', data['images'].bubbles.red);
           imageManager.addImage('bubble-yellow', data['images'].bubbles.yellow);
           imageManager.addImage('guide', data['images'].guide);
+            imageManager.addImage('batty', "bubbles/assets/SpriteSheetBatty.png");
           resolve();
         });
     });
@@ -42,6 +45,9 @@ class BubbleGame extends Game {
 
   update() {
     super.update();
+
+    this.explosionTest.doExplosion();
+
     if (this.launcher.isShooting){
 
         if (this.current.velocityX ===0 && this.current.velocityY===0) {
@@ -52,9 +58,8 @@ class BubbleGame extends Game {
         if (this.bubbleCollision() || this.current.y < 0){
             this.current.setStayPosition();
             this.bubbleGroup.add(this.current);
-            //this.current.resetVelocity();
-            //this.current.setPosition(this.launcher.bubbleX, this.launcher.bubbleY);
             this.current = new Bubble(this.launcher.bubbleX, this.launcher.bubbleY, this.bubbleR, BubbleType.BLUE);
+            this.spriteLayer.addDrawable(this.current);
             this.launcher.isShooting = false;
         }
     }
