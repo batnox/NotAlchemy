@@ -24,12 +24,15 @@ class ImageComponent {
         this.bounds.y + this.bounds.height / 2
       );
       context.rotate(this.bounds.rotation * Math.PI / 180);
-      let image = imageManager.getImage(this.name);
+      let image = imageManager.getImage(this.name).image;
+      let imageOffset = Math.floor(imageManager.getImage(this.name).offset);
       if (!image) {
-        throw Error(`No image \'${this.name}\'.`)
+        throw Error(`No image \'${this.name}\'.`);
       }
       context.drawImage(
         image,
+        imageOffset * image.height, 0,
+        image.height, image.height,
         -this.bounds.width / 2, -this.bounds.height / 2,
         this.bounds.width, this.bounds.height
       );
