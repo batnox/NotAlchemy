@@ -43,7 +43,7 @@ class Bubble extends Sprite {
         this.image.setImage('bubble-yellow');
         break;
       case BubbleType.BATTY:
-        this.image.setImage('assets/SpriteSheetBatty.png');
+        this.image.setImage('bubble-batty');
         break;
     }
   }
@@ -78,7 +78,7 @@ class Bubble extends Sprite {
   }
 
   doExplosion(){
-    return imageManager.canOffsetIncrease(this.image);
+    return imageManager.canOffsetIncrease(this.image.name);
   }
 
 }
