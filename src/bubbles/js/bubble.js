@@ -51,8 +51,7 @@ class Bubble extends Sprite {
   move(){
     if (this.velocityX !== 0 || this.velocityY !== 0){
       this.wallRebound();
-      this.bounds.x += this.velocityX;
-      this.bounds.y += this.velocityY;
+      this.setPosition(this.bounds.x += this.velocityX, this.bounds.y += this.velocityY);
     }
   }
 
@@ -74,7 +73,6 @@ class Bubble extends Sprite {
       this.y += this.height;
     }
     */
-    console.log("stay on"+this.bounds.x + ", "+ this.bounds.y);
     this.velocityX = 0;
     this.velocityY = 0;
   }
