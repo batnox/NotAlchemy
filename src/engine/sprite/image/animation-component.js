@@ -37,22 +37,30 @@ class AnimationComponent {
    */
   draw(context) {
     if (this.visible && this.currentImage >= 0) {
+      let current = this.sequence[this.currentImage].name;
+      let i = imageManager.getImage(current);
+      if (!i) {
+        throw Error('No image: ' + current);
+      }
+      let image = imageManager.getImage(current).image;
+      let imageOffset = imageManager.getImage(current).offset;
       context.save();
       context.translate(
         this.bounds.x + this.bounds.width / 2,
         this.bounds.y + this.bounds.height / 2
       );
       context.rotate(this.bounds.rotation * Math.PI / 180);
-      let current = this.sequence[this.currentImage];
-      let image = imageManager.getImage(current.name);
-      if (!image) {
-        throw Error(`No image \'${current.name}\'.`)
+      if (!image || !image.src) {
+        throw Error(`No image \'${current.name}\'.`);
       }
       context.drawImage(
         image,
+        imageOffset, 0,
+        image.height, image.height,
         -this.bounds.width / 2, -this.bounds.height / 2,
         this.bounds.width, this.bounds.height
       );
+
       context.restore();
     }
   }

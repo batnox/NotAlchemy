@@ -19,6 +19,25 @@ class ImageManager {
     });
   }
 
+  addSpritesheet(keys, size, src) {
+    return new Promise((resolve, reject) => {
+      if (!src) {
+        reject(Error('Invalid image source.'));
+      }
+
+      let image = new Image();
+      image.onload = () => resolve();
+      image.src = src;
+
+      for (let i = 0; i < keys.length; i++) {
+        this.imageMap.set(keys[i], {
+          image: image,
+          offset: i * size
+        });
+      }
+    });
+  }
+
   canOffsetIncrease(key){
       let image = this.imageMap.get(key).image;
       let split = Math.floor(image.width/image.height);
