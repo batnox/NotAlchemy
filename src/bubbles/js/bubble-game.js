@@ -1,7 +1,7 @@
 class BubbleGame extends Game {
   constructor() {
     super();
-    this.TICK_PER_SECOND = 30;
+    this.TICK_PER_SECOND = 100;
     this.addContent('images', 'bubbles/json/bubbles-config.json');
     this.canvas.width = 800;
     this.canvas.height = 800;
@@ -64,16 +64,16 @@ class BubbleGame extends Game {
   update() {
     super.update();
 
-    this.explosionTest.doExplosion();
+    //this.explosionTest.doExplosion();
 
     if (this.launcher.isShooting){
 
         if (this.current.velocityX ===0 && this.current.velocityY===0) {
-            this.current.velocityX = (this.launcher.bubbleX-this.launcher.x)/80;
-            this.current.velocityY = (this.launcher.bubbleY-this.launcher.y)/80;
+            this.current.velocityX = (this.launcher.bubbleX-this.launcher.bounds.x)/80;
+            this.current.velocityY = (this.launcher.bubbleY-this.launcher.bounds.y)/80;
         }
         this.current.move();
-        if (this.bubbleCollision() || this.current.y < 0){
+        if (this.bubbleCollision() || this.current.bounds.y-this.bubbleR < 0){
             this.current.setStayPosition();
             this.bubbleGroup.add(this.current);
             this.current = new Bubble(this.launcher.bubbleX, this.launcher.bubbleY, this.bubbleR, BubbleType.BLUE);
@@ -92,8 +92,8 @@ class BubbleGame extends Game {
       if(this.bubbleGroup.size() > 0){
           for (let i in this.bubbleGroup.sprites){
               let eachBubble = this.bubbleGroup.getSpriteByIndex(i);
-              let dx = this.current.x - eachBubble.x;
-              let dy = this.current.y - eachBubble.y;
+              let dx = this.current.bounds.x - eachBubble.bounds.x;
+              let dy = this.current.bounds.y - eachBubble.bounds.y;
               let dis = dy**2 + dx**2;
               if (dis <= (this.bubbleR*2)**2){
                   console.log("COLLIDE");

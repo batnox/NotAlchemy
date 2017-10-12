@@ -12,8 +12,9 @@ class Launcher extends Sprite {
     this.radius = 200;
     this.degree = 60;
     this.bounds.setRotation(this.degree);
-    this.bubbleX = this.x + Math.sin(this.toRadians(this.rotation)) * this.radius;
-    this.bubbleY = this.y - Math.cos(this.toRadians(this.rotation)) * this.radius;
+    this.bubbleX = this.bounds.x + Math.sin(this.toRadians(this.bounds.rotation)) * this.radius;
+    this.bubbleY = this.bounds.y - Math.cos(this.toRadians(this.bounds.rotation)) * this.radius;
+    console.log(this.bubbleX);
 
     addEventListener('keydown', event => this.keyDown(event));
   }
@@ -40,8 +41,8 @@ class Launcher extends Sprite {
         break;
     }
     this.bounds.setRotation(this.degree);
-    this.bubbleX = this.x + Math.sin(this.toRadians(this.rotation)) * this.radius;
-    this.bubbleY = this.y - Math.cos(this.toRadians(this.rotation)) * this.radius;
+    this.bubbleX = this.bounds.x + Math.sin(this.toRadians(this.bounds.rotation)) * this.radius;
+    this.bubbleY = this.bounds.y - Math.cos(this.toRadians(this.bounds.rotation)) * this.radius;
   }
 
   draw(context) {
