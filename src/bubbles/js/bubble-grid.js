@@ -1,12 +1,22 @@
 class BubbleGrid {
-  constructor() {
-    this.bubbles = [][];
+  constructor(width, height) {
+    this.bubbles = [];
+    this.width = width;
+    this.height = height;
+    for (let i = 0; i < height; i++) {
+      this.bubbles.push([]);
+    }
   }
 
   addBubble(x, y, bubble) {
     this.bubbles[x][y] = bubble;
-    bubble.bounds.x = x * bubble.bounds.radius * 2;
-    bubble.bounds.y = y * bubble.bounds.radius * 2;
+    let bx = x * bubble.bounds.radius * 2;
+    let by = y * bubble.bounds.radius * Math.sqrt(3);
+
+    if (y % 2 === 1) {
+      bx += bubble.bounds.radius;
+    }
+    bubble.setPosition(bx, by);
   }
 
   getBubble(x, y) {
@@ -20,6 +30,8 @@ class BubbleGrid {
   }
 
   draw(context) {
-    this.bubbles.forEach(row => row.forEach(bubble => bubble.draw(context)));
+    this.bubbles.forEach(row => row.forEach(bubble => {
+      bubble.draw(context);
+    }));
   }
 }
