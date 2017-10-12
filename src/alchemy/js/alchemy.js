@@ -108,10 +108,9 @@ class Alchemy extends Game {
       if (forwardMatch || backwardMatch) {
         let res = this.getElement(combination.result);
         if (!this.isKnown(combination.result)) {
-          this.knownElements.push(
-            Object.assign(Object.create(Object.getPrototypeOf(res)), res));
+          this.knownElements.push(new GameElement(res.id, res.name));
         }
-        return Object.assign(Object.create(Object.getPrototypeOf(res)), res);
+        return new GameElement(res.id, res.name);
       }
     }
     return null;
@@ -127,7 +126,6 @@ class Alchemy extends Game {
         .then(data => {
           for (let element of data['elements'].elements) {
             let gameElement = new GameElement(element.id, element.name);
-            gameElement.setImage(element.id);
             this.elements.push(gameElement);
           }
 
@@ -179,8 +177,8 @@ class Alchemy extends Game {
 
     this.displaySprites = new SpriteGroup();
     for (let element of this.knownElements) {
-      element.setPosition(x, y);
-      element.setSize(this.IMAGE_SIZE, this.IMAGE_SIZE);
+      element.bounds.setPosition(x, y);
+      element.bounds.setSize(this.IMAGE_SIZE, this.IMAGE_SIZE);
       this.displaySprites.add(element);
       x += this.IMAGE_SIZE;
 
@@ -191,9 +189,9 @@ class Alchemy extends Game {
     }
 
     if (this.heldSprite && this.mouse) {
-      this.heldSprite.setPosition(
-        this.mouse.x - this.heldSprite.width / 2,
-        this.mouse.y - this.heldSprite.height / 2
+      this.heldSprite.bounds.setPosition(
+        this.mouse.x - this.heldSprite.bounds.width / 2,
+        this.mouse.y - this.heldSprite.bounds.height / 2
       );
     }
 
@@ -223,8 +221,11 @@ class Alchemy extends Game {
   onMouseDown() {
     let display = this.displaySprites.getSprite(this.mouse.x, this.mouse.y);
     if (display) {
-      this.heldSprite = Object.assign(
-        Object.create(Object.getPrototypeOf(display)), display);
+      this.heldSprite = new GameElement(display.id, display.name);
+      this.heldSprite.bounds.x = display.bounds.x;
+      this.heldSprite.bounds.y = display.bounds.y;
+      this.heldSprite.bounds.width = display.bounds.width;
+      this.heldSprite.bounds.height = display.bounds.height;
     } else {
       let dropped = this.droppedSprites.getSprite(this.mouse.x, this.mouse.y);
       if (dropped) {
@@ -258,9 +259,14 @@ class Alchemy extends Game {
 
       if (result) {
         this.heldSprite = null;
-        result.setPosition(droppedOverlap.sprite.x, droppedOverlap.sprite.y);
-        result.setSize(droppedOverlap.sprite.width,
-          droppedOverlap.sprite.height);
+        result.bounds.setPosition(
+          droppedOverlap.sprite.bounds.x,
+          droppedOverlap.sprite.bounds.y
+        );
+        result.bounds.setSize(
+          droppedOverlap.sprite.bounds.width,
+          droppedOverlap.sprite.bounds.height
+        );
         this.droppedSprites.removeIndex(droppedOverlap.index);
         this.droppedSprites.add(result);
         return;
