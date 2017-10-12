@@ -1,11 +1,17 @@
 class Bubble extends Sprite {
-  constructor(radius, bubbleType) {
+  constructor(x, y, r, bubbleType) {
     super();
     this.bounds = new CircleBounds();
     this.image = new ImageComponent();
     this.image.bounds = new RectangleBounds();
-    this.setRadius(radius);
+    this.setPosition(x, y);
+    this.setRadius(r);
     this.type = bubbleType;
+    this.velocityX = 0;
+    this.velocityY = 0;
+    this.neighbors = [];
+    this.animateFrame = 0;
+
   }
 
   setPosition(x, y) {
@@ -36,6 +42,45 @@ class Bubble extends Sprite {
       case BubbleType.YELLOW:
         this.image.setImage('bubble-yellow');
         break;
+      case BubbleType.BATTY:
+        this.image.setImage('assets/SpriteSheetBatty.png');
+        break;
     }
   }
+
+  move(){
+    if (this.velocityX !== 0 || this.velocityY !== 0){
+      this.wallRebound();
+      this.bounds.x += this.velocityX;
+      this.bounds.y += this.velocityY;
+    }
+  }
+
+  wallRebound(){
+      let canvas = document.getElementById('alchemy-canvas');
+      let cWidth = canvas.width;
+
+      if (this.bounds.x < 0 || this.bounds.x + this.bounds.radius > cWidth ) {
+          this.velocityX = -this.velocityX;
+      }
+  }
+
+  setStayPosition(){
+
+    //this.x =  Math.floor(this.x/20)*20 + this.r;
+    //this.y =  Math.floor(this.y/20)*20 + this.r;
+    /*
+    if (this.y%2 !== 0){
+      this.y += this.height;
+    }
+    */
+    console.log("stay on"+this.bounds.x + ", "+ this.bounds.y);
+    this.velocityX = 0;
+    this.velocityY = 0;
+  }
+
+  doExplosion(){
+    return imageManager.canOffsetIncrease(this.image);
+  }
+
 }
