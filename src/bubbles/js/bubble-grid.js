@@ -93,16 +93,16 @@ class BubbleGrid {
   }
 
   draw(context) {
-    for (let x = 0; x < 40; x++) {
-      for (let y = 0; y < 40; y++) {
-        if (x % 10 === 0 || y % 10 === 0) {
-          context.strokeStyle = '#f0f';
-        } else {
-          context.strokeStyle = '#808';
-        }
-        context.strokeRect(x * 20, y * 20, 20, 20);
-      }
-    }
+    // for (let x = 0; x < 40; x++) {
+    //   for (let y = 0; y < 40; y++) {
+    //     if (x % 10 === 0 || y % 10 === 0) {
+    //       context.strokeStyle = '#f0f';
+    //     } else {
+    //       context.strokeStyle = '#808';
+    //     }
+    //     context.strokeRect(x * 20, y * 20, 20, 20);
+    //   }
+    // }
     this.bubbles.forEach(row => row.forEach(bubble => {
       if (bubble) {
         bubble.draw(context);
