@@ -43,6 +43,15 @@ class Bubble extends Sprite {
       case BubbleType.BATTY:
         this.image.setImage('batty');
         break;
+      case BubbleType.SKULL:
+        this.image.setImage('skull');
+        break;
+      case BubbleType.JACK:
+        this.image.setImage('jack');
+        break;
+      case BubbleType.CLOWN:
+        this.image.setImage('clown');
+        break;
     }
   }
 
@@ -57,11 +66,32 @@ class Bubble extends Sprite {
       this.bounds.radius * 2,
       this.bounds.radius * 2
     );
-    this.image.addImage('batty', 15);
-    this.image.addImage('batty-1', 15);
-    this.image.addImage('batty-2', 15);
-    this.image.addImage('batty-3', 15);
-    this.image.addImage('batty-4', 15);
+    
+    if (this._type == BubbleType.BATTY) {
+      this.image.addImage('batty', 15);
+      this.image.addImage('batty-1', 15);
+      this.image.addImage('batty-2', 15);
+      this.image.addImage('batty-3', 15);
+      this.image.addImage('batty-4', 15);
+    } else if (this._type == BubbleType.SKULL) {
+      this.image.addImage('skull', 15);
+      this.image.addImage('skull-1', 15);
+      this.image.addImage('skull-2', 15);
+      this.image.addImage('skull-3', 15);
+      this.image.addImage('skull-4', 15);
+    } else if (this._type == BubbleType.JACK) {
+      this.image.addImage('jack', 15);
+      this.image.addImage('jack-1', 15);
+      this.image.addImage('jack-2', 15);
+      this.image.addImage('jack-3', 15);
+      this.image.addImage('jack-4', 15);
+    } else if (this._type == BubbleType.CLOWN) {
+      this.image.addImage('clown', 15);
+      this.image.addImage('clown-1', 15);
+      this.image.addImage('clown-2', 15);
+      this.image.addImage('clown-3', 15);
+      this.image.addImage('clown-4', 15);
+    }
   }
 
   update() {
