@@ -24,14 +24,32 @@ class BubbleGrid {
   }
 
   alignBubble(bubble) {
-    let tileX = Math.round(bubble.bounds.x / (bubble.bounds.radius * 2));
-    let tileY = Math.round(bubble.bounds.y / (bubble.bounds.radius * 2));
+    let cx = bubble.bounds.x;
+    let cy = bubble.bounds.y;
+    console.log(`${cx}, ${cy}`);
+
+    if (cy % 2 === 1) {
+      cx -= bubble.bounds.radius;
+    }
+    let tileX = Math.round(cx / (bubble.bounds.radius * 2));
+    let tileY = Math.round(cy / (bubble.bounds.radius * 1.7));
+    console.log(`${tileX}, ${tileY}`);
     bubble.velocityX = 0;
     bubble.velocityY = 0;
     this.addBubble(tileX, tileY, bubble);
   }
 
   draw(context) {
+    for (let x = 0; x < 40; x++) {
+      for (let y = 0; y < 40; y++) {
+        if (x % 10 === 0 || y % 10 === 0) {
+          context.strokeStyle = '#f0f';
+        } else {
+          context.strokeStyle = '#808';
+        }
+        context.strokeRect(x * 20, y * 20, 20, 20);
+      }
+    }
     this.bubbles.forEach(row => row.forEach(bubble => {
       bubble.draw(context);
     }));

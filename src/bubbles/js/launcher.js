@@ -107,6 +107,7 @@ class Launcher extends Sprite {
             this.grid.alignBubble(this.loadedBubble);
             this.loadedBubble = null;
             this.state = LauncherState.EMPTY;
+            return;
           }
         }
       }
