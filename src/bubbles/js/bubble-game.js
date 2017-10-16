@@ -33,6 +33,7 @@ class BubbleGame extends Game {
     this.spriteLayer.addDrawable(this.launcher);
 
     addEventListener('keydown', event => this.keyDown(event));
+    addEventListener('mousedown', event => this.mouseDown(event));
 
     this.loadContent()
       .then(this.start());
@@ -76,6 +77,11 @@ class BubbleGame extends Game {
 
   update() {
     super.update();
+
+    let dx = this.launcher.bounds.x - this.mouse.x;
+    let dy = this.launcher.bounds.y - this.mouse.y;
+    let angle = Math.atan2(dy, dx);
+    this.launcher.setLaunchRotation(angle / Math.PI * 180 - 90);
     this.launcher.update();
     this.grid.update();
   }
@@ -94,5 +100,9 @@ class BubbleGame extends Game {
       default:
         break;
     }
+  }
+
+  mouseDown(event) {
+    this.launcher.launch();
   }
 }
