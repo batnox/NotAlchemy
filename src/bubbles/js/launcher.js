@@ -70,9 +70,12 @@ class Launcher extends Sprite {
   update() {
     switch (this.state) {
       case LauncherState.EMPTY:
+        let types = Object.values(BubbleType);
+        let index = Math.floor(Math.random() * types.length);
+        let color = types[index];
         let randomBubble = new Bubble(
           this.bubbleX, this.bubbleY,
-          BUBBLE_RADIUS, BubbleType.GREEN
+          BUBBLE_RADIUS, color
         );
         this.loadBubble(randomBubble);
         break;
