@@ -1,7 +1,10 @@
 class AnimationComponent {
-  constructor() {
+  constructor(repeat) {
     this.bounds = null;
     this.visible = true;
+    this.running = false;
+    this.repeat = repeat;
+    this.onEnd = null;
 
     this.currentImage = -1;
     this.timeRemaining = -1;
@@ -23,12 +26,34 @@ class AnimationComponent {
     this.visible = visible;
   }
 
+  start() {
+    console.log('start');
+    this.running = true;
+  }
+
+  end() {
+    this.running = false;
+  }
+
   update() {
-    this.timeRemaining--;
-    if (this.timeRemaining <= 0) {
-      this.currentImage++;
-      this.currentImage %= this.sequence.length;
-      this.timeRemaining = this.sequence[this.currentImage].time;
+    console.log('anim');
+    if (this.running) {
+      this.timeRemaining--;
+      if (this.timeRemaining <= 0) {
+        this.currentImage++;
+        if (this.currentImage >= this.sequence.length) {
+          if (this.repeat) {
+            this.currentImage %= this.sequence.length;
+          } else {
+            this.running = false;
+          }
+          if (this.onEnd) {
+            this.onEnd();
+            return;
+          }
+        }
+        this.timeRemaining = this.sequence[this.currentImage].time;
+      }
     }
   }
 

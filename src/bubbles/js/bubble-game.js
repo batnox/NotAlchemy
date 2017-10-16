@@ -21,9 +21,10 @@ class BubbleGame extends Game {
         let color = types[index];
         let randomBubble = new Bubble(
           0, 0,
-          BUBBLE_RADIUS, color
+          BUBBLE_RADIUS, color,
+          this.grid
         );
-        this.grid.addBubble(x, y, randomBubble);
+        this.grid.addBubble(x, y, randomBubble, true);
       }
     }
 
@@ -76,6 +77,7 @@ class BubbleGame extends Game {
   update() {
     super.update();
     this.launcher.update();
+    this.grid.update();
   }
 
   keyDown(event) {

@@ -75,7 +75,8 @@ class Launcher extends Sprite {
         let color = types[index];
         let randomBubble = new Bubble(
           this.bubbleX, this.bubbleY,
-          BUBBLE_RADIUS, color
+          BUBBLE_RADIUS, color,
+          this.grid
         );
         this.loadBubble(randomBubble);
         break;
