@@ -115,7 +115,7 @@ class Bubble extends Sprite {
 
   update() {
     super.update();
-    if (this.velocityX > 0 || this.velocityY > 0) {
+    if (this.velocityX !== 0 || this.velocityY !== 0) {
       this.setPosition(
         this.bounds.x + this.velocityX,
         this.bounds.y + this.velocityY
