@@ -17,6 +17,40 @@ class BubbleGrid {
       bx += bubble.bounds.radius;
     }
     bubble.setPosition(bx, by);
+
+    if (0 < x) {
+      this.updateNeighbor(bubble, this.getBubble(x - 1, y));
+    }
+    if (x + 1 < this.width) {
+      this.updateNeighbor(bubble, this.getBubble(x + 1, y));
+      if (0 < y) {
+        this.updateNeighbor(bubble, this.getBubble(x, y - 1));
+        this.updateNeighbor(bubble, this.getBubble(x + 1, y - 1));
+      }
+      if (y + 1 < this.height) {
+        this.updateNeighbor(bubble, this.getBubble(x, y + 1));
+        this.updateNeighbor(bubble, this.getBubble(x + 1, y + 1));
+      }
+    }
+  }
+
+  updateNeighbor(bubble, neighbor) {
+    if (neighbor) {
+      bubble.neighbors.push(neighbor);
+      neighbor.neighbors.push(bubble);
+
+      if (bubble.type === neighbor.type) {
+        for (let b of neighbor.matches) {
+          bubble.matches.push(b);
+        }
+        neighbor.matches.push(bubble);
+        console.log(bubble.type + ' - ' + bubble.matches.length);
+
+        if (bubble.matches.length >= BUBBLE_MATCH_COUNT) {
+          console.log('MATCH');
+        }
+      }
+    }
   }
 
   getBubble(x, y) {

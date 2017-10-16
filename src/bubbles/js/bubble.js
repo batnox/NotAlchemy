@@ -9,7 +9,8 @@ class Bubble extends Sprite {
     this.type = bubbleType;
     this.velocityX = 0;
     this.velocityY = 0;
-    this.neighbors = [];
+    this.neighbors = [this];
+    this.matches = [this];
   }
 
   setPosition(x, y) {
@@ -44,6 +45,10 @@ class Bubble extends Sprite {
         this.image.setImage('batty');
         break;
     }
+  }
+
+  get type() {
+    return this._type;
   }
 
   explode() {

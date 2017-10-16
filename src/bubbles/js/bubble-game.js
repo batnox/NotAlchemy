@@ -1,4 +1,5 @@
 let BUBBLE_RADIUS = 20;
+let BUBBLE_MATCH_COUNT = 3;
 
 class BubbleGame extends Game {
   constructor() {
