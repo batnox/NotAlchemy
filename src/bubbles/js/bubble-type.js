@@ -4,6 +4,9 @@ const BubbleType = Object.freeze({
   PURPLE:  Symbol('purple'),
   RED: Symbol('red'),
   YELLOW: Symbol('yellow'),
-  BATTY: Symbol('batty')
+  BATTY: Symbol('batty'),
+  SKULL: Symbol('skull'),
+  JACK: Symbol('jack'),
+  CLOWN: Symbol('clown')
 
 });
