@@ -1,5 +1,7 @@
 let BUBBLE_RADIUS = 20;
 let BUBBLE_MATCH_COUNT = 3;
+let BUBBLE_SCORE = 0;
+let BUBBLE_EXPLOSION_SCORE = 100;
 
 class BubbleGame extends Game {
   constructor() {
@@ -31,6 +33,16 @@ class BubbleGame extends Game {
     this.spriteLayer.addDrawable(this.grid);
     this.launcher = new Launcher(this.canvas.width / 2, this.canvas.height, this.grid);
     this.spriteLayer.addDrawable(this.launcher);
+
+    this.scoreDisplay = new TextDisplay(
+      BUBBLE_RADIUS, this.canvas.height - 18,
+      this.canvas.width - BUBBLE_RADIUS / 2
+    );
+    this.scoreDisplay.fontSize = 14;
+    this.scoreDisplay.fontName = 'Courier';
+    this.scoreDisplay.fontColor = '#fff';
+    this.scoreDisplay.text = `Score: ${BUBBLE_SCORE}`;
+    this.overlayLayer.addDrawable(this.scoreDisplay);
 
     addEventListener('keydown', event => this.keyDown(event));
     addEventListener('mousedown', event => this.mouseDown(event));
@@ -77,7 +89,7 @@ class BubbleGame extends Game {
 
   update() {
     super.update();
-
+    this.scoreDisplay.text = `Score: ${BUBBLE_SCORE}`;
     let dx = this.launcher.bounds.x - this.mouse.x;
     let dy = this.launcher.bounds.y - this.mouse.y;
     let angle = Math.atan2(dy, dx);

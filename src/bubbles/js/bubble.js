@@ -70,6 +70,7 @@ class Bubble extends Sprite {
   }
 
   explode() {
+    BUBBLE_SCORE += BUBBLE_EXPLOSION_SCORE;
     this.image = new AnimationComponent(false);
     this.image.bounds = new RectangleBounds();
     this.image.bounds.setPosition(
