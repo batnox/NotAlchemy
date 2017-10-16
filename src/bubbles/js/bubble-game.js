@@ -53,6 +53,21 @@ class BubbleGame extends Game {
             64,
             'bubbles/assets/SpriteSheetBatty.png'
           );
+          imageManager.addSpritesheet(
+            ['skull', 'skull-1', 'skull-2', 'skull-3', 'skull-4'],
+            64,
+            'bubbles/assets/SpriteSheetSkull.png'
+          );
+          imageManager.addSpritesheet(
+            ['jack', 'jack-1', 'jack-2', 'jack-3', 'jack-4'],
+            64,
+            'bubbles/assets/SpriteSheetJack.png'
+          );
+          imageManager.addSpritesheet(
+            ['clown', 'clown-1', 'clown-2', 'clown-3', 'clown-4'],
+            64,
+            'bubbles/assets/SpriteSheetClown.png'
+          );
           resolve();
         });
     });
