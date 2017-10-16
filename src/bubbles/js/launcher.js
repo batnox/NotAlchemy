@@ -1,5 +1,5 @@
 class Launcher extends Sprite {
-  constructor(x, y) {
+  constructor(x, y, grid) {
     super();
     this.LEFT_BOUND = -70;
     this.RIGHT_BOUND = 70;
@@ -12,6 +12,7 @@ class Launcher extends Sprite {
     this.image.setImage('guide');
     this.image.bounds = this.bounds;
 
+    this.grid = grid;
     this.state = LauncherState.EMPTY;
     this.loadedBubble = null;
     this.setLaunchRotation(0);
@@ -69,7 +70,6 @@ class Launcher extends Sprite {
   update() {
     switch (this.state) {
       case LauncherState.EMPTY:
-        console.log('E');
         let randomBubble = new Bubble(
           this.bubbleX, this.bubbleY,
           BUBBLE_RADIUS, BubbleType.GREEN
@@ -77,13 +77,36 @@ class Launcher extends Sprite {
         this.loadBubble(randomBubble);
         break;
       case LauncherState.LOADED:
-        console.log(`L: ${this.loadedBubble} - (${this.bubbleX}, ${this.bubbleY})`);
         this.loadedBubble.setPosition(this.bubbleX, this.bubbleY);
         break;
       case LauncherState.FIRED:
-        console.log('F');
         this.loadedBubble.update();
+        this.checkCollision();
         break;
+    }
+  }
+
+  checkCollision() {
+    if (this.loadedBubble.bounds.y < 0) {
+      this.grid.alignBubble(this.loadedBubble);
+      this.loadedBubble = null;
+      this.state = LauncherState.EMPTY;
+      return;
+    }
+
+    for (let row of this.grid.bubbles) {
+      for (let b of row) {
+        if (b) {
+          let dx = this.loadedBubble.bounds.x - b.bounds.x;
+          let dy = this.loadedBubble.bounds.y - b.bounds.y;
+          let dis = dy ** 2 + dx ** 2;
+          if (dis <= (BUBBLE_RADIUS * 2) ** 2) {
+            this.grid.alignBubble(this.loadedBubble);
+            this.loadedBubble = null;
+            this.state = LauncherState.EMPTY;
+          }
+        }
+      }
     }
   }
 

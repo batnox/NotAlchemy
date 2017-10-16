@@ -46,30 +46,7 @@ class Bubble extends Sprite {
     }
   }
 
-  wallRebound() {
-    let canvas = document.getElementById('alchemy-canvas');
-    let cWidth = canvas.width;
-
-    if (this.bounds.x < 0 || this.bounds.x + this.bounds.radius > cWidth) {
-      this.velocityX = -this.velocityX;
-    }
-  }
-
-  setStayPosition() {
-
-    //this.x =  Math.floor(this.x/20)*20 + this.r;
-    //this.y =  Math.floor(this.y/20)*20 + this.r;
-    /*
-    if (this.y%2 !== 0){
-      this.y += this.height;
-    }
-    */
-    this.velocityX = 0;
-    this.velocityY = 0;
-  }
-
-  doExplosion() {
-    // return imageManager.canOffsetIncrease(this.image);
+  explode() {
     this.image = new AnimationComponent();
     this.image.bounds = new RectangleBounds();
     this.image.bounds.setPosition(
@@ -85,17 +62,20 @@ class Bubble extends Sprite {
     this.image.addImage('batty-2', 15);
     this.image.addImage('batty-3', 15);
     this.image.addImage('batty-4', 15);
-    this.image.addImage('batty-3', 15);
-    this.image.addImage('batty-2', 15);
-    this.image.addImage('batty-1', 15);
   }
 
   update() {
-    this.wallRebound();
     this.setPosition(
       this.bounds.x + this.velocityX,
       this.bounds.y + this.velocityY
     );
+
+    let canvas = document.getElementById('alchemy-canvas');
+
+    if (this.bounds.x < 0 ||
+      this.bounds.x > canvas.width - this.bounds.radius * 2) {
+      this.velocityX = -this.velocityX;
+    }
   }
 
 }

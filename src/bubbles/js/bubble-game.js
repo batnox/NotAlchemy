@@ -1,4 +1,4 @@
-    let BUBBLE_RADIUS = 20;
+let BUBBLE_RADIUS = 20;
 
 class BubbleGame extends Game {
   constructor() {
@@ -8,7 +8,7 @@ class BubbleGame extends Game {
     this.canvas.width = 800;
     this.canvas.height = 800;
 
-    this.bubbles = new BubbleGrid(
+    this.grid = new BubbleGrid(
       Math.floor(this.canvas.width / (BUBBLE_RADIUS * 2)),
       Math.floor(this.canvas.height / (BUBBLE_RADIUS * 2))
     );
@@ -19,15 +19,13 @@ class BubbleGame extends Game {
           0, 0,
           BUBBLE_RADIUS, BubbleType.RED
         );
-        this.bubbles.addBubble(x, y, bubble);
+        this.grid.addBubble(x, y, bubble);
       }
     }
 
-    this.spriteLayer.addDrawable(this.bubbles);
-
-    this.launcher = new Launcher(this.canvas.width / 2, this.canvas.height);
+    this.spriteLayer.addDrawable(this.grid);
+    this.launcher = new Launcher(this.canvas.width / 2, this.canvas.height, this.grid);
     this.spriteLayer.addDrawable(this.launcher);
-    this.spriteLayer.addDrawable(this.bubbles);
 
     addEventListener('keydown', event => this.keyDown(event));
 
@@ -76,22 +74,4 @@ class BubbleGame extends Game {
         break;
     }
   }
-
-  // bubbleCollision() {
-  //   let isCollide = false;
-  //   if (this.bubbles.size() > 0) {
-  //     for (let i in this.bubbles.sprites) {
-  //       let eachBubble = this.bubbles.getSpriteByIndex(i);
-  //       let dx = this.current.bounds.x - eachBubble.bounds.x;
-  //       let dy = this.current.bounds.y - eachBubble.bounds.y;
-  //       let dis = dy ** 2 + dx ** 2;
-  //       if (dis <= (BUBBLE_RADIUS * 2) ** 2) {
-  //         console.log('COLLIDE');
-  //         this.current.neighbors.push(i);
-  //         isCollide = true;
-  //       }
-  //     }
-  //   }
-  //   return isCollide;
-  // }
 }

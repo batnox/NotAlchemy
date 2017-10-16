@@ -24,8 +24,10 @@ class BubbleGrid {
   }
 
   alignBubble(bubble) {
-    let tileX = bubble.bounds.x / (bubble.bounds.radius * 2);
-    let tileY = bubble.bounds.y / (bubble.bounds.radius * 2);
+    let tileX = Math.round(bubble.bounds.x / (bubble.bounds.radius * 2));
+    let tileY = Math.round(bubble.bounds.y / (bubble.bounds.radius * 2));
+    bubble.velocityX = 0;
+    bubble.velocityY = 0;
     this.addBubble(tileX, tileY, bubble);
   }
 
