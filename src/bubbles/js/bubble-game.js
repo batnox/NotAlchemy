@@ -13,13 +13,16 @@ class BubbleGame extends Game {
       Math.floor(this.canvas.height / (BUBBLE_RADIUS * 2))
     );
 
-    for (let x = 0; x < 5; x++) {
-      for (let y = 0; y < 7; y++) {
-        let bubble = new Bubble(
+    for (let x = 0; x < this.grid.width; x++) {
+      for (let y = 0; y < this.grid.height - 3; y++) {
+        let types = Object.values(BubbleType);
+        let index = Math.floor(Math.random() * types.length);
+        let color = types[index];
+        let randomBubble = new Bubble(
           0, 0,
-          BUBBLE_RADIUS, BubbleType.RED
+          BUBBLE_RADIUS, color
         );
-        this.grid.addBubble(x, y, bubble);
+        this.grid.addBubble(x, y, randomBubble);
       }
     }
 

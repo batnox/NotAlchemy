@@ -3,7 +3,7 @@ class Launcher extends Sprite {
     super();
     this.LEFT_BOUND = -70;
     this.RIGHT_BOUND = 70;
-    this.RADIUS = 200;
+    this.RADIUS = 100;
 
     this.bounds = new RectangleBounds();
     this.bounds.x = x;
