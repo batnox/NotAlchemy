@@ -9,9 +9,8 @@ class Bubble extends Sprite {
     this.type = bubbleType;
     this.velocityX = 0;
     this.velocityY = 0;
-    this.neighbors = [];
-    this.animateFrame = 0;
-
+    this.neighbors = [this];
+    this.matches = [this];
   }
 
   setPosition(x, y) {
@@ -43,42 +42,75 @@ class Bubble extends Sprite {
         this.image.setImage('bubble-yellow');
         break;
       case BubbleType.BATTY:
-        this.image.setImage('bubble-batty');
+        this.image.setImage('batty');
+        break;
+      case BubbleType.SKULL:
+        this.image.setImage('skull');
+        break;
+      case BubbleType.JACK:
+        this.image.setImage('jack');
+        break;
+      case BubbleType.CLOWN:
+        this.image.setImage('clown');
         break;
     }
   }
 
-  move(){
-    if (this.velocityX !== 0 || this.velocityY !== 0){
-      this.wallRebound();
-      this.setPosition(this.bounds.x += this.velocityX, this.bounds.y += this.velocityY);
+  get type() {
+    return this._type;
+  }
+
+  explode() {
+    this.image = new AnimationComponent();
+    this.image.bounds = new RectangleBounds();
+    this.image.bounds.setPosition(
+      this.bounds.x,
+      this.bounds.y
+    );
+    this.image.bounds.setSize(
+      this.bounds.radius * 2,
+      this.bounds.radius * 2
+    );
+    
+    if (this._type == BubbleType.BATTY) {
+      this.image.addImage('batty', 15);
+      this.image.addImage('batty-1', 15);
+      this.image.addImage('batty-2', 15);
+      this.image.addImage('batty-3', 15);
+      this.image.addImage('batty-4', 15);
+    } else if (this._type == BubbleType.SKULL) {
+      this.image.addImage('skull', 15);
+      this.image.addImage('skull-1', 15);
+      this.image.addImage('skull-2', 15);
+      this.image.addImage('skull-3', 15);
+      this.image.addImage('skull-4', 15);
+    } else if (this._type == BubbleType.JACK) {
+      this.image.addImage('jack', 15);
+      this.image.addImage('jack-1', 15);
+      this.image.addImage('jack-2', 15);
+      this.image.addImage('jack-3', 15);
+      this.image.addImage('jack-4', 15);
+    } else if (this._type == BubbleType.CLOWN) {
+      this.image.addImage('clown', 15);
+      this.image.addImage('clown-1', 15);
+      this.image.addImage('clown-2', 15);
+      this.image.addImage('clown-3', 15);
+      this.image.addImage('clown-4', 15);
     }
   }
 
-  wallRebound(){
-      let canvas = document.getElementById('alchemy-canvas');
-      let cWidth = canvas.width;
+  update() {
+    this.setPosition(
+      this.bounds.x + this.velocityX,
+      this.bounds.y + this.velocityY
+    );
 
-      if (this.bounds.x < 0 || this.bounds.x + this.bounds.radius > cWidth ) {
-          this.velocityX = -this.velocityX;
-      }
-  }
+    let canvas = document.getElementById('alchemy-canvas');
 
-  setStayPosition(){
-
-    //this.x =  Math.floor(this.x/20)*20 + this.r;
-    //this.y =  Math.floor(this.y/20)*20 + this.r;
-    /*
-    if (this.y%2 !== 0){
-      this.y += this.height;
+    if (this.bounds.x < 0 ||
+      this.bounds.x > canvas.width - this.bounds.radius * 2) {
+      this.velocityX = -this.velocityX;
     }
-    */
-    this.velocityX = 0;
-    this.velocityY = 0;
-  }
-
-  doExplosion(){
-    return imageManager.canOffsetIncrease(this.image.name);
   }
 
 }
