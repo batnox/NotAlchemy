@@ -11,13 +11,12 @@ class BubbleGame extends Game {
       Math.floor(this.canvas.width / (this.bubbleR * 2)),
       Math.floor(this.canvas.height / (this.bubbleR * 2))
     );
-    this.walls = new SpriteGroup();
 
+    this.walls = new SpriteGroup();
     let wallLeft = new BubblesWall(0, 0, 20, this.canvas.height);
     let wallRight = new BubblesWall(this.canvas.width - 20, 0, 20, this.canvas.height);
     let wallTop = new BubblesWall(0, 0, this.canvas.width, 20);
     let wallBottom = new BubblesWall(0, this.canvas.height - 20, this.canvas.width, 20);
-
     this.walls.add(wallLeft);
     this.walls.add(wallRight);
     this.walls.add(wallTop);
@@ -28,10 +27,14 @@ class BubbleGame extends Game {
     this.loadContent()
       .then(this.start());
 
+    this.bubbleLevel = new Level(Math.floor(this.canvas.width / (this.bubbleR * 2)),
+        Math.floor(this.canvas.height / (this.bubbleR * 2)), this.bubbleR);
+    this.spriteLayer.addDrawable(this.bubbleLevel.level[1]);
+
     this.launcher = new Launcher(this.canvas.width/2, this.canvas.height);
     this.launcher.image.setImage('guide');
 
-    this.current = new Bubble(this.launcher.bubbleX, this.launcher.bubbleY, this.bubbleR, BubbleType.YELLOW);
+    this.current = new Bubble(this.launcher.bubbleX, this.launcher.bubbleY, this.bubbleR, colorType.randomColor());
     this.bubbleGroup = new SpriteGroup();
 
     this.spriteLayer.addDrawable(this.launcher);
@@ -41,6 +44,8 @@ class BubbleGame extends Game {
     this.explosionTest = new Bubble(200, 200, this.bubbleR, BubbleType.BATTY);
     this.spriteLayer.addDrawable(this.explosionTest);
     this.explosionTest.doExplosion();
+
+
   }
 
   loadContent() {
@@ -79,7 +84,7 @@ class BubbleGame extends Game {
         if (this.bubbleCollision() || this.current.bounds.y-this.bubbleR < 0){
             this.current.setStayPosition();
             this.bubbleGroup.add(this.current);
-            this.current = new Bubble(this.launcher.bubbleX, this.launcher.bubbleY, this.bubbleR, BubbleType.BLUE);
+            this.current = new Bubble(this.launcher.bubbleX, this.launcher.bubbleY, this.bubbleR, colorType.randomColor());
             this.spriteLayer.addDrawable(this.current);
             this.launcher.isShooting = false;
         }
@@ -107,4 +112,6 @@ class BubbleGame extends Game {
       }
       return isCollide;
   }
+
+
 }

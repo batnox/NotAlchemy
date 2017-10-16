@@ -25,19 +25,19 @@ class Bubble extends Sprite {
   set type(type) {
     this._type = type;
     switch (this._type) {
-      case BubbleType.BLUE:
+      case 'bubble-blue':
         this.image.setImage('bubble-blue');
         break;
-      case BubbleType.GREEN:
+      case 'bubble-green':
         this.image.setImage('bubble-green');
         break;
-      case BubbleType.PURPLE:
+      case 'bubble-purple':
         this.image.setImage('bubble-purple');
         break;
-      case BubbleType.RED:
+      case 'bubble-red':
         this.image.setImage('bubble-red');
         break;
-      case BubbleType.YELLOW:
+      case 'bubble-yellow':
         this.image.setImage('bubble-yellow');
         break;
       case BubbleType.BATTY:
