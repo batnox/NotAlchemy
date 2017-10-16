@@ -33,7 +33,7 @@ class LineStuff{
             }
         }
         else {
-            var m = math.tan(theta);
+            var m = Math.tan(theta);
 
             while (tracequeue.length > 0) {
                 curTile = tracequeue.shift();
