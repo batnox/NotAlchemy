@@ -46,23 +46,16 @@ class Bubble extends Sprite {
     }
   }
 
-  move(){
-    if (this.velocityX !== 0 || this.velocityY !== 0){
-      this.wallRebound();
-      this.setPosition(this.bounds.x += this.velocityX, this.bounds.y += this.velocityY);
+  wallRebound() {
+    let canvas = document.getElementById('alchemy-canvas');
+    let cWidth = canvas.width;
+
+    if (this.bounds.x < 0 || this.bounds.x + this.bounds.radius > cWidth) {
+      this.velocityX = -this.velocityX;
     }
   }
 
-  wallRebound(){
-      let canvas = document.getElementById('alchemy-canvas');
-      let cWidth = canvas.width;
-
-      if (this.bounds.x < 0 || this.bounds.x + this.bounds.radius > cWidth ) {
-          this.velocityX = -this.velocityX;
-      }
-  }
-
-  setStayPosition(){
+  setStayPosition() {
 
     //this.x =  Math.floor(this.x/20)*20 + this.r;
     //this.y =  Math.floor(this.y/20)*20 + this.r;
@@ -75,7 +68,7 @@ class Bubble extends Sprite {
     this.velocityY = 0;
   }
 
-  doExplosion(){
+  doExplosion() {
     // return imageManager.canOffsetIncrease(this.image);
     this.image = new AnimationComponent();
     this.image.bounds = new RectangleBounds();
@@ -95,6 +88,14 @@ class Bubble extends Sprite {
     this.image.addImage('batty-3', 15);
     this.image.addImage('batty-2', 15);
     this.image.addImage('batty-1', 15);
+  }
+
+  update() {
+    this.wallRebound();
+    this.setPosition(
+      this.bounds.x + this.velocityX,
+      this.bounds.y + this.velocityY
+    );
   }
 
 }

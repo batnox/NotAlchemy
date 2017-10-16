@@ -1,54 +1,90 @@
 class Launcher extends Sprite {
   constructor(x, y) {
     super();
-    this.leftBound = -70;
-    this.rightBound = 70;
-    this.isShooting = false;
+    this.LEFT_BOUND = -70;
+    this.RIGHT_BOUND = 70;
+    this.RADIUS = 200;
+
     this.bounds = new RectangleBounds();
     this.bounds.x = x;
     this.bounds.y = y;
     this.image = new ImageComponent();
+    this.image.setImage('guide');
     this.image.bounds = this.bounds;
-    this.radius = 200;
-    this.degree = 60;
-    this.bounds.setRotation(this.degree);
-    this.bubbleX = this.bounds.x + Math.sin(this.toRadians(this.bounds.rotation)) * this.radius;
-    this.bubbleY = this.bounds.y - Math.cos(this.toRadians(this.bounds.rotation)) * this.radius;
-    console.log(this.bubbleX);
 
-    addEventListener('keydown', event => this.keyDown(event));
+    this.state = LauncherState.EMPTY;
+    this.loadedBubble = null;
+    this.setLaunchRotation(0);
+  }
+
+  loadBubble(bubble) {
+    this.loadedBubble = bubble;
+    this.state = LauncherState.LOADED;
+  }
+
+  turnLeft() {
+    if (this.degree > this.LEFT_BOUND) {
+      this.setLaunchRotation(this.degree - 2);
+    }
+  }
+
+  turnRight() {
+    if (this.degree < this.RIGHT_BOUND) {
+      this.setLaunchRotation(this.degree + 2);
+    }
+  }
+
+  launch() {
+    this.loadedBubble.velocityX =
+      (this.bubbleX - this.bounds.x) / 80;
+    this.loadedBubble.velocityY =
+      (this.bubbleY - this.bounds.y) / 80;
+    this.state = LauncherState.FIRED;
+  }
+
+  setLaunchRotation(degree) {
+    this.degree = degree;
+    this.bounds.setRotation(degree);
+    this.bubbleX = this.bounds.x + Math.sin(this.toRadians(degree)) *
+      this.RADIUS;
+    this.bubbleY = this.bounds.y - Math.cos(this.toRadians(degree)) *
+      this.RADIUS;
+
+    if (this.loadedBubble) {
+      this.loadedBubble.setPosition(this.bubbleX, this.bubbleY);
+    }
   }
 
   toRadians(degree) {
     return degree * Math.PI / 180;
   }
 
-  keyDown(event) {
-    switch (event.keyCode) {
-      case 37: // Left
-        if (this.degree > this.leftBound) {
-          this.degree -= 2;
-        }
-        break;
-      case 39: // Right
-        if (this.degree < this.rightBound) {
-          this.degree += 2;
-        }
-        break;
-      case 32: // space
-        console.log('space detected');
-        this.isShooting = true;
-        break;
-      default:
-        break;
-    }
-    this.bounds.setRotation(this.degree);
-    this.bubbleX = this.bounds.x + Math.sin(this.toRadians(this.bounds.rotation)) * this.radius;
-    this.bubbleY = this.bounds.y - Math.cos(this.toRadians(this.bounds.rotation)) * this.radius;
-  }
-
   draw(context) {
     super.draw(context);
+    if (this.loadedBubble) {
+      this.loadedBubble.draw(context);
+    }
+  }
+
+  update() {
+    switch (this.state) {
+      case LauncherState.EMPTY:
+        console.log('E');
+        let randomBubble = new Bubble(
+          this.bubbleX, this.bubbleY,
+          BUBBLE_RADIUS, BubbleType.GREEN
+        );
+        this.loadBubble(randomBubble);
+        break;
+      case LauncherState.LOADED:
+        console.log(`L: ${this.loadedBubble} - (${this.bubbleX}, ${this.bubbleY})`);
+        this.loadedBubble.setPosition(this.bubbleX, this.bubbleY);
+        break;
+      case LauncherState.FIRED:
+        console.log('F');
+        this.loadedBubble.update();
+        break;
+    }
   }
 
 }
