@@ -18,35 +18,7 @@ class BubbleGrid {
     }
     bubble.setPosition(bx, by);
     bubble.setGridPosition(x, y);
-
-    if (0 < x) {
-      this.updateNeighbor(bubble, this.getBubble(x - 1, y), spawned);
-      if (y % 2 === 0) {
-        if (0 < y) {
-          this.updateNeighbor(bubble, this.getBubble(x - 1, y - 1), spawned);
-        }
-        if (y + 1 < this.height) {
-          this.updateNeighbor(bubble, this.getBubble(x - 1, y + 1), spawned);
-        }
-      }
-    }
-    if (0 < y) {
-      this.updateNeighbor(bubble, this.getBubble(x, y - 1), spawned);
-    }
-    if (y + 1 < this.height) {
-      this.updateNeighbor(bubble, this.getBubble(x, y + 1), spawned);
-    }
-    if (x + 1 < this.width) {
-      this.updateNeighbor(bubble, this.getBubble(x + 1, y), spawned);
-      if (y % 2 === 1) {
-        if (0 < y) {
-          this.updateNeighbor(bubble, this.getBubble(x + 1, y - 1), spawned);
-        }
-        if (y + 1 < this.height) {
-          this.updateNeighbor(bubble, this.getBubble(x + 1, y + 1), spawned);
-        }
-      }
-    }
+    bubble.updateNeighbors(true);
   }
 
   updateNeighbor(bubble, neighbor, spawned) {

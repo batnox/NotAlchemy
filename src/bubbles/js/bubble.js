@@ -32,6 +32,33 @@ class Bubble extends Sprite {
     this.gridY = gridY;
   }
 
+  updateNeighbor(x, y, spawned) {
+    if (0 < x && x < this.width - 1) {
+      if (0 < y && y < this.height - 1) {
+        let neighbor = this.getBubble(x, y);
+        if (neighbor) {
+          this.neighbors.push(neighbor);
+        }
+      }
+    }
+  }
+
+  updateNeighbors(spawned) {
+    this.neighbors = [];
+    this.updateNeighbor(x - 1, y, spawned);
+    if (y % 2 === 0) {
+      this.updateNeighbor(x - 1, y - 1, spawned);
+      this.updateNeighbor(x - 1, y + 1, spawned);
+    }
+    this.updateNeighbor(x, y - 1, spawned);
+    this.updateNeighbor(x, y + 1, spawned);
+    this.updateNeighbor(x + 1, y, spawned);
+    if (y % 2 === 1) {
+      this.updateNeighbor(x + 1, y - 1, spawned);
+      this.updateNeighbor(x + 1, y + 1, spawned);
+    }
+  }
+
   set type(type) {
     this._type = type;
     switch (this._type) {
@@ -81,7 +108,7 @@ class Bubble extends Sprite {
       this.bounds.radius * 2,
       this.bounds.radius * 2
     );
-    
+
     if (this._type === BubbleType.BATTY) {
       this.image.addImage('batty', 15);
       this.image.addImage('batty-1', 15);
