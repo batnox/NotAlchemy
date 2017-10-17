@@ -59,10 +59,8 @@ class BubbleGrid {
           bubble.matches.push(b);
         }
         neighbor.matches.push(bubble);
-        console.log(bubble.type + ' - ' + bubble.matches.length);
 
         if (!spawned && bubble.matches.length >= BUBBLE_MATCH_COUNT) {
-          console.log('MATCH');
           for (let matchedBubble of bubble.matches) {
             matchedBubble.explode();
           }
@@ -82,17 +80,17 @@ class BubbleGrid {
   alignBubble(bubble) {
     let cx = bubble.bounds.x;
     let cy = bubble.bounds.y;
-    console.log(`${cx}, ${cy}`);
 
     if (cy % 2 === 1) {
       cx -= bubble.bounds.radius;
     }
     let tileX = Math.round(cx / (bubble.bounds.radius * 2));
-    let tileY = Math.round(cy / (bubble.bounds.radius * 1.7));
-    console.log(`${tileX}, ${tileY}`);
+    let tileY = Math.round(cy / (bubble.bounds.radius * Math.sqrt(3)));
     bubble.velocityX = 0;
     bubble.velocityY = 0;
     this.addBubble(tileX, tileY, bubble);
+
+    console.log(`Align (${cx}, ${cy}) => (${tileX}, ${tileY}) => (${bubble.bounds.x}, ${bubble.bounds.y})`);
   }
 
   update() {
@@ -107,16 +105,22 @@ class BubbleGrid {
   }
 
   draw(context) {
-    // for (let x = 0; x < 40; x++) {
-    //   for (let y = 0; y < 40; y++) {
-    //     if (x % 10 === 0 || y % 10 === 0) {
-    //       context.strokeStyle = '#f0f';
-    //     } else {
-    //       context.strokeStyle = '#808';
-    //     }
-    //     context.strokeRect(x * 20, y * 20, 20, 20);
-    //   }
-    // }
+    for (let x = 0; x < 40; x++) {
+      if (x % 10 === 0) {
+        context.strokeStyle = '#f0f';
+      } else {
+        context.strokeStyle = '#808';
+      }
+      context.strokeRect(x * 20, 0, 1, 800);
+    }
+    for (let y = 0; y < 40; y++) {
+      if (y % 10 === 0) {
+        context.strokeStyle = '#f0f';
+      } else {
+        context.strokeStyle = '#808';
+      }
+      context.strokeRect(0, y * 20, 800, 1);
+    }
     this.bubbles.forEach(row => row.forEach(bubble => {
       if (bubble) {
         bubble.draw(context);

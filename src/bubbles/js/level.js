@@ -21,11 +21,8 @@ class Level {
     for (let x = 0; x < this.width; x++) {
       let index = Math.floor(Math.random() * types.length);
       let color = types[index];
-      console.log(color);
       bubbleOnGrid.addBubble(x, 0, new Bubble(0, 0, this.r, color), true);
-      console.log(bubbleOnGrid.getBubble(x, 0));
     }
-    console.log(bubbleOnGrid);
 
     //difficulty
     for (let y = 1; y < 9; y++) {
