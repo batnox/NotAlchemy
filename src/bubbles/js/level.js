@@ -21,8 +21,9 @@ class Level {
     for (let x = 0; x < this.width; x++) {
       let index = Math.floor(Math.random() * types.length);
       let color = types[index];
-      bubbleOnGrid.addBubble(x, 0, new Bubble(0, 0, this.r, color), true);
+      bubbleOnGrid.addBubble(x, 0, new Bubble(0, 0, this.r, color, bubbleOnGrid), true);
     }
+    //console.log(bubbleOnGrid);
 
     //difficulty
     for (let y = 1; y < 9; y++) {
@@ -36,6 +37,7 @@ class Level {
           neighbors.push(bubbleOnGrid.getBubble(x - 1, y)._type);
         }
 
+        let text = "";
         //1-2 others
         for (let ct of types) {
           let exist = false;
@@ -46,29 +48,32 @@ class Level {
           if (exist)
             continue;
           others.push(ct);
+          text += " " + ct;
         }
+        console.log(text);
+
 
         //2. decide draw which color based by difficulty
         if (difficulty < 1) {//easy
-          bubbleOnGrid.addBubble(x, y, new Bubble(x, y, this.r, neighbors[0]), true);
+          bubbleOnGrid.addBubble(x, y, new Bubble(x, y, this.r, neighbors[0], bubbleOnGrid), true);
         }
         else if (difficulty < 2) {//middle
           if (y % 3 === 0) {
-            bubbleOnGrid.addBubble(x, y, new Bubble(x, y, this.r, others[Math.floor(Math.random() * others.length)]), true);
+            bubbleOnGrid.addBubble(x, y, new Bubble(x, y, this.r, others[Math.floor(Math.random() * others.length)], bubbleOnGrid), true);
           }
           else {
-            bubbleOnGrid.addBubble(x, y, new Bubble(x, y, this.r, neighbors[0]), true);
+            bubbleOnGrid.addBubble(x, y, new Bubble(x, y, this.r, neighbors[0], bubbleOnGrid), true);
           }
         }
         else {//hard
           let rad = Math.random();
 
           if (rad < 0.5) {
-            bubbleOnGrid.addBubble(x, y, new Bubble(x, y, this.r, neighbors[Math.floor(Math.random() * neighbors.length)]), true);
+            bubbleOnGrid.addBubble(x, y, new Bubble(x, y, this.r, neighbors[Math.floor(Math.random() * neighbors.length)], bubbleOnGrid), true);
           }
           else {
 
-            bubbleOnGrid.addBubble(x, y, new Bubble(x, y, this.r, others[Math.floor(Math.random() * others.length)]), true);
+            bubbleOnGrid.addBubble(x, y, new Bubble(x, y, this.r, others[Math.floor(Math.random() * others.length)], bubbleOnGrid), true);
 
           }
         }

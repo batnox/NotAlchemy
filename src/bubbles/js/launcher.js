@@ -1,6 +1,10 @@
 class Launcher extends Sprite {
   constructor(x, y, grid) {
     super();
+    this.LEFT_BOUND = -70;
+    this.RIGHT_BOUND = 70;
+    this.RADIUS = 150;
+
     this.bounds = new RectangleBounds();
     this.bounds.x = x;
     this.bounds.y = y;
@@ -19,24 +23,41 @@ class Launcher extends Sprite {
     this.state = LauncherState.LOADED;
   }
 
-  launch(mouse) {
-    let dx = mouse.x - this.bounds.x - BUBBLE_RADIUS;
-    let dy = mouse.y - this.bounds.y - BUBBLE_RADIUS;
-    let angle = Math.atan2(dy, dx);
-    this.loadedBubble.velocityX = BUBBLE_SPEED * Math.cos(angle);
-    this.loadedBubble.velocityY = BUBBLE_SPEED * Math.sin(angle);
+  turnLeft() {
+    if (this.degree > this.LEFT_BOUND) {
+      this.setLaunchRotation(this.degree - 2);
+    }
+  }
+
+  turnRight() {
+    if (this.degree < this.RIGHT_BOUND) {
+      this.setLaunchRotation(this.degree + 2);
+    }
+  }
+
+  launch() {
+    this.loadedBubble.velocityX =
+      (this.bubbleX - this.bounds.x) / 40;
+    this.loadedBubble.velocityY =
+      (this.bubbleY - this.bounds.y) / 40;
     this.state = LauncherState.FIRED;
   }
 
   setLaunchRotation(degree) {
-    // this.bubbleX = this.bounds.x - BUBBLE_RADIUS + Math.sin(this.toRadians(degree)) *
-    //   this.RADIUS;
-    // this.bubbleY = this.bounds.y - BUBBLE_RADIUS - Math.cos(this.toRadians(degree)) *
-    //   this.RADIUS;
+    this.degree = degree;
+    this.bounds.setRotation(degree);
+    this.bubbleX = this.bounds.x - BUBBLE_RADIUS + Math.sin(this.toRadians(degree)) *
+      this.RADIUS;
+    this.bubbleY = this.bounds.y - BUBBLE_RADIUS - Math.cos(this.toRadians(degree)) *
+      this.RADIUS;
 
-    // if (this.state === LauncherState.LOADED && this.loadedBubble) {
-    //   this.loadedBubble.setPosition(this.bubbleX, this.bubbleY);
-    // }
+    if (this.state === LauncherState.LOADED && this.loadedBubble) {
+      this.loadedBubble.setPosition(this.bubbleX, this.bubbleY);
+    }
+  }
+
+  toRadians(degree) {
+    return degree * Math.PI / 180;
   }
 
   draw(context) {
@@ -53,14 +74,14 @@ class Launcher extends Sprite {
         let index = Math.floor(Math.random() * types.length);
         let color = types[index];
         let randomBubble = new Bubble(
-          this.bounds.x, this.bounds.y,
+          this.bubbleX, this.bubbleY,
           BUBBLE_RADIUS, color,
           this.grid
         );
         this.loadBubble(randomBubble);
         break;
       case LauncherState.LOADED:
-        // this.loadedBubble.setPosition(this.bubbleX, this.bubbleY);
+        this.loadedBubble.setPosition(this.bubbleX, this.bubbleY);
         break;
       case LauncherState.FIRED:
         this.loadedBubble.update();

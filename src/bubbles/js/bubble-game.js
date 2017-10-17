@@ -16,7 +16,7 @@ class BubbleGame extends Game {
       Math.floor(this.canvas.width / (BUBBLE_RADIUS * 2)),
       Math.floor(this.canvas.height / (BUBBLE_RADIUS * 2)), BUBBLE_RADIUS);
     this.grid = this.bubbleLevel.level[0];
-
+/*
     for (let x = 0; x < this.grid.width; x++) {
       for (let y = 0; y < this.grid.height - 3; y++) {
         let types = Object.values(BubbleType);
@@ -30,7 +30,7 @@ class BubbleGame extends Game {
         this.grid.addBubble(x, y, randomBubble, true);
       }
     }
-
+*/
     this.spriteLayer.addDrawable(this.grid);
     this.launcher = new Launcher(
       this.canvas.width / 2 - BUBBLE_RADIUS,
