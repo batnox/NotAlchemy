@@ -2,6 +2,7 @@ let BUBBLE_RADIUS = 20;
 let BUBBLE_MATCH_COUNT = 3;
 let BUBBLE_SCORE = 0;
 let BUBBLE_EXPLOSION_SCORE = 100;
+let BUBBLE_SPEED = 5;
 
 class BubbleGame extends Game {
   constructor() {
@@ -31,7 +32,11 @@ class BubbleGame extends Game {
     }
 
     this.spriteLayer.addDrawable(this.grid);
-    this.launcher = new Launcher(this.canvas.width / 2, this.canvas.height, this.grid);
+    this.launcher = new Launcher(
+      this.canvas.width / 2 - BUBBLE_RADIUS,
+      this.canvas.height - BUBBLE_RADIUS * 2,
+      this.grid
+    );
     this.spriteLayer.addDrawable(this.launcher);
 
     this.scoreDisplay = new TextDisplay(
@@ -44,7 +49,6 @@ class BubbleGame extends Game {
     this.scoreDisplay.text = `Score: ${BUBBLE_SCORE}`;
     this.overlayLayer.addDrawable(this.scoreDisplay);
 
-    addEventListener('keydown', event => this.keyDown(event));
     addEventListener('mousedown', event => this.mouseDown(event));
 
     this.loadContent()
@@ -98,23 +102,7 @@ class BubbleGame extends Game {
     this.grid.update();
   }
 
-  keyDown(event) {
-    switch (event.keyCode) {
-      case 37: // Left
-        this.launcher.turnLeft();
-        break;
-      case 39: // Right
-        this.launcher.turnRight();
-        break;
-      case 32: // Space
-        this.launcher.launch();
-        break;
-      default:
-        break;
-    }
-  }
-
   mouseDown(event) {
-    this.launcher.launch();
+    this.launcher.launch(this.mouse);
   }
 }
