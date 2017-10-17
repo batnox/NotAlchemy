@@ -3,9 +3,21 @@ class BubbleGrid {
     this.bubbles = [];
     this.width = width;
     this.height = height;
+    this.gameOver = false;
     for (let i = 0; i < height; i++) {
       this.bubbles.push([]);
     }
+  }
+
+  isEmpty() {
+    for (let x = 0; x < this.width; x++) {
+      for (let  y = 0; y < this.height; y++) {
+        if (this.getBubble(x, y)) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   addBubble(x, y, bubble, spawned) {
@@ -40,6 +52,10 @@ class BubbleGrid {
     let tileY = Math.round(cy / (bubble.bounds.radius * Math.sqrt(3)));
     bubble.velocityX = 0;
     bubble.velocityY = 0;
+
+    if (tileY >= this.height) {
+      this.gameOver = true;
+    }
     this.addBubble(tileX, tileY, bubble);
 
     console.log(`Align (${cx}, ${cy}) => (${tileX}, ${tileY}) => (${bubble.bounds.x}, ${bubble.bounds.y})`);

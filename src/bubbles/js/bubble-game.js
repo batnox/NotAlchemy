@@ -35,6 +35,15 @@ class BubbleGame extends Game {
     this.scoreDisplay.text = `Score: ${BUBBLE_SCORE}`;
     this.overlayLayer.addDrawable(this.scoreDisplay);
 
+    this.gameOverDisplay = new TextDisplay(
+      BUBBLE_RADIUS, BUBBLE_RADIUS,
+      this.canvas.width - BUBBLE_RADIUS / 2
+    );
+    this.gameOverDisplay.fontSize = 32;
+    this.gameOverDisplay.fontName = 'Courier';
+    this.gameOverDisplay.fontColor = '#fff';
+    this.overlayLayer.addDrawable(this.gameOverDisplay);
+
     addEventListener('mousedown', event => this.mouseDown(event));
 
     this.loadContent()
@@ -79,13 +88,20 @@ class BubbleGame extends Game {
 
   update() {
     super.update();
-    this.scoreDisplay.text = `Score: ${BUBBLE_SCORE}`;
-    let dx = this.launcher.bounds.x - this.mouse.x;
-    let dy = this.launcher.bounds.y - this.mouse.y;
-    let angle = Math.atan2(dy, dx);
-    this.launcher.setLaunchRotation(angle / Math.PI * 180 - 90);
-    this.launcher.update();
-    this.grid.update();
+
+    if (this.grid.gameOver) {
+      this.gameOverDisplay.text = 'You Lose!';
+    } else if (this.grid.isEmpty()) {
+      this.gameOverDisplay.text = 'You Win!';
+    } else {
+      this.scoreDisplay.text = `Score: ${BUBBLE_SCORE}`;
+      let dx = this.launcher.bounds.x - this.mouse.x;
+      let dy = this.launcher.bounds.y - this.mouse.y;
+      let angle = Math.atan2(dy, dx);
+      this.launcher.setLaunchRotation(angle / Math.PI * 180 - 90);
+      this.launcher.update();
+      this.grid.update();
+    }
   }
 
   mouseDown(event) {
