@@ -8,7 +8,7 @@ class BubbleGrid {
     }
   }
 
-  addBubble(x, y, bubble) {
+  addBubble(x, y, bubble, spawned) {
     this.bubbles[x][y] = bubble;
     let bx = x * bubble.bounds.radius * 2;
     let by = y * bubble.bounds.radius * Math.sqrt(3);
@@ -17,24 +17,39 @@ class BubbleGrid {
       bx += bubble.bounds.radius;
     }
     bubble.setPosition(bx, by);
+    bubble.setGridPosition(x, y);
 
     if (0 < x) {
-      this.updateNeighbor(bubble, this.getBubble(x - 1, y));
+      this.updateNeighbor(bubble, this.getBubble(x - 1, y), spawned);
+      if (y % 2 === 0) {
+        if (0 < y) {
+          this.updateNeighbor(bubble, this.getBubble(x - 1, y - 1), spawned);
+        }
+        if (y + 1 < this.height) {
+          this.updateNeighbor(bubble, this.getBubble(x - 1, y + 1), spawned);
+        }
+      }
+    }
+    if (0 < y) {
+      this.updateNeighbor(bubble, this.getBubble(x, y - 1), spawned);
+    }
+    if (y + 1 < this.height) {
+      this.updateNeighbor(bubble, this.getBubble(x, y + 1), spawned);
     }
     if (x + 1 < this.width) {
-      this.updateNeighbor(bubble, this.getBubble(x + 1, y));
-      if (0 < y) {
-        this.updateNeighbor(bubble, this.getBubble(x, y - 1));
-        this.updateNeighbor(bubble, this.getBubble(x + 1, y - 1));
-      }
-      if (y + 1 < this.height) {
-        this.updateNeighbor(bubble, this.getBubble(x, y + 1));
-        this.updateNeighbor(bubble, this.getBubble(x + 1, y + 1));
+      this.updateNeighbor(bubble, this.getBubble(x + 1, y), spawned);
+      if (y % 2 === 1) {
+        if (0 < y) {
+          this.updateNeighbor(bubble, this.getBubble(x + 1, y - 1), spawned);
+        }
+        if (y + 1 < this.height) {
+          this.updateNeighbor(bubble, this.getBubble(x + 1, y + 1), spawned);
+        }
       }
     }
   }
 
-  updateNeighbor(bubble, neighbor) {
+  updateNeighbor(bubble, neighbor, spawned) {
     if (neighbor) {
       bubble.neighbors.push(neighbor);
       neighbor.neighbors.push(bubble);
@@ -46,8 +61,11 @@ class BubbleGrid {
         neighbor.matches.push(bubble);
         console.log(bubble.type + ' - ' + bubble.matches.length);
 
-        if (bubble.matches.length >= BUBBLE_MATCH_COUNT) {
+        if (!spawned && bubble.matches.length >= BUBBLE_MATCH_COUNT) {
           console.log('MATCH');
+          for (let matchedBubble of bubble.matches) {
+            matchedBubble.explode();
+          }
         }
       }
     }
@@ -55,6 +73,10 @@ class BubbleGrid {
 
   getBubble(x, y) {
     return this.bubbles[x][y];
+  }
+
+  removeBubble(x, y) {
+    this.bubbles[x][y] = null;
   }
 
   alignBubble(bubble) {
@@ -73,19 +95,32 @@ class BubbleGrid {
     this.addBubble(tileX, tileY, bubble);
   }
 
-  draw(context) {
-    for (let x = 0; x < 40; x++) {
-      for (let y = 0; y < 40; y++) {
-        if (x % 10 === 0 || y % 10 === 0) {
-          context.strokeStyle = '#f0f';
-        } else {
-          context.strokeStyle = '#808';
+  update() {
+    for (let x = 0; x < this.width; x++) {
+      for (let y = 0; y < this.height; y++) {
+        let bubble = this.getBubble(x, y);
+        if (bubble) {
+          bubble.update();
         }
-        context.strokeRect(x * 20, y * 20, 20, 20);
       }
     }
+  }
+
+  draw(context) {
+    // for (let x = 0; x < 40; x++) {
+    //   for (let y = 0; y < 40; y++) {
+    //     if (x % 10 === 0 || y % 10 === 0) {
+    //       context.strokeStyle = '#f0f';
+    //     } else {
+    //       context.strokeStyle = '#808';
+    //     }
+    //     context.strokeRect(x * 20, y * 20, 20, 20);
+    //   }
+    // }
     this.bubbles.forEach(row => row.forEach(bubble => {
-      bubble.draw(context);
+      if (bubble) {
+        bubble.draw(context);
+      }
     }));
   }
 }
