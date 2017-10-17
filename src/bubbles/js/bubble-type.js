@@ -1,7 +1,11 @@
 const BubbleType = Object.freeze({
-  BLUE:    Symbol('blue'),
-  GREEN:  Symbol('green'),
-  PURPLE:  Symbol('purple'),
-  RED: Symbol('red'),
-  YELLOW: Symbol('yellow')
+  // BLUE: 'blue',
+  // GREEN: 'green',
+  // PURPLE: 'purple',
+  // RED: 'red',
+  // YELLOW: 'yellow',
+  BATTY: 'batty',
+  SKULL: 'skull',
+  JACK: 'jack',
+  CLOWN: 'clown'
 });

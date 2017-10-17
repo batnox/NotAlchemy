@@ -1,7 +1,10 @@
 class AnimationComponent {
-  constructor() {
+  constructor(repeat) {
     this.bounds = null;
     this.visible = true;
+    this.running = false;
+    this.repeat = repeat;
+    this.onEnd = null;
 
     this.currentImage = -1;
     this.timeRemaining = -1;
@@ -23,12 +26,34 @@ class AnimationComponent {
     this.visible = visible;
   }
 
+  start() {
+    console.log('start');
+    this.running = true;
+  }
+
+  end() {
+    this.running = false;
+  }
+
   update() {
-    this.timeRemaining--;
-    if (this.timeRemaining <= 0) {
-      this.currentImage++;
-      this.currentImage %= this.sequence.length;
-      this.timeRemaining = this.sequence[this.currentImage].time;
+    console.log('anim');
+    if (this.running) {
+      this.timeRemaining--;
+      if (this.timeRemaining <= 0) {
+        this.currentImage++;
+        if (this.currentImage >= this.sequence.length) {
+          if (this.repeat) {
+            this.currentImage %= this.sequence.length;
+          } else {
+            this.running = false;
+          }
+          if (this.onEnd) {
+            this.onEnd();
+            return;
+          }
+        }
+        this.timeRemaining = this.sequence[this.currentImage].time;
+      }
     }
   }
 
@@ -37,22 +62,30 @@ class AnimationComponent {
    */
   draw(context) {
     if (this.visible && this.currentImage >= 0) {
+      let current = this.sequence[this.currentImage].name;
+      let i = imageManager.getImage(current);
+      if (!i) {
+        throw Error('No image: ' + current);
+      }
+      let image = imageManager.getImage(current).image;
+      let imageOffset = imageManager.getImage(current).offset;
       context.save();
       context.translate(
         this.bounds.x + this.bounds.width / 2,
         this.bounds.y + this.bounds.height / 2
       );
       context.rotate(this.bounds.rotation * Math.PI / 180);
-      let current = this.sequence[this.currentImage];
-      let image = imageManager.getImage(current.name);
-      if (!image) {
-        throw Error(`No image \'${current.name}\'.`)
+      if (!image || !image.src) {
+        throw Error(`No image \'${current.name}\'.`);
       }
       context.drawImage(
         image,
+        imageOffset, 0,
+        image.height, image.height,
         -this.bounds.width / 2, -this.bounds.height / 2,
         this.bounds.width, this.bounds.height
       );
+
       context.restore();
     }
   }
