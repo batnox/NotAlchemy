@@ -21,9 +21,11 @@ class Level {
     for (let x = 0; x < this.width; x++) {
       let index = Math.floor(Math.random() * types.length);
       let color = types[index];
+      console.log(color);
       bubbleOnGrid.addBubble(x, 0, new Bubble(0, 0, this.r, color, bubbleOnGrid), true);
+      console.log(bubbleOnGrid.getBubble(x, 0));
     }
-    //console.log(bubbleOnGrid);
+    console.log(bubbleOnGrid);
 
     //difficulty
     for (let y = 1; y < 9; y++) {
@@ -37,7 +39,6 @@ class Level {
           neighbors.push(bubbleOnGrid.getBubble(x - 1, y)._type);
         }
 
-        let text = "";
         //1-2 others
         for (let ct of types) {
           let exist = false;
@@ -48,10 +49,7 @@ class Level {
           if (exist)
             continue;
           others.push(ct);
-          text += " " + ct;
         }
-        console.log(text);
-
 
         //2. decide draw which color based by difficulty
         if (difficulty < 1) {//easy
