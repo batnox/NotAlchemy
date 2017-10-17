@@ -18,27 +18,7 @@ class BubbleGrid {
     }
     bubble.setPosition(bx, by);
     bubble.setGridPosition(x, y);
-    bubble.updateNeighbors(true);
-  }
-
-  updateNeighbor(bubble, neighbor, spawned) {
-    if (neighbor) {
-      bubble.neighbors.push(neighbor);
-      neighbor.neighbors.push(bubble);
-
-      if (bubble.type === neighbor.type) {
-        for (let b of neighbor.matches) {
-          bubble.matches.push(b);
-        }
-        neighbor.matches.push(bubble);
-
-        if (!spawned && bubble.matches.length >= BUBBLE_MATCH_COUNT) {
-          for (let matchedBubble of bubble.matches) {
-            matchedBubble.explode();
-          }
-        }
-      }
-    }
+    bubble.updateNeighbors(spawned);
   }
 
   getBubble(x, y) {

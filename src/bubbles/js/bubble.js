@@ -13,8 +13,8 @@ class Bubble extends Sprite {
     this.type = bubbleType;
     this.velocityX = 0;
     this.velocityY = 0;
-    this.neighbors = [this];
-    this.matches = [this];
+    this.neighbors = [];
+    this.matches = [];
   }
 
   setPosition(x, y) {
@@ -33,11 +33,32 @@ class Bubble extends Sprite {
   }
 
   updateNeighbor(x, y, spawned) {
-    if (0 < x && x < this.width - 1) {
-      if (0 < y && y < this.height - 1) {
-        let neighbor = this.getBubble(x, y);
+    if (0 <= x && x < this.grid.width) {
+      if (0 <= y && y < this.grid.height) {
+        let neighbor = this.grid.getBubble(x, y);
         if (neighbor) {
           this.neighbors.push(neighbor);
+
+          if (this.type === neighbor.type) {
+            if (!this.matches.includes(neighbor)) {
+              this.matches.push(neighbor);
+            }
+            for (let bubble of neighbor.matches) {
+              if (!this.matches.includes(bubble)) {
+                this.matches.push(bubble);
+              }
+            }
+            if (!neighbor.matches.includes(this)) {
+              neighbor.matches.push(this);
+            }
+
+            if (!spawned && this.matches.length >= BUBBLE_MATCH_COUNT - 1) {
+              for (let bubble of this.matches) {
+                bubble.explode();
+              }
+              this.explode();
+            }
+          }
         }
       }
     }
@@ -45,17 +66,18 @@ class Bubble extends Sprite {
 
   updateNeighbors(spawned) {
     this.neighbors = [];
-    this.updateNeighbor(x - 1, y, spawned);
-    if (y % 2 === 0) {
-      this.updateNeighbor(x - 1, y - 1, spawned);
-      this.updateNeighbor(x - 1, y + 1, spawned);
+    this.matches = [];
+    this.updateNeighbor(this.gridX - 1, this.gridY, spawned);
+    if (this.gridY % 2 === 0) {
+      this.updateNeighbor(this.gridX - 1, this.gridY - 1, spawned);
+      this.updateNeighbor(this.gridX - 1, this.gridY + 1, spawned);
     }
-    this.updateNeighbor(x, y - 1, spawned);
-    this.updateNeighbor(x, y + 1, spawned);
-    this.updateNeighbor(x + 1, y, spawned);
-    if (y % 2 === 1) {
-      this.updateNeighbor(x + 1, y - 1, spawned);
-      this.updateNeighbor(x + 1, y + 1, spawned);
+    this.updateNeighbor(this.gridX, this.gridY - 1, spawned);
+    this.updateNeighbor(this.gridX, this.gridY + 1, spawned);
+    this.updateNeighbor(this.gridX + 1, this.gridY, spawned);
+    if (this.gridY % 2 === 1) {
+      this.updateNeighbor(this.gridX + 1, this.gridY - 1, spawned);
+      this.updateNeighbor(this.gridX + 1, this.gridY + 1, spawned);
     }
   }
 
