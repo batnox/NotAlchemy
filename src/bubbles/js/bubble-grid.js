@@ -115,14 +115,16 @@ class BubbleGrid {
         let vY0 = launchedBubble.velocityY;
         let canvaswidth = 800;
         let canvasheight = 800;
-        if(vX0 != 0){
+        let launchX1 = 0.0;
+        let launchY1 = 0.0;
+        if(vX0 != 0.0){
             let slope = vY0 / vX0;
 
             let tempx1 = 0.0;
-            let tempy1 = this.yOnLine(launchY0, launchY0, slope, 0);
+            let tempy1 = this.yOnLine(launchX0, launchY0, slope, 0);
 
             let tempx2 = this.width;
-            let tempy2 = this.yOnLine(launchY0, launchY0, slope, canvaswidth);
+            let tempy2 = this.yOnLine(launchX0, launchY0, slope, canvaswidth);
 
             let tempx3 = this.xOnLine(launchX0, launchY0, slope, 0);
             let tempy3 = 0.0;
@@ -131,20 +133,20 @@ class BubbleGrid {
             let tempy4 = this.height;
 
             if(((tempy1 - launchY0)/ (tempx1 - launchX0)) === slope && tempy1 >= 0 && tempy1 <= canvasheight){
-                let launchX1 = tempx1;
-                let launchY1 = tempy1;
+                launchX1 = tempx1;
+                launchY1 = tempy1;
             }
             else if(((tempy2 - launchY0)/ (tempx2 - launchX0)) === slope && tempy2 >= 0 && tempy2 <= canvasheight){
-                let launchX1 = tempx2;
-                let launchY1 = tempy2;
+                launchX1 = tempx2;
+                launchY1 = tempy2;
             }
             else if(((tempy3 - launchY0)/ (tempx3 - launchX0)) === slope && tempx3 >= 0 && tempx3 <= canvaswidth){
-                let launchX1 = tempx3;
-                let launchY1 = tempy3;
+                launchX1 = tempx3;
+                launchY1 = tempy3;
             }
             else if(((tempy4 - launchY0)/ (tempx4 - launchX0)) === slope && tempx4 >= 0 && tempx4 <= canvaswidth){
-                let launchX1 = tempx4;
-                let launchY1 = tempy4;
+                launchX1 = tempx4;
+                launchY1 = tempy4;
             }
         }
 
@@ -152,18 +154,18 @@ class BubbleGrid {
             let launchX1 = launchX0;
 
             if(velocityY < 0.0){
-                let launchY0 = 0.0;
+                launchY1 = 0.0;
             }
             else{
-                let launchY0 = canvasheight;
+                launchY1 = canvasheight;
             }
         }
 
         let dirX = launchX1 - launchX0;
         let dirY = launchY1 - launchY0;
 
-        for(var i = 0; i < this.width; i++){
-            for(var j=0; j< this.height; j++){
+        for(let i = 0; i < this.width; i++){
+            for(let j=0; j< this.height; j++){
                 let circleH = this.getBubble(i,j).bounds.x;
                 let circleK = this.getBubble(i,j).bounds.y;
 
