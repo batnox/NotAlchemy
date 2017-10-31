@@ -35,8 +35,9 @@ class Bubble extends Sprite {
   updateNeighbor(x, y, spawned) {
     if (0 <= x && x < this.grid.width) {
       if (0 <= y && y < this.grid.height) {
-        let neighbor = this.grid.getBubble(x, y);
-        if (neighbor) {
+        let sprites = this.grid.getTile(x, y).getSprites();
+        if (sprites.length > 0 && sprites[0]) {
+          let neighbor = sprites[0];
           this.neighbors.push(neighbor);
 
           if (this.type === neighbor.type) {
@@ -158,7 +159,7 @@ class Bubble extends Sprite {
     }
 
     this.image.onEnd = () => {
-      this.grid.removeBubble(this.gridX, this.gridY);
+      this.grid.getTile(this.gridX, this.gridY).clear();
     };
     this.image.start();
   }

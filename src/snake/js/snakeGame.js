@@ -9,14 +9,15 @@ class SnakeGame extends Game {
     super();
     this.TICK_PER_SECOND = TICKS_PER_SECOND;
 
-    this.wallSprites = new SpriteGroup();
-    this.foodSprites = new SpriteGroup();
+    // this.wallSprites = new SpriteGroup();
+    // this.foodSprites = new SpriteGroup();
+    this.grid = new SnakeGrid(GRID_NUMBER, GRID_NUMBER);
 
     this.score = 0;
     if (!localStorage.getItem('high-score')) {
       localStorage.setItem('high-score', 0);
     }
-    this.worm = new Snake(GRID_SIZE);
+    this.worm = new Snake(3, 3, this.grid, GRID_SIZE);
 
     /**
      * Determines the direction that the Snake will go
@@ -32,8 +33,9 @@ class SnakeGame extends Game {
     this.canvas.height = GRID_NUMBER * GRID_SIZE;
 
     this.spriteLayer.addDrawable(this.worm);
-    this.spriteLayer.addDrawable(this.wallSprites);
-    this.spriteLayer.addDrawable(this.foodSprites);
+    this.spriteLayer.addDrawable(this.grid);
+    // this.spriteLayer.addDrawable(this.wallSprites);
+    // this.spriteLayer.addDrawable(this.foodSprites);
 
     this.scoreDisplay = new TextDisplay(GRID_SIZE, this.canvas.height -
       18, this.canvas.width - GRID_SIZE / 2);
@@ -61,17 +63,16 @@ class SnakeGame extends Game {
     this.loadContent()
       .then(() => {
         this.buildMap();
-        this.worm.setPosition(3*GRID_SIZE, 3*GRID_SIZE);
         this.start();
       });
 
   }
 
   newLevel() {
-    this.wallSprites.clear();
+    this.grid.clear();
 
     this.worm.killBody();
-    this.worm.setPosition(3*GRID_SIZE, 3*GRID_SIZE);
+    this.worm.setPosition(3, 3);
     this.worm.direction = Direction.RIGHT;
 
     this.currentLevel++;
@@ -88,9 +89,7 @@ class SnakeGame extends Game {
           if (x === 0 || y === 0 || x === GRID_NUMBER - 1 ||
             y === GRID_NUMBER - 1) {
             let random = Math.floor(Math.random() * 4);
-            let wall = new Wall(random);
-            wall.bounds.setPosition(x * GRID_SIZE, y * GRID_SIZE);
-            this.wallSprites.add(wall);
+            this.grid.addWall(x, y, random);
           }
         }
       }
@@ -100,30 +99,22 @@ class SnakeGame extends Game {
           let random = Math.floor(Math.random() * 4) + 4;
           if (x === 0 || y === 0 || x === (GRID_NUMBER - 1) ||
             y === (GRID_NUMBER - 1)) {
-            let wall = new Wall(random);
-            wall.bounds.setPosition(x * GRID_SIZE, y * GRID_SIZE);
-            this.wallSprites.add(wall);
+            this.grid.addWall(x, y, random);
           } else if (x > Math.floor(GRID_NUMBER / 3) &&
             x < Math.floor(GRID_NUMBER * 2 / 3) &&
             y === Math.floor((GRID_NUMBER) / 2)) {
-            let wall = new Wall(random);
-            wall.bounds.setPosition(x * GRID_SIZE, y * GRID_SIZE);
-            this.wallSprites.add(wall);
+            this.grid.addWall(x, y, random);
           }
           else if (y > Math.floor(GRID_NUMBER / 3) &&
             y < Math.floor(GRID_NUMBER * 2 / 3) &&
             x === Math.floor((GRID_NUMBER) / 2)) {
-            let wall = new Wall(random);
-            wall.bounds.setPosition(x * GRID_SIZE, y * GRID_SIZE);
-            this.wallSprites.add(wall);
+            this.grid.addWall(x, y, random);
           }
         }
       }
     }
 
-    let food = new Food();
-    food.bounds.setPosition(8 * GRID_SIZE, 8 * GRID_SIZE);
-    this.foodSprites.add(food);
+    this.grid.addFood(8, 8);
   }
 
   loadContent() {
@@ -148,27 +139,21 @@ class SnakeGame extends Game {
   }
 
   replaceFood(deadFood) {
-    this.foodSprites.removeSprite(deadFood);
-    let food = new Food();
+    this.grid.removeFood(deadFood.gridX, deadFood.gridY);
     let position = this.emptyCheck();
-    food.bounds.setPosition(position[0], position[1]);
-    this.foodSprites.add(food);
+    this.grid.addFood(position[0], position[1]);
   }
 
   emptyCheck() {
     let position = [
-      Math.floor(Math.random() * GRID_NUMBER) * GRID_SIZE,
-      Math.floor(Math.random() * GRID_NUMBER) * GRID_SIZE];
+      Math.floor(Math.random() * GRID_NUMBER),
+      Math.floor(Math.random() * GRID_NUMBER)];
 
-    for (let checkWall of this.wallSprites.sprites) {
-      if (checkWall.bounds.x === position[0] && checkWall.bounds.y === position[1]) {
-        return this.emptyCheck();
-      }
+    if (this.grid.getWall(position[0], position[1])) {
+      return this.emptyCheck();
     }
 
-    let food = new Food();
-    food.bounds.setPosition(position[0], position[1]);
-    if (this.worm.isCollision(food)) {
+    if (this.worm.isCollision(position[0], position[1])) {
       return this.emptyCheck();
     }
     return position;
@@ -198,18 +183,15 @@ class SnakeGame extends Game {
   update() {
     super.update();
     this.worm.update();
+    this.grid.update();
 
     if (this.worm.alive) {
-      let foodCollision = this.foodSprites.getOverlap(this.worm.snakeHead);
-      let wallCollision = this.wallSprites.getOverlap(this.worm.snakeHead);
+      let head = this.worm.snakeHead;
+      let food = this.grid.getFood(head.gridX, head.gridY);
+      let wall = this.grid.getWall(head.gridX, head.gridY);
       let bodyCollision = this.worm.isBodyCollision();
 
-      for (let food of this.foodSprites.sprites) {
-        food.update();
-      }
-
-      if (foodCollision) {
-        let food = foodCollision.sprite;
+      if (food) {
         if (food.spoiled) {
           this.score -= SCORE_PER_FOOD;
           this.worm.removeLink();
@@ -222,7 +204,7 @@ class SnakeGame extends Game {
           this.score >= this.condition[this.currentLevel]) {
           this.newLevel();
         }
-      } else if (wallCollision || bodyCollision) {
+      } else if (wall || bodyCollision) {
         this.worm.alive = false;
       }
     } else if (!this.gameOver.text) {
