@@ -31,9 +31,9 @@ class Level {
         let neighbors = [];
         let others = [];
         //1-1 neighbor
-        neighbors.push(bubbleOnGrid.getBubble(x, y - 1)._type);
+        neighbors.push(bubbleOnGrid.getTile(x, y - 1).getSprites()[0]._type);
         if (x > 0) {
-          neighbors.push(bubbleOnGrid.getBubble(x - 1, y)._type);
+          neighbors.push(bubbleOnGrid.getTile(x - 1, y).getSprites()[0]._type);
         }
 
         //1-2 others

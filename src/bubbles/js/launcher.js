@@ -77,9 +77,11 @@ class Launcher extends Sprite {
       return;
     }
 
-    for (let row of this.grid.bubbles) {
-      for (let b of row) {
-        if (b) {
+    for (let x = 0; x < this.grid.width; x++) {
+      for (let y = 0; y < this.grid.height; y++) {
+        let sprites = this.grid.getTile(x, y).getSprites();
+        if (sprites.length > 0 && sprites[0]) {
+          let b = sprites[0];
           let dx = this.loadedBubble.bounds.x - b.bounds.x;
           let dy = this.loadedBubble.bounds.y - b.bounds.y;
           let dis = dy ** 2 + dx ** 2;
