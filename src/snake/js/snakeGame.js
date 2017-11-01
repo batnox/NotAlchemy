@@ -83,16 +83,15 @@ class SnakeGame extends Game {
   }
 
   buildMap() {
-
-    let tmpMap = sampleMaps.getMap(this.currentLevel);
+    let tmpMap = sampleMaps.getMap(this.currentLevel+3);
     for (let x = 0; x < tmpMap.length; x++){
       for (let y = 0; y < tmpMap[x].length; y++){
         if (tmpMap[x][y] === 1){
             let random = 0;
             if(this.currentLevel === 0)
-              random = Math.floor(Math.random() * 4);
+                random = Math.floor(Math.random() * 4);
             else
-              random = Math.floor(Math.random() * 4) + 4;
+                random = Math.floor(Math.random() * 4) + 4;
             this.grid.addWall(x, y, random);
         }
       }

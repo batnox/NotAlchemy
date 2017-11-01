@@ -1,0 +1,46 @@
+{
+  "allMaps": [
+    {
+      "data":[
+        ["batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty"],
+        ["batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty"],
+        ["batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty"],
+        ["batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty"],
+        ["batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty"],
+        ["batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty"],
+        ["batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty"],
+        ["batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty"],
+        ["batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty"],
+        ["batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty"]
+      ]
+    },
+    {
+      "data":[
+        ["batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty"],
+        ["batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty"],
+        ["batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty"],
+        ["batty","jack","batty","batty","clown","jack","clown","skull","jack","clown","batty","clown","clown","skull","batty","skull","skull","clown","jack","skull"],
+        ["skull","jack","batty","batty","clown","jack","clown","skull","jack","clown","batty","clown","clown","skull","batty","skull","skull","clown","jack","skull"],
+        ["skull","jack","batty","batty","clown","jack","clown","skull","jack","clown","batty","clown","clown","skull","batty","skull","skull","clown","jack","skull"],
+        ["skull","jack","batty","batty","clown","jack","clown","skull","jack","clown","batty","clown","clown","skull","batty","skull","skull","clown","jack","skull"],
+        ["batty","jack","clown","batty","clown","jack","clown","clown","jack","skull","batty","jack","jack","clown","clown","clown","skull","jack","batty","batty"],
+        ["batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty"],
+        ["batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty"]
+      ]
+    },
+    {
+      "data":[
+        ["skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty","batty","skull","clown","jack","clown","batty","clown","batty","skull"],
+        ["skull","jack","jack","jack","clown","clown","clown","skull","jack","batty","batty","batty","skull","clown","jack","clown","batty","clown","batty","skull"],
+        ["batty","jack","jack","jack","clown","clown","clown","skull","batty","clown","clown","jack","skull","clown","skull","clown","batty","clown","clown","skull"],
+        ["batty","clown","skull","batty","skull","skull","skull","jack","skull","batty","jack","jack","batty","clown","skull","batty","skull","jack","clown","batty"],
+        ["clown","clown","skull","batty","skull","skull","skull","jack","skull","skull","jack","batty","skull","skull","skull","batty","skull","jack","batty","batty"],
+        ["clown","clown","batty","batty","jack","clown","clown","jack","skull","skull","batty","clown","clown","clown","jack","clown","skull","jack","batty","clown"],
+        ["clown","clown","skull","batty","jack","clown","clown","jack","skull","skull","batty","batty","batty","clown","jack","skull","skull","jack","clown","batty"],
+        ["jack","jack","batty","clown","clown","skull","jack","batty","clown","batty","jack","clown","batty","clown","jack","skull","skull","jack","skull","batty"],
+        ["jack","jack","batty","clown","clown","skull","clown","batty","clown","batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack"],
+        ["jack","jack","batty","clown","clown","skull","jack","batty","clown","batty","skull","clown","jack","clown","batty","clown","clown","skull","skull","jack"]
+      ]
+    }
+  ]
+}
