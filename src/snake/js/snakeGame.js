@@ -83,7 +83,7 @@ class SnakeGame extends Game {
   }
 
   buildMap() {
-    let tmpMap = sampleMaps.getMap(this.currentLevel+3);
+    let tmpMap = sampleMaps.getMap(this.currentLevel);
     for (let x = 0; x < tmpMap.length; x++){
       for (let y = 0; y < tmpMap[x].length; y++){
         if (tmpMap[x][y] === 1){

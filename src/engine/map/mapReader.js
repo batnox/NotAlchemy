@@ -23,10 +23,11 @@ class MapReader{
 
         for (let i of map.allMaps){
             let tmp = [[],[]];
-            for (let y in i.data){
-                tmp[y] = [];
-                for (let x in i.data[y]){
-                    tmp[y][x] = i.data[y][x];
+
+            for (let x = 0; x < i.data[0].length; x++){
+                tmp[x] = [];
+                for (let y = 0; y < i.data.length; y++){
+                    tmp[x][y] = i.data[y][x];//rotate 2d-array on JSON 90 degree
                 }
             }
             arr.push(tmp);
@@ -37,7 +38,6 @@ class MapReader{
     getMapLength(){
         return this.data.length;
     }
-
 }
 
-const sampleMaps = new MapReader("engine/map/maps.json");
+const sampleMaps = new MapReader("engine/map/generalMaps.json");
