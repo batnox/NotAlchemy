@@ -8,7 +8,7 @@ class BubbleGame extends Game {
   constructor() {
     super();
     this.TICK_PER_SECOND = 100;
-    this.addContent('images', 'bubbles/json/bubbles-config.json');
+    this.addContent('images', 'src/bubbles/json/bubbles-config.json');
     this.canvas.width = 800;
     this.canvas.height = 800;
 

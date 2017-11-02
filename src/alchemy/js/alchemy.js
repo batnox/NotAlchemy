@@ -57,10 +57,10 @@ class Alchemy extends Game {
       (event) => this.onMouseDown(event));
     this.canvas.addEventListener('mouseup', (event) => this.onMouseUp(event));
 
-    this.addContent('images', 'alchemy/json/alchemy-icons.json');
-    this.addContent('combinations', 'alchemy/json/combinations.json');
-    this.addContent('elements', 'alchemy/json/elements.json');
-    this.addContent('known-elements', 'alchemy/json/known-elements.json');
+    this.addContent('images', 'src/alchemy/json/alchemy-icons.json');
+    this.addContent('combinations', 'src/alchemy/json/combinations.json');
+    this.addContent('elements', 'src/alchemy/json/elements.json');
+    this.addContent('known-elements', 'src/alchemy/json/known-elements.json');
 
     // Loads content and then sets the game loop
     this.loadContent()
