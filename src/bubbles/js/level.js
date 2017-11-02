@@ -8,7 +8,7 @@ class Level {
     this.height = height;
     this.r = r;
 
-    let tmpMap = new MapReader("bubbles/json/bubbleMap.json");
+    let tmpMap = new MapReader("src/bubbles/json/bubbleMap.json");
     this.level = [];
 
 

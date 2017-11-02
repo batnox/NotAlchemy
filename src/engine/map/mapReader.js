@@ -40,4 +40,4 @@ class MapReader{
     }
 }
 
-const sampleMaps = new MapReader("engine/map/generalMaps.json");
+const sampleMaps = new MapReader("src/engine/map/generalMaps.json");
