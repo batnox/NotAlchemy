@@ -16,7 +16,8 @@ class SnakeGame extends Game {
     if (!localStorage.getItem('high-score')) {
       localStorage.setItem('high-score', 0);
     }
-    this.worm = new Snake(GRID_SIZE);
+    this.worm= new Snake(GRID_SIZE);
+    // this.worm_2= new Snake(GRID_SIZE);
 
     /**
      * Determines the direction that the Snake will go
