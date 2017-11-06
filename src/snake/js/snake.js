@@ -8,6 +8,7 @@ class Snake {
     this.direction = Direction.RIGHT;
     this.alive = true;
     this.bodyImage = null;
+    this.score = 0;
   }
 
   isCollision(sprite) {
@@ -114,6 +115,14 @@ class Snake {
   killBody() {
     this.snakeHead.nextCell = null;
     this.snakeTail = this.snakeHead;
+  }
+
+  addScore(scoreToAdd){
+    this.score = this.score + scoreToAdd;
+  }
+
+  getScore(){
+    return this.score;
   }
 
   draw(context) {
