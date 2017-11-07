@@ -16,7 +16,7 @@ class SnakeGame extends Game {
     if (!localStorage.getItem('high-score')) {
       localStorage.setItem('high-score', 0);
     }
-    this.worm1= new Snake(GRID_SIZE);
+    this.worm1 = new Snake(GRID_SIZE);
     this.worm2 = new Snake(GRID_SIZE);
     // this.worm_2= new Snake(GRID_SIZE);
 
@@ -34,7 +34,7 @@ class SnakeGame extends Game {
     this.canvas.height = GRID_NUMBER * GRID_SIZE;
 
     this.spriteLayer.addDrawable(this.worm1);
-      this.spriteLayer.addDrawable(this.worm2);
+    this.spriteLayer.addDrawable(this.worm2);
     this.spriteLayer.addDrawable(this.wallSprites);
     this.spriteLayer.addDrawable(this.foodSprites);
 
@@ -43,7 +43,7 @@ class SnakeGame extends Game {
     this.scoreDisplay.fontSize = 14;
     this.scoreDisplay.fontName = 'Courier';
     this.scoreDisplay.fontColor = '#fff';
-    this.scoreDisplay.text = `Score: ${worm1.getScore()}`;
+    this.scoreDisplay.text = `Score: ${this.worm1.getScore()}`;
     this.overlayLayer.addDrawable(this.scoreDisplay);
 
     this.highScoreDisplay = new TextDisplay(this.canvas.width /
@@ -52,7 +52,7 @@ class SnakeGame extends Game {
     this.highScoreDisplay.fontSize = 14;
     this.highScoreDisplay.fontName = 'Courier';
     this.highScoreDisplay.fontColor = '#fff';
-    this.highScoreDisplay.text = `High Score: ${worm1.getScore()}`;
+    this.highScoreDisplay.text = `High Score: ${this.worm1.getScore()}`;
     this.overlayLayer.addDrawable(this.highScoreDisplay);
 
     this.gameOver = new TextDisplay(GRID_SIZE * 2, GRID_SIZE * 2,
@@ -64,8 +64,8 @@ class SnakeGame extends Game {
     this.loadContent()
       .then(() => {
         this.buildMap();
-        this.worm1.setPosition(3*GRID_SIZE, 3*GRID_SIZE);
-        this.worm2.setPosition(6*GRID_SIZE, 3*GRID_SIZE);
+        this.worm1.setPosition(3 * GRID_SIZE, 3 * GRID_SIZE);
+        this.worm2.setPosition(6 * GRID_SIZE, 3 * GRID_SIZE);
         this.start();
       });
 
@@ -75,12 +75,12 @@ class SnakeGame extends Game {
     this.wallSprites.clear();
 
     this.worm1.killBody();
-    this.worm1.setPosition(3*GRID_SIZE, 3*GRID_SIZE);
+    this.worm1.setPosition(3 * GRID_SIZE, 3 * GRID_SIZE);
     this.worm1.direction = Direction.RIGHT;
 
-      this.worm2.killBody();
-      this.worm2.setPosition(6*GRID_SIZE, 3*GRID_SIZE);
-      this.worm2.direction = Direction.RIGHT;
+    this.worm2.killBody();
+    this.worm2.setPosition(6 * GRID_SIZE, 3 * GRID_SIZE);
+    this.worm2.direction = Direction.RIGHT;
 
     this.currentLevel++;
 
@@ -169,7 +169,8 @@ class SnakeGame extends Game {
       Math.floor(Math.random() * GRID_NUMBER) * GRID_SIZE];
 
     for (let checkWall of this.wallSprites.sprites) {
-      if (checkWall.bounds.x === position[0] && checkWall.bounds.y === position[1]) {
+      if (checkWall.bounds.x === position[0] &&
+        checkWall.bounds.y === position[1]) {
         return this.emptyCheck();
       }
     }
@@ -207,41 +208,38 @@ class SnakeGame extends Game {
     super.update();
     this.worm1.update();
     this.worm2.update();
-    for(let tempworm in [this.worm1, this.worm2]){
-        if (tempworm.alive) {
-            let foodCollision = this.foodSprites.getOverlap(tempworm.snakeHead);
-            let wallCollision = this.wallSprites.getOverlap(tempworm.snakeHead);
-            let bodyCollision = tempworm.isBodyCollision();
+    for (let tempworm of [this.worm1, this.worm2]) {
+      if (tempworm.alive) {
+        let foodCollision = this.foodSprites.getOverlap(tempworm.snakeHead);
+        let wallCollision = this.wallSprites.getOverlap(tempworm.snakeHead);
+        let bodyCollision = tempworm.isBodyCollision();
 
-            for (let food of this.foodSprites.sprites) {
-                food.update();
-            }
-
-            if (foodCollision) {
-                let food = foodCollision.sprite;
-                if (food.spoiled) {
-                    tempworm.score -= SCORE_PER_FOOD;
-                    tempwormworm.removeLink();
-                } else {
-                    tempworm.score += SCORE_PER_FOOD;
-                    tempworm.addLink();
-                }
-                this.replaceFood(food);
-                if (this.currentLevel < this.maximumLevel &&
-                    tempworm.score >= this.condition[this.currentLevel]) {
-                    this.newLevel();
-                }
-            } else if (wallCollision || bodyCollision) {
-                tempworm.alive = false;
-            }
-        } else if (!this.gameOver.text) {
-            this.gameOver.text = 'Game Over';
-            this.overlayLayer.addDrawable(this.gameOver);
+        for (let food of this.foodSprites.sprites) {
+          food.update();
         }
+
+        if (foodCollision) {
+          let food = foodCollision.sprite;
+          if (food.spoiled) {
+            tempworm.score -= SCORE_PER_FOOD;
+            tempworm.removeLink();
+          } else {
+            tempworm.score += SCORE_PER_FOOD;
+            tempworm.addLink();
+          }
+          this.replaceFood(food);
+          if (this.currentLevel < this.maximumLevel &&
+            tempworm.score >= this.condition[this.currentLevel]) {
+            this.newLevel();
+          }
+        } else if (wallCollision || bodyCollision) {
+          tempworm.alive = false;
+        }
+      } else if (!this.gameOver.text) {
+        this.gameOver.text = 'Game Over';
+        this.overlayLayer.addDrawable(this.gameOver);
+      }
     }
-
-
-
 
     this.scoreDisplay.text = `Score: ${this.worm1.getScore()}`;
 
