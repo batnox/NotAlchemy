@@ -33,6 +33,17 @@ class Snake {
     return false;
   }
 
+  isSnakeCollision(otherHead) {
+      let current = this.snakeHead;
+      while (current) {
+          if (current.bounds.isCollision(otherHead)) {
+              return true;
+          }
+          current = current.nextCell;
+      }
+      return false;
+  }
+
   setPosition(x, y) {
     this.snakeHead.bounds.setPosition(x, y);
   }

@@ -65,7 +65,7 @@ class SnakeGame extends Game {
       .then(() => {
         this.buildMap();
         this.worm1.setPosition(3 * GRID_SIZE, 3 * GRID_SIZE);
-        this.worm2.setPosition(6 * GRID_SIZE, 3 * GRID_SIZE);
+        this.worm2.setPosition(9 * GRID_SIZE, 3 * GRID_SIZE);
         this.start();
       });
 
@@ -79,8 +79,8 @@ class SnakeGame extends Game {
     this.worm1.direction = Direction.RIGHT;
 
     this.worm2.killBody();
-    this.worm2.setPosition(6 * GRID_SIZE, 3 * GRID_SIZE);
-    this.worm2.direction = Direction.RIGHT;
+    this.worm2.setPosition(9 * GRID_SIZE, 3 * GRID_SIZE);
+    this.worm2.direction = Direction.LEFT;
 
     this.currentLevel++;
 
@@ -213,6 +213,16 @@ class SnakeGame extends Game {
         let foodCollision = this.foodSprites.getOverlap(tempworm.snakeHead);
         let wallCollision = this.wallSprites.getOverlap(tempworm.snakeHead);
         let bodyCollision = tempworm.isBodyCollision();
+        let otherSnakeCollision = false;
+        // console.log(Object.is(tempworm,  this.worm1));
+        if(Object.is(tempworm,  this.worm1)) {
+            otherSnakeCollision = this.worm2.isSnakeCollision(this.worm1.snakeHead);
+            // console.log(otherSnakeCollision);
+        }
+        else {
+            otherSnakeCollision = this.worm1.isSnakeCollision(tempworm.snakeHead);
+        }
+
 
         for (let food of this.foodSprites.sprites) {
           food.update();
@@ -232,7 +242,7 @@ class SnakeGame extends Game {
             tempworm.score >= this.condition[this.currentLevel]) {
             this.newLevel();
           }
-        } else if (wallCollision || bodyCollision) {
+        } else if (wallCollision || bodyCollision || otherSnakeCollision) {
           tempworm.alive = false;
         }
       } else if (!this.gameOver.text) {
