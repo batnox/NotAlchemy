@@ -201,6 +201,20 @@ class SnakeGame extends Game {
       case 40: // Down
         this.worm1.direction = Direction.DOWN;
         break;
+    case 65: // Left
+        this.worm2.direction = Direction.LEFT;
+        break;
+    case 87: // Up
+        this.worm2.direction = Direction.UP;
+        break;
+    case 68: // Right
+        this.worm2.direction = Direction.RIGHT;
+        break;
+    case 83: // Down
+        this.worm2.direction = Direction.DOWN;
+        break;
+
+
     }
   }
 
