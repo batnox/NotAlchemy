@@ -7,10 +7,25 @@ class Level {
     this.width = width;
     this.height = height;
     this.r = r;
+
+    let tmpMap = new MapReader("src/bubbles/json/bubbleMap.json");
     this.level = [];
-    this.level.push(this.createLevel(0));
-    this.level.push(this.createLevel(1));
-    this.level.push(this.createLevel(2));
+
+
+    for (let i = 0; i < tmpMap.getMapLength(); i++){
+      let m = tmpMap.getMap(i);
+      let bubbleOnGrid = new BubbleGrid(this.width, this.height);
+      for (let x = 0; x < m.length; x++){
+        for (let y = 0; y < m[x].length; y++){
+            bubbleOnGrid.addBubble(x, y, new Bubble(0, 0, this.r, m[x][y], bubbleOnGrid), true);
+        }
+      }
+      this.level.push(bubbleOnGrid);
+    }
+
+    //this.level.push(this.createLevel(0));
+    //this.level.push(this.createLevel(1));
+    //this.level.push(this.createLevel(2));
   }
 
   createLevel(difficulty) {
