@@ -1,7 +1,7 @@
 {
   "snake": {
-    "head": "src/snake/assets/snake-head.png",
-    "body": "src/snake/assets/snake-body.png"
+    "head": "src/snake/assets/snake-head-blue.png",
+    "body": "src/snake/assets/snake-body-blue.png"
   },
   "walls": [
     [
