@@ -7,6 +7,7 @@ class Snake {
     this.direction = Direction.RIGHT;
     this.alive = true;
     this.bodyImage = null;
+    this.score = 0;
   }
 
   isCollision(gridX, gridY) {
@@ -29,6 +30,17 @@ class Snake {
       }
     }
     return false;
+  }
+
+  isSnakeCollision(otherHead) {
+      let current = this.snakeHead;
+      while (current) {
+          if (current.bounds.isCollision(otherHead)) {
+              return true;
+          }
+          current = current.nextCell;
+      }
+      return false;
   }
 
   setPosition(x, y) {
@@ -111,6 +123,14 @@ class Snake {
   killBody() {
     this.snakeHead.nextCell = null;
     this.snakeTail = this.snakeHead;
+  }
+
+  addScore(scoreToAdd){
+    this.score = this.score + scoreToAdd;
+  }
+
+  getScore(){
+    return this.score;
   }
 
   draw(context) {
