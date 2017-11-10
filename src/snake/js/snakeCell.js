@@ -1,6 +1,7 @@
 class SnakeCell extends Sprite {
-  constructor(gridX, gridY, grid, head) {
+  constructor(gridX, gridY, grid, head, type) {
     super();
+    this.type = type;
     this.bounds = new RectangleBounds();
     this.bounds.setPosition(gridX * GRID_SIZE, gridY * GRID_SIZE);
     this.bounds.setSize(GRID_SIZE, GRID_SIZE);
@@ -15,7 +16,14 @@ class SnakeCell extends Sprite {
   }
 
   update() {
-    this.image.setImage(this.head ? 'head' : 'body');
+    switch (this.type) {
+      case SnakeType.RED:
+        this.image.setImage(this.head ? 'head-red' : 'body-red');
+        break;
+      case SnakeType.BLUE:
+        this.image.setImage(this.head ? 'head-blue' : 'body-blue');
+        break;
+    }
 
     switch (this.direction) {
       case Direction.LEFT:

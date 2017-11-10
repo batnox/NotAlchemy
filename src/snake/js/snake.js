@@ -1,8 +1,9 @@
 class Snake {
-  constructor(gridX, gridY, grid, segmentSize) {
+  constructor(gridX, gridY, grid, segmentSize, type) {
     this.cellSize = segmentSize;
+    this.type = type;
 
-    this.snakeHead = new SnakeCell(gridX, gridY, grid, true);
+    this.snakeHead = new SnakeCell(gridX, gridY, grid, true, type);
     this.snakeTail = this.snakeHead;
     this.direction = Direction.RIGHT;
     this.alive = true;
@@ -97,7 +98,7 @@ class Snake {
       tailY--;
     }
 
-    let newCell = new SnakeCell(tailX, tailY, this.snakeHead.grid, false);
+    let newCell = new SnakeCell(tailX, tailY, this.snakeHead.grid, false, this.type);
     this.snakeTail.nextCell = newCell;
     this.snakeTail = newCell;
     return newCell;
