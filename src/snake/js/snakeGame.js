@@ -90,15 +90,15 @@ class SnakeGame extends Game {
 
   buildMap() {
     let tmpMap = sampleMaps.getMap(this.currentLevel);
-    for (let x = 0; x < tmpMap.length; x++){
-      for (let y = 0; y < tmpMap[x].length; y++){
-        if (tmpMap[x][y] === 1){
-            let random = 0;
-            if(this.currentLevel === 0)
-                random = Math.floor(Math.random() * 4);
-            else
-                random = Math.floor(Math.random() * 4) + 4;
-            this.grid.addWall(x, y, random);
+    for (let x = 0; x < tmpMap.length; x++) {
+      for (let y = 0; y < tmpMap[x].length; y++) {
+        if (tmpMap[x][y] === 1) {
+          let random = 0;
+          if (this.currentLevel === 0)
+            random = Math.floor(Math.random() * 4);
+          else
+            random = Math.floor(Math.random() * 4) + 4;
+          this.grid.addWall(x, y, random);
         }
       }
     }
@@ -203,19 +203,18 @@ class SnakeGame extends Game {
       case 40: // Down
         this.worm1.direction = Direction.DOWN;
         break;
-    case 65: // Left
+      case 65: // Left
         this.worm2.direction = Direction.LEFT;
         break;
-    case 87: // Up
+      case 87: // Up
         this.worm2.direction = Direction.UP;
         break;
-    case 68: // Right
+      case 68: // Right
         this.worm2.direction = Direction.RIGHT;
         break;
-    case 83: // Down
+      case 83: // Down
         this.worm2.direction = Direction.DOWN;
         break;
-
 
     }
   }
@@ -235,8 +234,9 @@ class SnakeGame extends Game {
 
         let otherSnakeCollision = false;
         // console.log(Object.is(tempworm,  this.worm1));
-        if(Object.is(tempworm,  this.worm1)) {
-          otherSnakeCollision = this.worm2.isSnakeCollision(this.worm1.snakeHead);
+        if (Object.is(tempworm, this.worm1)) {
+          otherSnakeCollision = this.worm2.isSnakeCollision(
+            this.worm1.snakeHead);
           // console.log(otherSnakeCollision);
         }
         else {
