@@ -273,6 +273,10 @@ class SnakeGame extends Game {
       highScore = this.worm1.getScore();
       localStorage.setItem('high-score', this.worm1.getScore());
     }
+    if (this.worm2.getScore() > highScore) {
+      highScore = this.worm2.getScore();
+      localStorage.setItem('high-score', this.worm2.getScore());
+    }
     this.highScoreDisplay.text = `High Score: ${highScore}`;
   }
 
