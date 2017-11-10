@@ -16,8 +16,8 @@ class SnakeGame extends Game {
     if (!localStorage.getItem('high-score')) {
       localStorage.setItem('high-score', 0);
     }
-    this.worm1 = new Snake(3, 3, this.grid, GRID_SIZE);
-    this.worm2 = new Snake(6, 6, this.grid, GRID_SIZE);
+    this.worm1 = new Snake(3, 3, this.grid, GRID_SIZE, SnakeType.RED);
+    this.worm2 = new Snake(6, 6, this.grid, GRID_SIZE, SnakeType.BLUE);
 
     /**
      * Determines the direction that the Snake will go
@@ -150,8 +150,10 @@ class SnakeGame extends Game {
     return new Promise((resolve, reject) => {
       super.loadContent()
         .then(data => {
-          imageManager.addImage('head', data['images'].snake.head);
-          imageManager.addImage('body', data['images'].snake.body);
+          imageManager.addImage('head-red', data['images'].snake.head.red);
+          imageManager.addImage('head-blue', data['images'].snake.head.blue);
+          imageManager.addImage('body-red', data['images'].snake.body.red);
+          imageManager.addImage('body-blue', data['images'].snake.body.blue);
           imageManager.addImage('wall-0', data['images'].walls[0][0]);
           imageManager.addImage('wall-1', data['images'].walls[0][1]);
           imageManager.addImage('wall-2', data['images'].walls[0][2]);
