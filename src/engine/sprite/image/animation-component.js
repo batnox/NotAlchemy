@@ -27,7 +27,6 @@ class AnimationComponent {
   }
 
   start() {
-    console.log('start');
     this.running = true;
   }
 
@@ -36,7 +35,6 @@ class AnimationComponent {
   }
 
   update() {
-    console.log('anim');
     if (this.running) {
       this.timeRemaining--;
       if (this.timeRemaining <= 0) {

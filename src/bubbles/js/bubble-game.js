@@ -2,12 +2,13 @@ let BUBBLE_RADIUS = 20;
 let BUBBLE_MATCH_COUNT = 3;
 let BUBBLE_SCORE = 0;
 let BUBBLE_EXPLOSION_SCORE = 100;
+let BUBBLE_SPEED = 5;
 
 class BubbleGame extends Game {
   constructor() {
     super();
     this.TICK_PER_SECOND = 100;
-    this.addContent('images', 'bubbles/json/bubbles-config.json');
+    this.addContent('images', 'src/bubbles/json/bubbles-config.json');
     this.canvas.width = 800;
     this.canvas.height = 800;
 
@@ -16,22 +17,12 @@ class BubbleGame extends Game {
       Math.floor(this.canvas.height / (BUBBLE_RADIUS * 2)), BUBBLE_RADIUS);
     this.grid = this.bubbleLevel.level[0];
 
-    for (let x = 0; x < this.grid.width; x++) {
-      for (let y = 0; y < this.grid.height - 3; y++) {
-        let types = Object.values(BubbleType);
-        let index = Math.floor(Math.random() * types.length);
-        let color = types[index];
-        let randomBubble = new Bubble(
-          0, 0,
-          BUBBLE_RADIUS, color,
-          this.grid
-        );
-        this.grid.addBubble(x, y, randomBubble, true);
-      }
-    }
-
     this.spriteLayer.addDrawable(this.grid);
-    this.launcher = new Launcher(this.canvas.width / 2, this.canvas.height, this.grid);
+    this.launcher = new Launcher(
+      this.canvas.width / 2 - BUBBLE_RADIUS,
+      this.canvas.height - BUBBLE_RADIUS * 2,
+      this.grid
+    );
     this.spriteLayer.addDrawable(this.launcher);
 
     this.scoreDisplay = new TextDisplay(
@@ -44,7 +35,15 @@ class BubbleGame extends Game {
     this.scoreDisplay.text = `Score: ${BUBBLE_SCORE}`;
     this.overlayLayer.addDrawable(this.scoreDisplay);
 
-    addEventListener('keydown', event => this.keyDown(event));
+    this.gameOverDisplay = new TextDisplay(
+      BUBBLE_RADIUS, BUBBLE_RADIUS,
+      this.canvas.width - BUBBLE_RADIUS / 2
+    );
+    this.gameOverDisplay.fontSize = 32;
+    this.gameOverDisplay.fontName = 'Courier';
+    this.gameOverDisplay.fontColor = '#fff';
+    this.overlayLayer.addDrawable(this.gameOverDisplay);
+
     addEventListener('mousedown', event => this.mouseDown(event));
 
     this.loadContent()
@@ -65,22 +64,22 @@ class BubbleGame extends Game {
           imageManager.addSpritesheet(
             ['batty', 'batty-1', 'batty-2', 'batty-3', 'batty-4'],
             64,
-            'bubbles/assets/SpriteSheetBatty.png'
+            'src/bubbles/assets/SpriteSheetBatty.png'
           );
           imageManager.addSpritesheet(
             ['skull', 'skull-1', 'skull-2', 'skull-3', 'skull-4'],
             64,
-            'bubbles/assets/SpriteSheetSkull.png'
+            'src/bubbles/assets/SpriteSheetSkull.png'
           );
           imageManager.addSpritesheet(
             ['jack', 'jack-1', 'jack-2', 'jack-3', 'jack-4'],
             64,
-            'bubbles/assets/SpriteSheetJack.png'
+            'src/bubbles/assets/SpriteSheetJack.png'
           );
           imageManager.addSpritesheet(
             ['clown', 'clown-1', 'clown-2', 'clown-3', 'clown-4'],
             64,
-            'bubbles/assets/SpriteSheetClown.png'
+            'src/bubbles/assets/SpriteSheetClown.png'
           );
           resolve();
         });
@@ -89,32 +88,23 @@ class BubbleGame extends Game {
 
   update() {
     super.update();
-    this.scoreDisplay.text = `Score: ${BUBBLE_SCORE}`;
-    let dx = this.launcher.bounds.x - this.mouse.x;
-    let dy = this.launcher.bounds.y - this.mouse.y;
-    let angle = Math.atan2(dy, dx);
-    this.launcher.setLaunchRotation(angle / Math.PI * 180 - 90);
-    this.launcher.update();
-    this.grid.update();
-  }
 
-  keyDown(event) {
-    switch (event.keyCode) {
-      case 37: // Left
-        this.launcher.turnLeft();
-        break;
-      case 39: // Right
-        this.launcher.turnRight();
-        break;
-      case 32: // Space
-        this.launcher.launch();
-        break;
-      default:
-        break;
+    if (this.grid.gameOver) {
+      this.gameOverDisplay.text = 'You Lose!';
+    } else if (this.grid.isEmpty()) {
+      this.gameOverDisplay.text = 'You Win!';
+    } else {
+      this.scoreDisplay.text = `Score: ${BUBBLE_SCORE}`;
+      let dx = this.launcher.bounds.x - this.mouse.x;
+      let dy = this.launcher.bounds.y - this.mouse.y;
+      let angle = Math.atan2(dy, dx);
+      this.launcher.setLaunchRotation(angle / Math.PI * 180 - 90);
+      this.launcher.update();
+      this.grid.update();
     }
   }
 
   mouseDown(event) {
-    this.launcher.launch();
+    this.launcher.launch(this.mouse);
   }
 }

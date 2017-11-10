@@ -1,9 +1,8 @@
 class Snake {
-  constructor(segmentSize) {
+  constructor(gridX, gridY, grid, segmentSize) {
     this.cellSize = segmentSize;
 
-    this.snakeHead = new SnakeCell(true);
-    this.snakeHead.bounds.setSize(segmentSize, segmentSize);
+    this.snakeHead = new SnakeCell(gridX, gridY, grid, true);
     this.snakeTail = this.snakeHead;
     this.direction = Direction.RIGHT;
     this.alive = true;
@@ -11,10 +10,10 @@ class Snake {
     this.score = 0;
   }
 
-  isCollision(sprite) {
+  isCollision(gridX, gridY) {
     let current = this.snakeHead;
     while (current) {
-      if (current.bounds.isCollision(sprite)) {
+      if (current.gridX === gridX || current.gridY === gridY) {
         return true;
       }
       current = current.nextCell;
@@ -45,7 +44,7 @@ class Snake {
   }
 
   setPosition(x, y) {
-    this.snakeHead.bounds.setPosition(x, y);
+    this.snakeHead.setPosition(x, y);
   }
 
   update() {
@@ -65,48 +64,46 @@ class Snake {
     let dy = 0;
     switch (this.direction) {
       case Direction.LEFT:
-        dx = -this.cellSize;
+        dx = -1;
         break;
       case Direction.RIGHT:
-        dx = this.cellSize;
+        dx = 1;
         break;
       case Direction.UP:
-        dy = -this.cellSize;
+        dy = -1;
         break;
       case Direction.DOWN:
-        dy = this.cellSize;
+        dy = 1;
         break;
     }
-    this.snakeHead.updatePosition(this.snakeHead.bounds.x + dx, this.snakeHead.bounds.y + dy,
-      this.direction);
+    this.snakeHead.updatePosition(
+      this.snakeHead.gridX + dx,
+      this.snakeHead.gridY + dy,
+      this.direction
+    );
   }
 
   addLink() {
-    console.log('Adding...');
-    let tailX = this.snakeTail.bounds.x;
-    let tailY = this.snakeTail.bounds.y;
+    let tailX = this.snakeTail.gridX;
+    let tailY = this.snakeTail.gridY;
     let tailDirection = this.snakeTail.direction;
     if (tailDirection === Direction.RIGHT) {
-      tailX = tailX - this.cellSize;
+      tailX--;
     } else if (tailDirection === Direction.LEFT) {
-      tailX = tailX + this.cellSize;
+      tailX++;
     } else if (tailDirection === Direction.RIGHT) {
-      tailY = tailY + this.cellSize;
+      tailY++;
     } else {
-      tailY = tailY - this.cellSize;
+      tailY--;
     }
 
-    let newCell = new SnakeCell(false);
-    newCell.bounds.setPosition(tailX, tailY);
-    newCell.bounds.setSize(this.cellSize, this.cellSize);
-    newCell.image.setImage(this.bodyImage);
+    let newCell = new SnakeCell(tailX, tailY, this.snakeHead.grid, false);
     this.snakeTail.nextCell = newCell;
     this.snakeTail = newCell;
     return newCell;
   }
 
   removeLink() {
-    console.log('Removing...');
     if (this.snakeHead === this.snakeTail) {
       this.alive = false;
       return;

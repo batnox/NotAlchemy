@@ -9,22 +9,22 @@ class SnakeGame extends Game {
     super();
     this.TICK_PER_SECOND = TICKS_PER_SECOND;
 
-    this.wallSprites = new SpriteGroup();
-    this.foodSprites = new SpriteGroup();
+    // this.wallSprites = new SpriteGroup();
+    // this.foodSprites = new SpriteGroup();
+    this.grid = new SnakeGrid(GRID_NUMBER, GRID_NUMBER);
 
     this.score = 0;
     if (!localStorage.getItem('high-score')) {
       localStorage.setItem('high-score', 0);
     }
-    this.worm1 = new Snake(GRID_SIZE);
-    this.worm2 = new Snake(GRID_SIZE);
-    // this.worm_2= new Snake(GRID_SIZE);
+    this.worm1 = new Snake(3, 3, this.grid, GRID_SIZE);
+    this.worm2 = new Snake(6, 6, this.grid, GRID_SIZE);
 
     /**
      * Determines the direction that the Snake will go
      */
     addEventListener('keydown', event => this.onKeyDown(event));
-    this.addContent('images', 'snake/json/snake_elements.json');
+    this.addContent('images', 'src/snake/json/snake_elements.json');
 
     this.currentLevel = 0; // 0 and 1
     this.maximumLevel = 1;
@@ -35,8 +35,9 @@ class SnakeGame extends Game {
 
     this.spriteLayer.addDrawable(this.worm1);
     this.spriteLayer.addDrawable(this.worm2);
-    this.spriteLayer.addDrawable(this.wallSprites);
-    this.spriteLayer.addDrawable(this.foodSprites);
+    this.spriteLayer.addDrawable(this.grid);
+    // this.spriteLayer.addDrawable(this.wallSprites);
+    // this.spriteLayer.addDrawable(this.foodSprites);
 
     this.scoreDisplay = new TextDisplay(GRID_SIZE, this.canvas.height -
       18, this.canvas.width - GRID_SIZE / 2);
@@ -64,22 +65,20 @@ class SnakeGame extends Game {
     this.loadContent()
       .then(() => {
         this.buildMap();
-        this.worm1.setPosition(3 * GRID_SIZE, 3 * GRID_SIZE);
-        this.worm2.setPosition(9 * GRID_SIZE, 3 * GRID_SIZE);
         this.start();
       });
 
   }
 
   newLevel() {
-    this.wallSprites.clear();
+    this.grid.clear();
 
     this.worm1.killBody();
-    this.worm1.setPosition(3 * GRID_SIZE, 3 * GRID_SIZE);
+    this.worm1.setPosition(3, 3);
     this.worm1.direction = Direction.RIGHT;
 
     this.worm2.killBody();
-    this.worm2.setPosition(9 * GRID_SIZE, 3 * GRID_SIZE);
+    this.worm2.setPosition(10, 10);
     this.worm2.direction = Direction.LEFT;
 
     this.currentLevel++;
@@ -90,15 +89,28 @@ class SnakeGame extends Game {
   }
 
   buildMap() {
+    let tmpMap = sampleMaps.getMap(this.currentLevel);
+    for (let x = 0; x < tmpMap.length; x++){
+      for (let y = 0; y < tmpMap[x].length; y++){
+        if (tmpMap[x][y] === 1){
+            let random = 0;
+            if(this.currentLevel === 0)
+                random = Math.floor(Math.random() * 4);
+            else
+                random = Math.floor(Math.random() * 4) + 4;
+            this.grid.addWall(x, y, random);
+        }
+      }
+    }
+
+    /*
     if (this.currentLevel === 0) {
       for (let x = 0; x < GRID_NUMBER; x++) {
         for (let y = 0; y < GRID_NUMBER; y++) {
           if (x === 0 || y === 0 || x === GRID_NUMBER - 1 ||
             y === GRID_NUMBER - 1) {
             let random = Math.floor(Math.random() * 4);
-            let wall = new Wall(random);
-            wall.bounds.setPosition(x * GRID_SIZE, y * GRID_SIZE);
-            this.wallSprites.add(wall);
+            this.grid.addWall(x, y, random);
           }
         }
       }
@@ -108,30 +120,23 @@ class SnakeGame extends Game {
           let random = Math.floor(Math.random() * 4) + 4;
           if (x === 0 || y === 0 || x === (GRID_NUMBER - 1) ||
             y === (GRID_NUMBER - 1)) {
-            let wall = new Wall(random);
-            wall.bounds.setPosition(x * GRID_SIZE, y * GRID_SIZE);
-            this.wallSprites.add(wall);
+            this.grid.addWall(x, y, random);
           } else if (x > Math.floor(GRID_NUMBER / 3) &&
             x < Math.floor(GRID_NUMBER * 2 / 3) &&
             y === Math.floor((GRID_NUMBER) / 2)) {
-            let wall = new Wall(random);
-            wall.bounds.setPosition(x * GRID_SIZE, y * GRID_SIZE);
-            this.wallSprites.add(wall);
+            this.grid.addWall(x, y, random);
           }
           else if (y > Math.floor(GRID_NUMBER / 3) &&
             y < Math.floor(GRID_NUMBER * 2 / 3) &&
             x === Math.floor((GRID_NUMBER) / 2)) {
-            let wall = new Wall(random);
-            wall.bounds.setPosition(x * GRID_SIZE, y * GRID_SIZE);
-            this.wallSprites.add(wall);
+            this.grid.addWall(x, y, random);
           }
         }
       }
     }
+    */
 
-    let food = new Food();
-    food.bounds.setPosition(8 * GRID_SIZE, 8 * GRID_SIZE);
-    this.foodSprites.add(food);
+    this.grid.addFood(8, 8);
   }
 
   loadContent() {
@@ -156,28 +161,25 @@ class SnakeGame extends Game {
   }
 
   replaceFood(deadFood) {
-    this.foodSprites.removeSprite(deadFood);
-    let food = new Food();
+    this.grid.removeFood(deadFood.gridX, deadFood.gridY);
     let position = this.emptyCheck();
-    food.bounds.setPosition(position[0], position[1]);
-    this.foodSprites.add(food);
+    this.grid.addFood(position[0], position[1]);
   }
 
   emptyCheck() {
     let position = [
-      Math.floor(Math.random() * GRID_NUMBER) * GRID_SIZE,
-      Math.floor(Math.random() * GRID_NUMBER) * GRID_SIZE];
+      Math.floor(Math.random() * GRID_NUMBER),
+      Math.floor(Math.random() * GRID_NUMBER)];
 
-    for (let checkWall of this.wallSprites.sprites) {
-      if (checkWall.bounds.x === position[0] &&
-        checkWall.bounds.y === position[1]) {
-        return this.emptyCheck();
-      }
+    if (this.grid.getWall(position[0], position[1])) {
+      return this.emptyCheck();
     }
 
-    let food = new Food();
-    food.bounds.setPosition(position[0], position[1]);
-    if (this.worm1.isCollision(food) || this.worm2.isCollision(food)) {
+    if (this.worm1.isCollision(position[0], position[1])) {
+      return this.emptyCheck();
+    }
+
+    if (this.worm2.isCollision(position[0], position[1])) {
       return this.emptyCheck();
     }
     return position;
@@ -222,42 +224,41 @@ class SnakeGame extends Game {
     super.update();
     this.worm1.update();
     this.worm2.update();
+    this.grid.update();
+
     for (let tempworm of [this.worm1, this.worm2]) {
       if (tempworm.alive) {
-        let foodCollision = this.foodSprites.getOverlap(tempworm.snakeHead);
-        let wallCollision = this.wallSprites.getOverlap(tempworm.snakeHead);
+        let head = tempworm.snakeHead;
+        let food = this.grid.getFood(head.gridX, head.gridY);
+        let wall = this.grid.getWall(head.gridX, head.gridY);
         let bodyCollision = tempworm.isBodyCollision();
+
         let otherSnakeCollision = false;
         // console.log(Object.is(tempworm,  this.worm1));
         if(Object.is(tempworm,  this.worm1)) {
-            otherSnakeCollision = this.worm2.isSnakeCollision(this.worm1.snakeHead);
-            // console.log(otherSnakeCollision);
+          otherSnakeCollision = this.worm2.isSnakeCollision(this.worm1.snakeHead);
+          // console.log(otherSnakeCollision);
         }
         else {
-            otherSnakeCollision = this.worm1.isSnakeCollision(tempworm.snakeHead);
+          otherSnakeCollision = this.worm1.isSnakeCollision(tempworm.snakeHead);
         }
 
-
-        for (let food of this.foodSprites.sprites) {
-          food.update();
-        }
-
-        if (foodCollision) {
-          let food = foodCollision.sprite;
+        if (food) {
           if (food.spoiled) {
-            tempworm.score -= SCORE_PER_FOOD;
+            this.score -= SCORE_PER_FOOD;
             tempworm.removeLink();
           } else {
-            tempworm.score += SCORE_PER_FOOD;
+            this.score += SCORE_PER_FOOD;
             tempworm.addLink();
           }
           this.replaceFood(food);
           if (this.currentLevel < this.maximumLevel &&
-            tempworm.score >= this.condition[this.currentLevel]) {
+            this.score >= this.condition[this.currentLevel]) {
             this.newLevel();
           }
-        } else if (wallCollision || bodyCollision || otherSnakeCollision) {
-          tempworm.alive = false;
+        } else if (wall || bodyCollision) {
+          this.worm1.alive = false;
+          this.worm2.alive = false;
         }
       } else if (!this.gameOver.text) {
         this.gameOver.text = 'Game Over';
