@@ -13,7 +13,6 @@ class SnakeGame extends Game {
     // this.foodSprites = new SpriteGroup();
     this.grid = new SnakeGrid(GRID_NUMBER, GRID_NUMBER);
 
-    this.score = 0;
     if (!localStorage.getItem('high-score')) {
       localStorage.setItem('high-score', 0);
     }
@@ -39,13 +38,21 @@ class SnakeGame extends Game {
     // this.spriteLayer.addDrawable(this.wallSprites);
     // this.spriteLayer.addDrawable(this.foodSprites);
 
-    this.scoreDisplay = new TextDisplay(GRID_SIZE, this.canvas.height -
+    this.scoreDisplay1 = new TextDisplay(GRID_SIZE, this.canvas.height -
+      18 * 2, this.canvas.width - GRID_SIZE / 2);
+    this.scoreDisplay1.fontSize = 14;
+    this.scoreDisplay1.fontName = 'Courier';
+    this.scoreDisplay1.fontColor = '#fff';
+    this.scoreDisplay1.text = `Score 1: ${this.worm1.getScore()}`;
+    this.overlayLayer.addDrawable(this.scoreDisplay1);
+
+    this.scoreDisplay2 = new TextDisplay(GRID_SIZE, this.canvas.height -
       18, this.canvas.width - GRID_SIZE / 2);
-    this.scoreDisplay.fontSize = 14;
-    this.scoreDisplay.fontName = 'Courier';
-    this.scoreDisplay.fontColor = '#fff';
-    this.scoreDisplay.text = `Score: ${this.worm1.getScore()}`;
-    this.overlayLayer.addDrawable(this.scoreDisplay);
+    this.scoreDisplay2.fontSize = 14;
+    this.scoreDisplay2.fontName = 'Courier';
+    this.scoreDisplay2.fontColor = '#fff';
+    this.scoreDisplay2.text = `Score 2: ${this.worm2.getScore()}`;
+    this.overlayLayer.addDrawable(this.scoreDisplay2);
 
     this.highScoreDisplay = new TextDisplay(this.canvas.width /
       2, this.canvas.height -
@@ -53,7 +60,7 @@ class SnakeGame extends Game {
     this.highScoreDisplay.fontSize = 14;
     this.highScoreDisplay.fontName = 'Courier';
     this.highScoreDisplay.fontColor = '#fff';
-    this.highScoreDisplay.text = `High Score: ${this.worm1.getScore()}`;
+    this.highScoreDisplay.text = `High Score: ${Math.max(this.worm1.getScore(), this.worm2.getScore())}`;
     this.overlayLayer.addDrawable(this.highScoreDisplay);
 
     this.gameOver = new TextDisplay(GRID_SIZE * 2, GRID_SIZE * 2,
@@ -245,15 +252,15 @@ class SnakeGame extends Game {
 
         if (food) {
           if (food.spoiled) {
-            this.score -= SCORE_PER_FOOD;
+            tempworm.score -= SCORE_PER_FOOD;
             tempworm.removeLink();
           } else {
-            this.score += SCORE_PER_FOOD;
+            tempworm.score += SCORE_PER_FOOD;
             tempworm.addLink();
           }
           this.replaceFood(food);
           if (this.currentLevel < this.maximumLevel &&
-            this.score >= this.condition[this.currentLevel]) {
+            tempworm.score >= this.condition[this.currentLevel]) {
             this.newLevel();
           }
         } else if (wall || bodyCollision || otherSnakeCollision) {
@@ -266,7 +273,8 @@ class SnakeGame extends Game {
       }
     }
 
-    this.scoreDisplay.text = `Score: ${this.worm1.getScore()}`;
+    this.scoreDisplay1.text = `Score 1: ${this.worm1.getScore()}`;
+    this.scoreDisplay2.text = `Score 2: ${this.worm2.getScore()}`;
 
     let highScore = localStorage.getItem('high-score');
     if (this.worm1.getScore() > highScore) {
