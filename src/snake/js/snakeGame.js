@@ -256,7 +256,7 @@ class SnakeGame extends Game {
             this.score >= this.condition[this.currentLevel]) {
             this.newLevel();
           }
-        } else if (wall || bodyCollision) {
+        } else if (wall || bodyCollision || otherSnakeCollision) {
           this.worm1.alive = false;
           this.worm2.alive = false;
         }
