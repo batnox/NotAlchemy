@@ -27,8 +27,8 @@ class SnakeGame extends Game {
     this.addContent('images', 'src/snake/json/snake_elements.json');
 
     this.currentLevel = 0; // 0 and 1
-    this.maximumLevel = 1;
-    this.condition = [500];//condition for go to next level
+    this.maximumLevel = 4;
+    this.condition = [500, 1500, 3000, 5000];//condition for go to next level
 
     this.canvas.width = GRID_NUMBER * GRID_SIZE;
     this.canvas.height = GRID_NUMBER * GRID_SIZE;
