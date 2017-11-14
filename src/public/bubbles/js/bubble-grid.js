@@ -5,6 +5,9 @@ class BubbleGrid extends Grid {
   }
 
   addBubble(x, y, bubble, spawned) {
+    if (!this.getTile(x, y).isEmpty()) {
+      throw Error('Cannot add bubble to filled position.')
+    }
     this.getTile(x, y).addSprite(bubble);
     let bx = x * bubble.bounds.radius * 2;
     let by = y * bubble.bounds.radius * Math.sqrt(3);
@@ -13,8 +16,7 @@ class BubbleGrid extends Grid {
       bx += bubble.bounds.radius;
     }
     bubble.setPosition(bx, by);
-    bubble.setGridPosition(x, y);
-    bubble.updateNeighbors(spawned);
+    bubble.setGridPosition(x, y, spawned);
   }
 
   alignBubble(bubble) {
