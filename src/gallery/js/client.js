@@ -1,3 +1,4 @@
+const socket = io();
 let game;
 
 function startAlchemy() {
