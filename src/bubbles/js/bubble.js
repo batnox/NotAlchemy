@@ -13,7 +13,6 @@ class Bubble extends Sprite {
     this.type = bubbleType;
     this.velocityX = 0;
     this.velocityY = 0;
-    this.neighbors = [];
     this.matches = [];
   }
 
@@ -27,59 +26,72 @@ class Bubble extends Sprite {
     this.image.bounds.setSize(radius * 2, radius * 2);
   }
 
-  setGridPosition(gridX, gridY) {
+  setGridPosition(gridX, gridY, spawned) {
     this.gridX = gridX;
     this.gridY = gridY;
-  }
 
-  updateNeighbor(x, y, spawned) {
-    if (0 <= x && x < this.grid.width) {
-      if (0 <= y && y < this.grid.height) {
-        let sprites = this.grid.getTile(x, y).getSprites();
-        if (sprites.length > 0 && sprites[0]) {
-          let neighbor = sprites[0];
-          this.neighbors.push(neighbor);
-
-          if (this.type === neighbor.type) {
-            if (!this.matches.includes(neighbor)) {
-              this.matches.push(neighbor);
-            }
-            for (let bubble of neighbor.matches) {
-              if (!this.matches.includes(bubble)) {
-                this.matches.push(bubble);
-              }
-            }
-            if (!neighbor.matches.includes(this)) {
-              neighbor.matches.push(this);
-            }
-
-            if (!spawned && this.matches.length >= BUBBLE_MATCH_COUNT - 1) {
-              for (let bubble of this.matches) {
-                bubble.explode();
-              }
-              this.explode();
-            }
-          }
-        }
-      }
-    }
+    this.updateNeighbors(spawned);
   }
 
   updateNeighbors(spawned) {
-    this.neighbors = [];
     this.matches = [];
-    this.updateNeighbor(this.gridX - 1, this.gridY, spawned);
-    if (this.gridY % 2 === 0) {
-      this.updateNeighbor(this.gridX - 1, this.gridY - 1, spawned);
-      this.updateNeighbor(this.gridX - 1, this.gridY + 1, spawned);
+    let tiles = [];
+    let neighbors = [];
+
+    if (this.gridX - 1 >= 0) {
+      tiles.push(this.grid.getTile(this.gridX - 1, this.gridY));
+      if (this.gridY % 2 === 0) {
+        if (this.gridY - 1 >= 0) {
+          tiles.push(this.grid.getTile(this.gridX - 1, this.gridY - 1));
+        }
+        if (this.gridY + 1 < this.grid.height) {
+          tiles.push(this.grid.getTile(this.gridX - 1, this.gridY + 1));
+        }
+      }
     }
-    this.updateNeighbor(this.gridX, this.gridY - 1, spawned);
-    this.updateNeighbor(this.gridX, this.gridY + 1, spawned);
-    this.updateNeighbor(this.gridX + 1, this.gridY, spawned);
-    if (this.gridY % 2 === 1) {
-      this.updateNeighbor(this.gridX + 1, this.gridY - 1, spawned);
-      this.updateNeighbor(this.gridX + 1, this.gridY + 1, spawned);
+    if (this.gridY - 1 >= 0) {
+      tiles.push(this.grid.getTile(this.gridX, this.gridY - 1));
     }
+    if (this.gridY + 1 < this.grid.height) {
+      tiles.push(this.grid.getTile(this.gridX, this.gridY + 1));
+    }
+    if (this.gridX + 1 < this.grid.width) {
+      tiles.push(this.grid.getTile(this.gridX + 1, this.gridY));
+      if (this.gridY % 2 === 1) {
+        if (this.gridY - 1 >= 0) {
+          tiles.push(this.grid.getTile(this.gridX + 1, this.gridY - 1));
+        }
+        if (this.gridY + 1 < this.grid.height) {
+          tiles.push(this.grid.getTile(this.gridX + 1, this.gridY + 1));
+        }
+      }
+    }
+
+    tiles.forEach(tile => {
+      if (!tile.isEmpty()) {
+        neighbors.push(tile.getSprites()[0]);
+      }
+    });
+
+    neighbors.forEach(neighbor => {
+      if (this.type === neighbor.type) {
+        neighbor.matches.forEach(match => {
+          if (!match.matches.includes(this)) {
+            match.matches.push(this);
+          }
+          this.matches.push(match);
+        });
+        if (!neighbor.matches.includes(this)) {
+          neighbor.matches.push(this);
+        }
+        this.matches.push(neighbor);
+
+        if (!spawned && this.matches.length >= BUBBLE_MATCH_COUNT - 1) {
+          this.matches.forEach(match => match.explode());
+          this.explode();
+        }
+      }
+    });
   }
 
   set type(type) {
