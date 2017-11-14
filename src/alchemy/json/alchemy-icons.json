@@ -1,14 +1,14 @@
 {
-  "angle": "src/alchemy/assets/Angle.png",
-  "wall": "src/alchemy/assets/Wall.png",
-  "circle": "src/alchemy/assets/Circle.png",
-  "dot": "src/alchemy/assets/Dot.png",
-  "hexagon": "src/alchemy/assets/Hexagon.png",
-  "honeycomb": "src/alchemy/assets/Honeycomb.png",
-  "line": "src/alchemy/assets/Line.png",
-  "pentagon": "src/alchemy/assets/Pentagon.png",
-  "rectangle": "src/alchemy/assets/Rectangle.png",
-  "square": "src/alchemy/assets/Square.png",
-  "trapezoid": "src/alchemy/assets/Trapezoid.png",
-  "triangle": "src/alchemy/assets/Triangle.png"
+  "angle": "alchemy/assets/Angle.png",
+  "wall": "alchemy/assets/Wall.png",
+  "circle": "alchemy/assets/Circle.png",
+  "dot": "alchemy/assets/Dot.png",
+  "hexagon": "alchemy/assets/Hexagon.png",
+  "honeycomb": "alchemy/assets/Honeycomb.png",
+  "line": "alchemy/assets/Line.png",
+  "pentagon": "alchemy/assets/Pentagon.png",
+  "rectangle": "alchemy/assets/Rectangle.png",
+  "square": "alchemy/assets/Square.png",
+  "trapezoid": "alchemy/assets/Trapezoid.png",
+  "triangle": "alchemy/assets/Triangle.png"
 }
