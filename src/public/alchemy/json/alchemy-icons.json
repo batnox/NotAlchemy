@@ -1,0 +1,14 @@
+{
+  "angle": "alchemy/assets/Angle.png",
+  "wall": "alchemy/assets/Wall.png",
+  "circle": "alchemy/assets/Circle.png",
+  "dot": "alchemy/assets/Dot.png",
+  "hexagon": "alchemy/assets/Hexagon.png",
+  "honeycomb": "alchemy/assets/Honeycomb.png",
+  "line": "alchemy/assets/Line.png",
+  "pentagon": "alchemy/assets/Pentagon.png",
+  "rectangle": "alchemy/assets/Rectangle.png",
+  "square": "alchemy/assets/Square.png",
+  "trapezoid": "alchemy/assets/Trapezoid.png",
+  "triangle": "alchemy/assets/Triangle.png"
+}

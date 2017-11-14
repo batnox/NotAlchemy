@@ -1,23 +1,13 @@
-let game;
+const path = require('path');
+const express = require('express');
+const app = require('express')();
+const http = require('http').Server(app);
 
-function startAlchemy() {
-  stopGame();
-  game = new Alchemy();
-}
+app.use(express.static(__dirname + '/public'));
+app.get('/', function(req, res) {
+  res.sendFile(path.resolve(__dirname + '/../index.html'));
+});
 
-function startSnake() {
-  stopGame();
-  game = new SnakeGame();
-}
-
-function startBubbleShooter() {
-  stopGame();
-  game = new BubbleGame();
-}
-
-function stopGame() {
-  if (game) {
-    game.stop();
-    game = null;
-  }
-}
+http.listen(3000, function() {
+  console.log('listening on *:3000');
+});
