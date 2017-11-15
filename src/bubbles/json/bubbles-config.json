@@ -1,14 +1,14 @@
 {
   "bubbles": {
-    "blue": "src/bubbles/assets/bubble-blue.png",
-    "green": "src/bubbles/assets/bubble-green.png",
-    "purple": "src/bubbles/assets/bubble-purple.png",
-    "red": "src/bubbles/assets/bubble-red.png",
-    "yellow": "src/bubbles/assets/bubble-yellow.png",
-    "batty": "src/bubbles/assets/SpriteSheetBatty.png"
+    "blue": "bubbles/assets/bubble-blue.png",
+    "green": "bubbles/assets/bubble-green.png",
+    "purple": "bubbles/assets/bubble-purple.png",
+    "red": "bubbles/assets/bubble-red.png",
+    "yellow": "bubbles/assets/bubble-yellow.png",
+    "batty": "bubbles/assets/SpriteSheetBatty.png"
   },
   "walls": {
-    "stone": "src/bubbles/assets/stonewall3.png"
+    "stone": "bubbles/assets/stonewall3.png"
   },
-  "guide": "src/bubbles/assets/guide.png"
+  "guide": "bubbles/assets/guide.png"
 }
