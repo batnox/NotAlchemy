@@ -1,30 +1,30 @@
 {
   "snake": {
     "head": {
-      "red": "src/snake/assets/snake-head-red.png",
-      "blue": "src/snake/assets/snake-head-blue.png"
+      "red": "snake/assets/snake-head-red.png",
+      "blue": "snake/assets/snake-head-blue.png"
     },
     "body": {
-      "red": "src/snake/assets/snake-body-red.png",
-      "blue": "src/snake/assets/snake-body-blue.png"
+      "red": "snake/assets/snake-body-red.png",
+      "blue": "snake/assets/snake-body-blue.png"
     }
   },
   "walls": [
     [
-      "src/snake/assets/wall1.png",
-      "src/snake/assets/wall2.png",
-      "src/snake/assets/wall3.png",
-      "src/snake/assets/wall4.png"
+      "snake/assets/wall1.png",
+      "snake/assets/wall2.png",
+      "snake/assets/wall3.png",
+      "snake/assets/wall4.png"
     ],
     [
-      "src/snake/assets/stonewall1.png",
-      "src/snake/assets/stonewall2.png",
-      "src/snake/assets/stonewall3.png",
-      "src/snake/assets/stonewall4.png"
+      "snake/assets/stonewall1.png",
+      "snake/assets/stonewall2.png",
+      "snake/assets/stonewall3.png",
+      "snake/assets/stonewall4.png"
     ]
   ],
   "food": {
-    "normal": "src/snake/assets/food.png",
-    "spoiled": "src/snake/assets/food-spoiled.png"
+    "normal": "snake/assets/food.png",
+    "spoiled": "snake/assets/food-spoiled.png"
   }
 }

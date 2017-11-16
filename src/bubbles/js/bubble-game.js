@@ -8,7 +8,7 @@ class BubbleGame extends Game {
   constructor() {
     super();
     this.TICK_PER_SECOND = 100;
-    this.addContent('images', 'src/bubbles/json/bubbles-config.json');
+    this.addContent('images', 'bubbles/json/bubbles-config.json');
     this.canvas.width = 800;
     this.canvas.height = 800;
 
@@ -64,22 +64,22 @@ class BubbleGame extends Game {
           imageManager.addSpritesheet(
             ['batty', 'batty-1', 'batty-2', 'batty-3', 'batty-4'],
             64,
-            'src/bubbles/assets/SpriteSheetBatty.png'
+            'bubbles/assets/SpriteSheetBatty.png'
           );
           imageManager.addSpritesheet(
             ['skull', 'skull-1', 'skull-2', 'skull-3', 'skull-4'],
             64,
-            'src/bubbles/assets/SpriteSheetSkull.png'
+            'bubbles/assets/SpriteSheetSkull.png'
           );
           imageManager.addSpritesheet(
             ['jack', 'jack-1', 'jack-2', 'jack-3', 'jack-4'],
             64,
-            'src/bubbles/assets/SpriteSheetJack.png'
+            'bubbles/assets/SpriteSheetJack.png'
           );
           imageManager.addSpritesheet(
             ['clown', 'clown-1', 'clown-2', 'clown-3', 'clown-4'],
             64,
-            'src/bubbles/assets/SpriteSheetClown.png'
+            'bubbles/assets/SpriteSheetClown.png'
           );
           resolve();
         });
