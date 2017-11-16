@@ -12,6 +12,7 @@ class Layer {
      * @type {Array}
      */
     this.drawables = [];
+    this.drawLayer = true;
   }
 
   /**
@@ -43,8 +44,10 @@ class Layer {
    * @param context {CanvasRenderingContext2D}
    */
   draw(context) {
-    for (let drawable of this.drawables) {
-      drawable.draw(context);
+    if (this.drawLayer) {
+      for (let drawable of this.drawables) {
+        drawable.draw(context);
+      }
     }
   }
 }
