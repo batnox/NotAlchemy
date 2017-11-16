@@ -8,7 +8,12 @@ function startAlchemy() {
 
 function startSnake() {
   stopGame();
-  game = new SnakeGame();
+  game = new SnakeGame(false);
+}
+
+function startMultiplayerSnake() {
+  stopGame();
+  game = new SnakeGame(true);
 }
 
 function startBubbleShooter() {
