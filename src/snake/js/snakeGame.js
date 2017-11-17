@@ -3,7 +3,7 @@ let GRID_SIZE = 30;
 let SCORE_PER_FOOD = 500;
 let TICKS_PER_SECOND = 10;
 let FOOD_LIFE = 10 * TICKS_PER_SECOND;
-
+const socket = io();
 class SnakeGame extends Game {
   constructor(multiplayer) {
     super();
@@ -182,15 +182,19 @@ class SnakeGame extends Game {
     switch (event.keyCode) {
       case 37: // Left
         this.worm1.direction = Direction.LEFT;
+        socket.emit('direction', "1_LEFT");
         break;
       case 38: // Up
         this.worm1.direction = Direction.UP;
+        socket.emit('direction', "1_UP");
         break;
       case 39: // Right
         this.worm1.direction = Direction.RIGHT;
+        socket.emit('direction', "1_RIGHT");
         break;
       case 40: // Down
         this.worm1.direction = Direction.DOWN;
+        socket.emit('direction', "1_DOWN");
         break;
     }
 
@@ -198,20 +202,28 @@ class SnakeGame extends Game {
       switch (event.keyCode) {
         case 65: // Left
           this.worm2.direction = Direction.LEFT;
+          socket.emit('direction', "2_LEFT");
           break;
         case 87: // Up
           this.worm2.direction = Direction.UP;
+          socket.emit('direction', "2_UP");
           break;
         case 68: // Right
           this.worm2.direction = Direction.RIGHT;
+          socket.emit('direction', "2_RIGHT");
           break;
         case 83: // Down
           this.worm2.direction = Direction.DOWN;
+          socket.emit('direction', "2_DOWN");
           break;
 
       }
     }
+
   }
+
+
+
 
   update() {
     super.update();
@@ -287,3 +299,7 @@ class SnakeGame extends Game {
     super.draw();
   }
 }
+
+// socket.on('message', function(data) {
+//     console.log(data);
+// });

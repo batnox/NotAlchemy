@@ -1,4 +1,8 @@
-const socket = io();
+// const socket = io();
+// const socket = io();
+// socket.on('message', function(data) {
+//     console.log("papap");
+// });
 let game;
 
 function startAlchemy() {
