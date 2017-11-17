@@ -1,8 +1,3 @@
-// const socket = io();
-// const socket = io();
-// socket.on('message', function(data) {
-//     console.log("papap");
-// });
 let game;
 
 function startAlchemy() {
@@ -12,12 +7,17 @@ function startAlchemy() {
 
 function startSnake() {
   stopGame();
-  game = new SnakeGame(false);
+  game = new SnakeGame(SnakeGameType.SINGLEPLAYER);
 }
 
-function startMultiplayerSnake() {
+function startLocal2PSnake() {
   stopGame();
-  game = new SnakeGame(true);
+  game = new SnakeGame(SnakeGameType.LOCAL_MULTIPLAYER);
+}
+
+function startOnline2PSnake() {
+  stopGame();
+  game = new SnakeGame(SnakeGameType.ONLINE_MULTIPLAYER);
 }
 
 function startBubbleShooter() {
