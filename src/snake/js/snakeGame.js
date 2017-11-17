@@ -1,7 +1,7 @@
 let GRID_NUMBER = 30;
 let GRID_SIZE = 30;
 let SCORE_PER_FOOD = 500;
-let TICKS_PER_SECOND = 10;
+let TICKS_PER_SECOND = 6;
 let FOOD_LIFE = 10 * TICKS_PER_SECOND;
 
 const socket = io();
