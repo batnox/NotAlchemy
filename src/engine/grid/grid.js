@@ -34,6 +34,10 @@ class Grid {
     this.tiles.forEach(row => row.forEach(tile => tile.clear()));
   }
 
+  delete(index){
+    delete this.tiles[index];
+  }
+
   draw(context) {
     // for (let x = 0; x < 40; x++) {
     //   if (x % 10 === 0) {
