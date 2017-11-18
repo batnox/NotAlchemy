@@ -81,9 +81,17 @@ class Launcher extends Sprite {
 
     for (let x = 0; x < this.grid.width; x++) {
       for (let y = 0; y < this.grid.height; y++) {
+
         let sprites = this.grid.getTile(x, y).getSprites();
         if (sprites.length > 0 && sprites[0]) {
           let b = sprites[0];
+          if (this.loadedBubble.bounds.isCollision(b)){
+              this.grid.alignBubble(this.loadedBubble);
+              this.loadedBubble = null;
+              this.state = LauncherState.EMPTY;
+              return;
+          }
+          /*
           let dx = this.loadedBubble.bounds.x - b.bounds.x;
           let dy = this.loadedBubble.bounds.y - b.bounds.y;
           let dis = dy ** 2 + dx ** 2;
@@ -93,7 +101,9 @@ class Launcher extends Sprite {
             this.state = LauncherState.EMPTY;
             return;
           }
+          */
         }
+
       }
     }
   }

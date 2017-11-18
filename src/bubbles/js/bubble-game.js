@@ -36,7 +36,7 @@ class BubbleGame extends Game {
     this.overlayLayer.addDrawable(this.scoreDisplay);
 
     this.gameOverDisplay = new TextDisplay(
-      BUBBLE_RADIUS, BUBBLE_RADIUS,
+      BUBBLE_RADIUS, this.canvas.height-200,
       this.canvas.width - BUBBLE_RADIUS / 2
     );
     this.gameOverDisplay.fontSize = 32;
