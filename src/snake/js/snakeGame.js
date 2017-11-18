@@ -1,14 +1,50 @@
 let GRID_NUMBER = 30;
 let GRID_SIZE = 30;
 let SCORE_PER_FOOD = 500;
-let TICKS_PER_SECOND = 10;
+let TICKS_PER_SECOND = 6;
 let FOOD_LIFE = 10 * TICKS_PER_SECOND;
 
+const socket = io();
+
 class SnakeGame extends Game {
-  constructor(multiplayer) {
+  constructor(gameType) {
     super();
     this.TICK_PER_SECOND = TICKS_PER_SECOND;
-    this.multiplayer = multiplayer;
+    this.gameType = gameType;
+    this.serverReady = false;
+    this.clientReady = false;
+
+    if (this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
+      socket.on('message', (msg) => {
+        console.log(`Server: ${msg}`);
+        switch (msg) {
+          case 'START_GAME_0':
+            this.serverReady = true;
+            this.checkStart();
+            break;
+          case 'START_GAME_1':
+            this.worm1.setPosition(6, 6);
+            this.worm2.setPosition(3, 3);
+            this.serverReady = true;
+            this.checkStart();
+            break;
+          case 'UP':
+            this.worm2.direction = Direction.UP;
+            break;
+          case 'DOWN':
+            this.worm2.direction = Direction.DOWN;
+            break;
+          case 'LEFT':
+            this.worm2.direction = Direction.LEFT;
+            break;
+          case 'RIGHT':
+            this.worm2.direction = Direction.RIGHT;
+            break;
+        }
+      });
+
+      socket.emit('message', 'START_MP_SNAKE');
+    }
 
     // this.wallSprites = new SpriteGroup();
     // this.foodSprites = new SpriteGroup();
@@ -19,7 +55,8 @@ class SnakeGame extends Game {
     }
 
     this.worm1 = new Snake(3, 3, this.grid, GRID_SIZE, SnakeType.RED);
-    if (this.multiplayer) {
+    if (this.gameType === SnakeGameType.LOCAL_MULTIPLAYER ||
+      this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
       this.worm2 = new Snake(6, 6, this.grid, GRID_SIZE, SnakeType.BLUE);
     }
 
@@ -37,7 +74,8 @@ class SnakeGame extends Game {
     this.canvas.height = GRID_NUMBER * GRID_SIZE;
 
     this.spriteLayer.addDrawable(this.worm1);
-    if (this.multiplayer) {
+    if (this.gameType === SnakeGameType.LOCAL_MULTIPLAYER ||
+      this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
       this.spriteLayer.addDrawable(this.worm2);
     }
     this.spriteLayer.addDrawable(this.grid);
@@ -52,7 +90,8 @@ class SnakeGame extends Game {
     this.scoreDisplay1.text = `Score 1: ${this.worm1.getScore()}`;
     this.overlayLayer.addDrawable(this.scoreDisplay1);
 
-    if (multiplayer) {
+    if (this.gameType === SnakeGameType.LOCAL_MULTIPLAYER ||
+      this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
       this.scoreDisplay2 = new TextDisplay(GRID_SIZE, this.canvas.height -
         18, this.canvas.width - GRID_SIZE / 2);
       this.scoreDisplay2.fontSize = 14;
@@ -69,9 +108,11 @@ class SnakeGame extends Game {
     this.highScoreDisplay.fontName = 'Courier';
     this.highScoreDisplay.fontColor = '#fff';
 
-    let highScore = multiplayer ?
-      Math.max(this.worm1.getScore(), this.worm2.getScore()) :
-      this.worm1.getScore();
+    let highScore = this.worm1.getScore();
+    if (this.gameType === SnakeGameType.LOCAL_MULTIPLAYER ||
+      this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
+      highScore = Math.max(this.worm1.getScore(), this.worm2.getScore());
+    }
     this.highScoreDisplay.text = `High Score: ${highScore}`;
     this.overlayLayer.addDrawable(this.highScoreDisplay);
 
@@ -84,9 +125,35 @@ class SnakeGame extends Game {
     this.loadContent()
       .then(() => {
         this.buildMap();
-        this.start();
-      });
+        if (this.gameType !== SnakeGameType.ONLINE_MULTIPLAYER) {
+          this.start();
+        } else {
+          console.log('Waiting for other player...');
+          this.spriteLayer.drawLayer = false;
+          this.overlayLayer.drawLayer = false;
+          let connectionLayer = new Layer();
+          this.layers[2] = connectionLayer;
 
+          let connectionText = new TextDisplay(100, 100, this.canvas.width);
+          connectionText.text = 'Waiting for other player...';
+          connectionText.fontSize = 32;
+          connectionText.fontColor = '#fff';
+          connectionLayer.addDrawable(connectionText);
+          this.draw();
+
+          this.clientReady = true;
+          this.checkStart();
+        }
+      });
+  }
+
+  checkStart() {
+    if (this.clientReady && this.serverReady) {
+      this.layers[2].drawLayer = false;
+      this.spriteLayer.drawLayer = true;
+      this.overlayLayer.drawLayer = true;
+      this.start();
+    }
   }
 
   newLevel() {
@@ -96,7 +163,8 @@ class SnakeGame extends Game {
     this.worm1.setPosition(3, 3);
     this.worm1.direction = Direction.RIGHT;
 
-    if (this.multiplayer) {
+    if (this.gameType === SnakeGameType.LOCAL_MULTIPLAYER ||
+      this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
       this.worm2.killBody();
       this.worm2.setPosition(10, 10);
       this.worm2.direction = Direction.LEFT;
@@ -168,7 +236,9 @@ class SnakeGame extends Game {
       return this.emptyCheck();
     }
 
-    if (this.multiplayer && this.worm2.isCollision(position[0], position[1])) {
+    if ((this.gameType === SnakeGameType.LOCAL_MULTIPLAYER ||
+        this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) &&
+      this.worm2.isCollision(position[0], position[1])) {
       return this.emptyCheck();
     }
     return position;
@@ -182,19 +252,31 @@ class SnakeGame extends Game {
     switch (event.keyCode) {
       case 37: // Left
         this.worm1.direction = Direction.LEFT;
+        if (this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
+          socket.emit('message', 'LEFT');
+        }
         break;
       case 38: // Up
         this.worm1.direction = Direction.UP;
+        if (this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
+          socket.emit('message', 'UP');
+        }
         break;
       case 39: // Right
         this.worm1.direction = Direction.RIGHT;
+        if (this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
+          socket.emit('message', 'RIGHT');
+        }
         break;
       case 40: // Down
         this.worm1.direction = Direction.DOWN;
+        if (this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
+          socket.emit('message', 'DOWN');
+        }
         break;
     }
 
-    if (this.multiplayer) {
+    if (this.gameType === SnakeGameType.LOCAL_MULTIPLAYER) {
       switch (event.keyCode) {
         case 65: // Left
           this.worm2.direction = Direction.LEFT;
@@ -211,24 +293,28 @@ class SnakeGame extends Game {
 
       }
     }
+
   }
 
   update() {
     super.update();
     this.worm1.update();
-    if (this.multiplayer) {
+    if (this.gameType === SnakeGameType.LOCAL_MULTIPLAYER ||
+      this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
       this.worm2.update();
     }
     this.grid.update();
 
     this.updateWorm(this.worm1);
-    if (this.multiplayer) {
+    if (this.gameType === SnakeGameType.LOCAL_MULTIPLAYER ||
+      this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
       this.updateWorm(this.worm2);
     }
 
     this.scoreDisplay1.text = `Score 1: ${this.worm1.getScore()}`;
 
-    if (this.multiplayer) {
+    if (this.gameType === SnakeGameType.LOCAL_MULTIPLAYER ||
+      this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
       this.scoreDisplay2.text = `Score 2: ${this.worm2.getScore()}`;
     }
 
@@ -237,7 +323,9 @@ class SnakeGame extends Game {
       highScore = this.worm1.getScore();
       localStorage.setItem('high-score', this.worm1.getScore());
     }
-    if (this.multiplayer && this.worm2.getScore() > highScore) {
+    if ((this.gameType === SnakeGameType.LOCAL_MULTIPLAYER ||
+        this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) &&
+      this.worm2.getScore() > highScore) {
       highScore = this.worm2.getScore();
       localStorage.setItem('high-score', this.worm2.getScore());
     }
@@ -252,7 +340,8 @@ class SnakeGame extends Game {
       let bodyCollision = worm.isBodyCollision();
 
       let otherSnakeCollision = false;
-      if (this.multiplayer) {
+      if (this.gameType === SnakeGameType.LOCAL_MULTIPLAYER ||
+        this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
         otherSnakeCollision =
           this.worm2.isSnakeCollision(this.worm1.snakeHead) ||
           this.worm1.isSnakeCollision(this.worm2.snakeHead);
@@ -273,7 +362,8 @@ class SnakeGame extends Game {
         }
       } else if (wall || bodyCollision || otherSnakeCollision) {
         this.worm1.alive = false;
-        if (this.multiplayer) {
+        if (this.gameType === SnakeGameType.LOCAL_MULTIPLAYER ||
+          this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
           this.worm2.alive = false;
         }
       }
@@ -287,3 +377,7 @@ class SnakeGame extends Game {
     super.draw();
   }
 }
+
+// socket.on('message', function(data) {
+//     console.log(data);
+// });
