@@ -10,14 +10,3 @@ const BubbleType = Object.freeze({
   CLOWN: 'clown'
 });
 
-class ColorType{
-  constructor() {
-      this.bubbleType = ['bubble-blue', 'bubble-green', 'bubble-purple', 'bubble-red', 'bubble-yellow'];
-  }
-
-    randomColor(){
-        return this.bubbleType[Math.floor(Math.random()*this.bubbleType.length)];
-    }
-}
-
-let colorType = new ColorType();
