@@ -10,5 +10,8 @@
   "walls": {
     "stone": "bubbles/assets/stonewall3.png"
   },
+  "walls": {
+    "stone": "bubbles/assets/stonewall3.png"
+  },
   "guide": "bubbles/assets/guide.png"
 }
