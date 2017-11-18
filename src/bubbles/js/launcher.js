@@ -20,12 +20,14 @@ class Launcher extends Sprite {
   }
 
   launch(mouse) {
-    let dx = mouse.x - this.bounds.x - BUBBLE_RADIUS;
-    let dy = mouse.y - this.bounds.y - BUBBLE_RADIUS;
-    let angle = Math.atan2(dy, dx);
-    this.loadedBubble.velocityX = BUBBLE_SPEED * Math.cos(angle);
-    this.loadedBubble.velocityY = BUBBLE_SPEED * Math.sin(angle);
-    this.state = LauncherState.FIRED;
+    if (this.state == LauncherState.LOADED) {
+        let dx = mouse.x - this.bounds.x - BUBBLE_RADIUS;
+        let dy = mouse.y - this.bounds.y - BUBBLE_RADIUS;
+        let angle = Math.atan2(dy, dx);
+        this.loadedBubble.velocityX = BUBBLE_SPEED * Math.cos(angle);
+        this.loadedBubble.velocityY = BUBBLE_SPEED * Math.sin(angle);
+        this.state = LauncherState.FIRED;
+    }
   }
 
   setLaunchRotation(degree) {

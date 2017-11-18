@@ -36,17 +36,23 @@ class BubbleGrid extends Grid {
 
         if (tileY >= this.height) {
             this.gameOver = true;
+            console.log("game over on 1");
         }
 
-        this.positionCheck(tileX, tileY, bubble);
-
-        this.addBubble(bubble.bounds.x, bubble.bounds.y, bubble);
+        if (!this.gameOver) {
+            this.positionCheck(tileX, tileY, bubble);
+        }
+        if (!this.gameOver) {
+            this.addBubble(bubble.bounds.x, bubble.bounds.y, bubble);
+        }
     }
 
     positionCheck(x, y, bubble){
+
         if (!this.getTile(x, y).isEmpty()){
             if (y + 1 >=this.height){
                 this.gameOver = true;
+                console.log("game over on 2");
                 return;
             }
 
