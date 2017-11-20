@@ -1,41 +1,93 @@
 class BubbleGrid extends Grid {
-  constructor(width, height) {
-    super(width, height);
-    this.gameOver = false;
-  }
-
-  addBubble(x, y, bubble, spawned) {
-    if (!this.getTile(x, y).isEmpty()) {
-      throw Error('Cannot add bubble to filled position.')
+    constructor(width, height) {
+        super(width, height);
+        this.gameOver = false;
     }
-    this.getTile(x, y).addSprite(bubble);
-    let bx = x * bubble.bounds.radius * 2;
-    let by = y * bubble.bounds.radius * Math.sqrt(3);
 
-    if (y % 2 === 1) {
-      bx += bubble.bounds.radius;
+    addBubble(x, y, bubble, spawned) {
+        /*
+        if (!this.getTile(x, y).isEmpty()) {
+          console.log(this.getTile(x, y));
+          throw Error('Cannot add bubble to filled position.')
+        }
+        */
+        this.getTile(x, y).addSprite(bubble);
+        let bx = x * bubble.bounds.radius * 2;
+        let by = y * bubble.bounds.radius * Math.sqrt(3);
+
+        if (y % 2 === 1) {
+            bx += bubble.bounds.radius;
+        }
+        bubble.setPosition(bx, by);
+        bubble.setGridPosition(x, y, spawned);
     }
-    bubble.setPosition(bx, by);
-    bubble.setGridPosition(x, y, spawned);
-  }
 
-  alignBubble(bubble) {
-    let cx = bubble.bounds.x;
-    let cy = bubble.bounds.y;
+    alignBubble(bubble) {
+        let cx = bubble.bounds.x;
+        let cy = bubble.bounds.y;
 
-    if (cy % 2 === 1) {
-      cx -= bubble.bounds.radius;
+        if (cy % 2 === 1) {
+            cx -= bubble.bounds.radius;
+        }
+        let tileX = Math.round(cx / (bubble.bounds.radius * 2));
+        let tileY = Math.round(cy / (bubble.bounds.radius * Math.sqrt(3)));
+        bubble.velocityX = 0;
+        bubble.velocityY = 0;
+
+        if (tileY >= this.height) {
+            this.gameOver = true;
+            console.log("game over on 1");
+        }
+
+        if (!this.gameOver) {
+            this.positionCheck(tileX, tileY, bubble);
+        }
+        if (!this.gameOver) {
+            this.addBubble(bubble.bounds.x, bubble.bounds.y, bubble);
+        }
     }
-    let tileX = Math.round(cx / (bubble.bounds.radius * 2));
-    let tileY = Math.round(cy / (bubble.bounds.radius * Math.sqrt(3)));
-    bubble.velocityX = 0;
-    bubble.velocityY = 0;
 
-    if (tileY >= this.height) {
-      this.gameOver = true;
+    positionCheck(x, y, bubble){
+
+        if (!this.getTile(x, y).isEmpty()){
+            if (y + 1 >=this.height){
+                this.gameOver = true;
+                console.log("game over on 2");
+                return;
+            }
+
+            if(this.getTile(x, y+1).isEmpty()){
+                bubble.setPosition(x, y+1);
+                return;
+            }
+            if(x% 2 === 1){
+                if(this.getTile(x+1, y+1).isEmpty()){
+                    bubble.setPosition(x+1, y+1);
+                    return;
+                }
+            }
+            else {
+                if(this.getTile(x-1, y+1).isEmpty()){
+                    bubble.setPosition(x-1, y+1);
+                    return;
+                }
+            }
+            /*
+            if(this.getTile(x-1, y).isEmpty()){
+                bubble.setPosition(x-1, y);
+                return;
+            }
+            if(this.getTile(x+1, y).isEmpty()){
+                bubble.setPosition(x+1, y);
+                return;
+            }
+            */
+            throw Error('position check error, 2 neighbors is not empty');
+        }
+        else {
+            bubble.setPosition(x, y);
+        }
     }
-    this.addBubble(tileX, tileY, bubble);
-  }
 
     xOnLine(x0, y0, m, y) {
         return (x0 + m * (y - y0));
