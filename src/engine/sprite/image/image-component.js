@@ -1,14 +1,39 @@
+/**
+ * Represents an image to be displayed on the game screen
+ */
 class ImageComponent {
+  /**
+   * The constructor of an image
+   */
   constructor() {
+    /**
+     * The collision boundaries of the image
+     * @type {bounds-component)
+     */
     this.bounds = null;
+    /**
+     * The name of the image
+     * @type {string}
+     */
     this.name = null;
+    /**
+     * Whether or not an image is visible on screen
+     * @type {boolean}
+     */
     this.visible = true;
   }
 
+  /**
+   * Sets the image's name based on its filepath name
+   * @param name (string)
+   */
   setImage(name) {
     this.name = name;
   }
-
+  /**
+   * Sets whether or not an umage is visible
+   * @param visible (boolean)
+   */
   setVisible(visible) {
     this.visible = visible;
   }
@@ -18,6 +43,7 @@ class ImageComponent {
   }
 
   /**
+   * Draws the image to the screen
    * @param context {CanvasRenderingContext2D}
    */
   draw(context) {

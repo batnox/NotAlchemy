@@ -1,3 +1,6 @@
+/**
+ * Represents a group of sprites
+ */
 class SpriteGroup {
   /**
    * Creates a sprite group.
@@ -23,7 +26,9 @@ class SpriteGroup {
   removeIndex(index) {
     return this.sprites.splice(index, 1)[0];
   }
-
+  /**
+   * Clears all sprites out of a sprite group
+   */
   clear() {
     this.sprites = [];
   }
@@ -82,15 +87,24 @@ class SpriteGroup {
     }
     return null;
   }
-
+  /**
+   * Updates the sprites in a sprite group
+   */
   update() {
     this.sprites.forEach(sprite => sprite.update());
   }
-
+  /**
+   * Returns a sprite from this sprite group based on a given index
+   * @param index (number)
+   * @returns {sprite}
+   */
   getSpriteByIndex(index){
     return this.sprites[index];
   }
-
+  /**
+   * Draws the sprites in the sprite group onto the game screen
+   * @param context
+   */
   draw(context) {
     for (let sprite of this.sprites) {
       sprite.draw(context);

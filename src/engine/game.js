@@ -1,3 +1,6 @@
+/**
+ * Represents a game to be ran by the engine
+ */
 class Game {
   constructor() {
     /**
@@ -36,13 +39,22 @@ class Game {
      * @type {Layer}
      */
     this.overlayLayer = new Layer();
+    /**
+     * The layers used by the game
+     * @type {Layer}
+     */
     this.layers[1] = this.overlayLayer;
-
+    /**
+     * The content that is used by the game
+     * @type {Array}
+     */
     this.content = [];
 
     addEventListener('mousemove', event => this.onMouseMove(event));
   }
-
+  /**
+   * The function to run the game
+   */
   start() {
     this.loop = setInterval(() => {
       this.update();
@@ -53,7 +65,9 @@ class Game {
   update() {
 
   }
-
+  /**
+   * Draws the contents of the game onto the screen
+   */
   draw() {
     let ctx = this.canvas.getContext('2d');
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -65,7 +79,11 @@ class Game {
       this.layers[i].draw(ctx);
     }
   }
-
+  /**
+   * Adds content to the game based on its name and filepath
+   * @param name
+   * @param path
+   */
   addContent(name, path) {
     for (let content of this.content) {
       if (content.name === name) {
@@ -77,7 +95,9 @@ class Game {
       path: path
     });
   }
-
+  /**
+   * Function to end the game
+   */
   stop() {
     console.log('Stopping...');
     clearInterval(this.loop);

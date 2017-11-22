@@ -12,6 +12,10 @@ class Layer {
      * @type {Array}
      */
     this.drawables = [];
+    /**
+     * Whether or not this layer is one to draw on
+     * @type {boolean}
+     */
     this.drawLayer = true;
   }
 

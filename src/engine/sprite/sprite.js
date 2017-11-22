@@ -1,3 +1,6 @@
+/**
+ * Represents a sprite to be displayed on screen
+ */
 class Sprite {
   /**
    * Creates a sprite.
@@ -15,7 +18,9 @@ class Sprite {
      */
     this.image = null;
   }
-
+  /**
+   * Updates the image of a sprite
+   */
   update() {
     if (this.image) {
       this.image.update();
@@ -23,6 +28,7 @@ class Sprite {
   }
 
   /**
+   * Draws the sprite's image onto the screen
    * @param context {CanvasRenderingContext2D}
    */
   draw(context) {

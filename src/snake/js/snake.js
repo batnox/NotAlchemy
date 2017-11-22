@@ -1,4 +1,15 @@
+/**
+ * Represents a Snake on the grid
+ */
 class Snake {
+  /**
+   * Constructor of the Snake Game itself
+   * @param gridX the x-coordinate of the center of the grid
+   * @param gridY the y-coordinate of the center of the grid
+   * @param grid the grid used by the game
+   * @param segmentSize the size of the snake segments
+   * @param type whether it is single player or multiplayer
+   */
   constructor(gridX, gridY, grid, segmentSize, type) {
     this.cellSize = segmentSize;
     this.type = type;
@@ -10,7 +21,12 @@ class Snake {
     this.bodyImage = null;
     this.score = 0;
   }
-
+  /**
+   * Returns whether a collision has occurred at a specific point on its grid
+   * @param gridX the x-coordinate to check
+   * @param gridY the y-coordinate to check
+   * @returns {boolean}
+   */
   isCollision(gridX, gridY) {
     let current = this.snakeHead;
     while (current) {
