@@ -1,4 +1,4 @@
-let CNB_GRID_NUM = 10;
+let CNB_GRID_NUM = 9;
 let CNB_GRID_SIZE = 80;
 
 
@@ -9,14 +9,17 @@ class CnbGame extends Game{
 
 
         this.grid = new CnbGrid(GRID_NUMBER, GRID_NUMBER);
-        this.cops = new SpriteGroup();//TODO
 
-        this.robber = new Robber();
+        this.cops = new SpriteGroup();
+        this.cops.add(new Cop(7,1,CNB_GRID_SIZE));
+
+        this.robbers = new SpriteGroup();
+        this.robbers.add(new Robber(1,1,CNB_GRID_SIZE));
 
         addEventListener('keydown', event => this.onKeyDown(event));
         this.addContent('images', 'cnb/json/cnb-elements.json');
 
-        this.currentLevel = 1; // 0 and 1
+        this.currentLevel = 4; // 0 and 1
         this.maximumLevel = 4;
         this.condition = [500, 1500, 3000, 5000];//condition for go to next level
 
@@ -25,14 +28,14 @@ class CnbGame extends Game{
 
         this.spriteLayer.addDrawable(this.grid);
         this.spriteLayer.addDrawable(this.cops);
-
+        this.spriteLayer.addDrawable(this.robbers);
 
         this.scoreDisplay1 = new TextDisplay(GRID_SIZE, this.canvas.height -
             18 * 2, this.canvas.width - GRID_SIZE / 2);
         this.scoreDisplay1.fontSize = 14;
         this.scoreDisplay1.fontName = 'Courier';
         this.scoreDisplay1.fontColor = '#fff';
-        this.scoreDisplay1.text = `Score 1: ${0}`;
+        this.scoreDisplay1.text = `Score : ${this.robbers.getSpriteByIndex(0).getScore()}`;
         this.overlayLayer.addDrawable(this.scoreDisplay1);
 
         this.highScoreDisplay = new TextDisplay(this.canvas.width /
@@ -45,6 +48,12 @@ class CnbGame extends Game{
 
         this.highScoreDisplay.text = `High Score: ${0}`;
         this.overlayLayer.addDrawable(this.highScoreDisplay);
+
+        this.gameOver = new TextDisplay(GRID_SIZE * 2, GRID_SIZE * 2,
+            this.canvas.width);
+        this.gameOver.fontName = 'Courier';
+        this.gameOver.fontSize = 32;
+        this.gameOver.fontColor = '#fff';
 
         this.gameOver = new TextDisplay(GRID_SIZE * 2, GRID_SIZE * 2,
             this.canvas.width);
@@ -87,11 +96,16 @@ class CnbGame extends Game{
                         case 5://down
                             this.grid.addTile(x, y, 'down');
                             break;
+                        case 6://treasure
+                            this.grid.addTile(x, y, 'treasure');
+                            break;
                         default:
                             break;
                     }
                 }
             }
+
+
         //}
     }
 
@@ -105,6 +119,7 @@ class CnbGame extends Game{
                     imageManager.addImage('wall-1', data['images'].walls[1]);
                     imageManager.addImage('wall-2', data['images'].walls[2]);
                     imageManager.addImage('wall-3', data['images'].walls[3]);
+                    imageManager.addImage('treasure', data['images'].treasure);
                     imageManager.addImage('down', data['images'].down);
                     imageManager.addImage('left', data['images'].left);
                     imageManager.addImage('right', data['images'].right);
@@ -121,17 +136,27 @@ class CnbGame extends Game{
         'use strict';
         switch (event.keyCode) {
             case 37: // Left
-                this.worm1.direction = Direction.LEFT;
+                this.robbers.getSpriteByIndex(0).direction = Direction.LEFT;
                 break;
             case 38: // Up
-                this.worm1.direction = Direction.UP;
+                this.robbers.getSpriteByIndex(0).direction = Direction.UP;
                 break;
             case 39: // Right
-                this.worm1.direction = Direction.RIGHT;
+                this.robbers.getSpriteByIndex(0).direction = Direction.RIGHT;
                 break;
             case 40: // Down
-                this.worm1.direction = Direction.DOWN;
+                this.robbers.getSpriteByIndex(0).direction = Direction.DOWN;
                 break;
+        }
+
+    }
+
+    update(){
+        super.update();
+        this.robbers.getSpriteByIndex(0).update(this.map.getMap(this.currentLevel), this.grid);
+        if (this.robbers.getSpriteByIndex(0).gameOver){
+            this.gameOver.text = 'Game Over';
+            this.overlayLayer.addDrawable(this.gameOver);
         }
 
     }
