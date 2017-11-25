@@ -11,23 +11,25 @@ class CnbGame extends Game{
         this.grid = new CnbGrid(GRID_NUMBER, GRID_NUMBER);
 
         this.cops = new SpriteGroup();
-        this.cops.add(new Cop(7,1,CNB_GRID_SIZE));
+        this.cops.add(new Cop(7,1,CNB_GRID_SIZE, this.grid));
 
         this.robbers = new SpriteGroup();
         this.robbers.add(new Robber(1,1,CNB_GRID_SIZE));
+        this.key = Direction.STAY;
 
         addEventListener('keydown', event => this.onKeyDown(event));
         this.addContent('images', 'cnb/json/cnb-elements.json');
 
+        this.map = new MapReader("cnb/json/cnb-maps.json");
         this.currentLevel = 4; // 0 and 1
-        this.maximumLevel = 4;
+        this.maximumLevel = this.map.getMapLength();
         this.condition = [500, 1500, 3000, 5000];//condition for go to next level
 
         this.canvas.width = CNB_GRID_NUM * CNB_GRID_SIZE;
         this.canvas.height = CNB_GRID_NUM * CNB_GRID_SIZE;
 
         this.spriteLayer.addDrawable(this.grid);
-        this.spriteLayer.addDrawable(this.cops);
+        //this.spriteLayer.addDrawable(this.cops);//draw in grid
         this.spriteLayer.addDrawable(this.robbers);
 
         this.scoreDisplay1 = new TextDisplay(GRID_SIZE, this.canvas.height -
@@ -45,7 +47,6 @@ class CnbGame extends Game{
         this.highScoreDisplay.fontName = 'Courier';
         this.highScoreDisplay.fontColor = '#fff';
 
-
         this.highScoreDisplay.text = `High Score: ${0}`;
         this.overlayLayer.addDrawable(this.highScoreDisplay);
 
@@ -61,7 +62,7 @@ class CnbGame extends Game{
         this.gameOver.fontSize = 32;
         this.gameOver.fontColor = '#fff';
 
-        this.map = new MapReader("cnb/json/cnb-maps.json");
+
 
         this.loadContent()
             .then(() => {
