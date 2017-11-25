@@ -2,7 +2,7 @@ class Wall extends Sprite {
   constructor(gridX, gridY, grid, size, variant) {
     super();
     this.bounds = new RectangleBounds();
-    this.bounds.setPosition(gridX * GRID_SIZE, gridY * GRID_SIZE);
+    this.bounds.setPosition(gridX * size, gridY * size);
     this.image = new ImageComponent();
     this.image.bounds = this.bounds;
     this.bounds.setSize(size, size);

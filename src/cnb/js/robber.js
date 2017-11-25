@@ -7,6 +7,7 @@ class Robber extends Sprite{
         this.bounds.setSize(GRID_SIZE, GRID_SIZE);
         this.image = new ImageComponent();
         this.image.bounds = this.bounds;
+        this.score = 0;
 
         this.setPosition(gridX, gridY);
         this.grid = grid;

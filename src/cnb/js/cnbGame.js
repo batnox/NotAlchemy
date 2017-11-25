@@ -1,5 +1,5 @@
 let CNB_GRID_NUM = 10;
-let CNB_GRID_SIZE = 50;
+let CNB_GRID_SIZE = 80;
 
 
 class CnbGame extends Game{
@@ -14,9 +14,9 @@ class CnbGame extends Game{
         this.robber = new Robber();
 
         addEventListener('keydown', event => this.onKeyDown(event));
-        this.addContent('images', 'cnb/json/cnb_elements.json');
+        this.addContent('images', 'cnb/json/cnb-elements.json');
 
-        this.currentLevel = 0; // 0 and 1
+        this.currentLevel = 1; // 0 and 1
         this.maximumLevel = 4;
         this.condition = [500, 1500, 3000, 5000];//condition for go to next level
 
@@ -32,20 +32,18 @@ class CnbGame extends Game{
         this.scoreDisplay1.fontSize = 14;
         this.scoreDisplay1.fontName = 'Courier';
         this.scoreDisplay1.fontColor = '#fff';
-        this.scoreDisplay1.text = `Score 1: ${this.worm1.getScore()}`;
+        this.scoreDisplay1.text = `Score 1: ${0}`;
         this.overlayLayer.addDrawable(this.scoreDisplay1);
 
         this.highScoreDisplay = new TextDisplay(this.canvas.width /
             2, this.canvas.height -
-            18, this.canvas.width / 2 - GRID_SIZE);
+            18 * 2, this.canvas.width / 2 - GRID_SIZE);
         this.highScoreDisplay.fontSize = 14;
         this.highScoreDisplay.fontName = 'Courier';
         this.highScoreDisplay.fontColor = '#fff';
 
 
-        let highScore = this.worm1.getScore();
-
-        this.highScoreDisplay.text = `High Score: ${highScore}`;
+        this.highScoreDisplay.text = `High Score: ${0}`;
         this.overlayLayer.addDrawable(this.highScoreDisplay);
 
         this.gameOver = new TextDisplay(GRID_SIZE * 2, GRID_SIZE * 2,
@@ -53,6 +51,8 @@ class CnbGame extends Game{
         this.gameOver.fontName = 'Courier';
         this.gameOver.fontSize = 32;
         this.gameOver.fontColor = '#fff';
+
+        this.map = new MapReader("cnb/json/cnb-maps.json");
 
         this.loadContent()
             .then(() => {
@@ -62,11 +62,11 @@ class CnbGame extends Game{
     }
 
     buildMap(){
-        let tmpMap = new MapReader("cnb/json/cnb-maps.json");
+        //let tmpMap = new MapReader("cnb/json/cnb-maps.json");
         //this.level = [];
 
-        for (let i = 0; i < tmpMap.getMapLength(); i++){
-            let m = tmpMap.getMap(i);
+        //for (let i = 0; i < tmpMap.getMapLength(); i++){
+            let m = this.map.getMap(this.currentLevel);
             //let tmpGrid = new Grid(CNB_GRID_NUM, CNB_GRID_NUM);
             for (let x = 0; x < m.length; x++){
                 for (let y = 0; y < m[x].length; y++){
@@ -92,7 +92,7 @@ class CnbGame extends Game{
                     }
                 }
             }
-        }
+        //}
     }
 
     loadContent() {
