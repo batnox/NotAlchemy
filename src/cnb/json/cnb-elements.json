@@ -1,0 +1,15 @@
+{
+  "cop": "cnb/assets/Cop.png",
+  "robber": "cnb/assets/Robber.png",
+  "walls": [
+    "cnb/assets/stonewall1.png",
+    "cnb/assets/stonewall2.png",
+    "cnb/assets/stonewall3.png",
+    "cnb/assets/stonewall4.png"
+  ],
+  "treasure": "cnb/assets/treasure.png",
+  "down": "cnb/assets/down.png",
+  "left": "cnb/assets/left.png",
+  "right": "cnb/assets/right.png",
+  "up": "cnb/assets/up.png"
+}
