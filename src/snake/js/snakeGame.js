@@ -1,8 +1,8 @@
 let GRID_NUMBER = 30;
 let GRID_SIZE = 30;
 let SCORE_PER_FOOD = 500;
-let TICKS_PER_SECOND = 6;
-let FOOD_LIFE = 10 * TICKS_PER_SECOND;
+let TICKS_PER_SECOND = 3;
+let FOOD_LIFE = 10 * (2 / TICKS_PER_SECOND);
 
 const socket = io();
 
@@ -15,14 +15,42 @@ class SnakeGame extends Game {
     this.clientReady = false;
 
     if (this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
+      this.sendUpdate = setInterval(() => {
+        let msg = 'UPDATE';
+
+        msg += '_';
+        let current = this.worm2.snakeHead;
+        while (current) {
+          msg += `${current.gridX}.${current.gridY}.${current.direction}`;
+          current = current.nextCell;
+          if (current) {
+            msg += '-';
+          }
+        }
+
+        msg += '_';
+        current = this.worm1.snakeHead;
+        while (current) {
+          msg += `${current.gridX}.${current.gridY}.${current.direction}`;
+          current = current.nextCell;
+          if (current) {
+            msg += '-';
+          }
+        }
+
+        socket.emit('message', msg);
+      }, 1000);
+
       socket.on('message', (msg) => {
         console.log(`Server: ${msg}`);
         switch (msg) {
           case 'START_GAME_0':
+            this.mainClient = true;
             this.serverReady = true;
             this.checkStart();
             break;
           case 'START_GAME_1':
+            this.mainClient = false;
             this.worm1.setPosition(6, 6);
             this.worm2.setPosition(3, 3);
             this.serverReady = true;
@@ -40,6 +68,49 @@ class SnakeGame extends Game {
           case 'RIGHT':
             this.worm2.direction = Direction.RIGHT;
             break;
+          case 'LEVEL':
+            this.newLevel();
+            break;
+          default:
+            let tokens = msg.split('_');
+            if (tokens.length < 1) {
+              throw Error('Invalid message.')
+            }
+            if (tokens[0] === 'UPDATE' && !this.mainClient) {
+              let snakeToken1 = tokens[1].split('-');
+              let c = this.worm1.snakeHead;
+              for (let cellToken of snakeToken1) {
+                if (!c) {
+                  c = this.worm1.addLink();
+                }
+                let cellTokens = cellToken.split('.');
+                let x = cellTokens[0];
+                let y = cellTokens[1];
+                let dir = cellTokens[2];
+
+                c.setPosition(x, y);
+                c.direction = dir;
+                c = c.nextCell;
+              }
+
+              let snakeToken2 = tokens[2].split('-');
+              c = this.worm2.snakeHead;
+              for (let cellToken of snakeToken2) {
+                if (!c) {
+                  c = this.worm1.addLink();
+                }
+                let cellTokens = cellToken.split('.');
+                let x = cellTokens[0];
+                let y = cellTokens[1];
+                let dir = cellTokens[2];
+
+                c.setPosition(Number.parseInt(x), Number.parseInt(y));
+                c.direction = dir;
+                c = c.nextCell;
+              }
+            } else if (tokens[0] === 'FOOD') {
+              this.grid.addFood(Number.parseInt(tokens[1]), Number.parseInt(tokens[2]));
+            }
         }
       });
 
@@ -147,6 +218,11 @@ class SnakeGame extends Game {
       });
   }
 
+  stop() {
+    super.stop();
+    clearInterval(this.sendUpdate);
+  }
+
   checkStart() {
     if (this.clientReady && this.serverReady) {
       this.layers[2].drawLayer = false;
@@ -168,6 +244,13 @@ class SnakeGame extends Game {
       this.worm2.killBody();
       this.worm2.setPosition(10, 10);
       this.worm2.direction = Direction.LEFT;
+
+      if (this.mainClient) {
+        this.worm1.setPosition(10, 10);
+        this.worm1.direction = Direction.LEFT;
+        this.worm2.setPosition(3, 3);
+        this.worm2.direction = Direction.RIGHT;
+      }
     }
 
     this.currentLevel++;
@@ -221,6 +304,7 @@ class SnakeGame extends Game {
     this.grid.removeFood(deadFood.gridX, deadFood.gridY);
     let position = this.emptyCheck();
     this.grid.addFood(position[0], position[1]);
+    socket.emit('message', `FOOD_${position[0]}_${position[1]}`);
   }
 
   emptyCheck() {
@@ -358,6 +442,7 @@ class SnakeGame extends Game {
         this.replaceFood(food);
         if (this.currentLevel < this.maximumLevel &&
           worm.score >= this.condition[this.currentLevel]) {
+          socket.emit('message', 'LEVEL');
           this.newLevel();
         }
       } else if (wall || bodyCollision || otherSnakeCollision) {
@@ -370,6 +455,7 @@ class SnakeGame extends Game {
     } else if (!this.gameOver.text) {
       this.gameOver.text = 'Game Over';
       this.overlayLayer.addDrawable(this.gameOver);
+      clearInterval(this.sendUpdate);
     }
   }
 
