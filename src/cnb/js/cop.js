@@ -1,25 +1,14 @@
 class Cop extends Sprite{
-    constructor(gridX, gridY, size, grid) {
+    constructor(gridX, gridY, size, grid, map) {
         super();
-        /*
-        this.size = size;
-        this.bounds = new RectangleBounds();
-        this.bounds.setPosition(gridX * this.size, gridY * this.size);
-        this.bounds.setSize(this.size, this.size);
-        this.image = new ImageComponent();
-        this.image.bounds = this.bounds;
-        this.image.setImage('cop');
-        this.score = 0;
-        this.points = 500;
-        this.setPosition(gridX, gridY);
-        this.grid = grid;
-        */
         this.grid = grid;
         this.grid.addTile(gridX, gridY, 'cop');
-        //this.nextCell = null;
-        this.direction = null;
-        //this.gameOver = false;
-        console.log("create cop");
+        this.direction = Direction.LEFT;
+        this.gridX = gridX;
+        this.gridY = gridY;
+        this.size = size;
+        this.wander = true;
+        this.map = map;
     }
 
     draw(context) {
@@ -27,9 +16,61 @@ class Cop extends Sprite{
     }
 
     setPosition(x, y) {
-        this.gridX = x;
-        this.gridY = y;
-        this.bounds.setPosition(x * this.size, y * this.size);
+        this.grid.addTile(this.gridX, this.gridY, 'cop');
+        console.log(x + " " + y);
     }
+
+    update(){
+        super.update();
+        if (this.wander){
+            this.getNext();
+            this.moveTo(this.gridX, this.gridY);
+        }
+    }
+
+    getNext(){
+        let neighbor = this.getNeighbor();
+        this.direction = neighbor[Math.floor(Math.random() * neighbor.length)];
+        this.moveTo(this.direction);
+    }
+
+    getNeighbor(){
+        let neighbor = [];
+        if (this.gridX -1 > 0 && this.map[this.gridX-1][this.gridY] != 1 ){
+            neighbor.push(Direction.LEFT);
+        }
+        if (this.gridX +1 < this.map[0].length && this.map[this.gridX+1][this.gridY] != 1 ){
+            neighbor.push(Direction.RIGHT);
+        }
+        if (this.gridY -1 > 0 && this.map[this.gridX][this.gridY-1] != 1 ){
+            neighbor.push(Direction.UP);
+        }
+        if (this.gridY +1 < this.map.length && this.map[this.gridX][this.gridY+1] != 1 ){
+            neighbor.push(Direction.DOWN);
+        }
+        return neighbor;
+    }
+
+    moveTo(dir){
+        this.grid.removeTile(this.gridX, this.gridY);
+        switch (dir) {
+            case Direction.LEFT:
+                this.gridX-=1;
+                break;
+            case Direction.RIGHT:
+                this.gridX+=1;
+                break;
+            case Direction.UP:
+                this.gridY-=1;
+                break;
+            case Direction.DOWN:
+                this.gridY+=1;
+                break;
+        }
+        this.setPosition(this.gridX, this.gridY);
+        this.direction = null;
+    }
+
+
 
 }

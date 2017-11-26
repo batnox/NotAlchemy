@@ -3,6 +3,5 @@ const Direction = Object.freeze({
   DOWN:  Symbol("down"),
   LEFT:  Symbol("left"),
   RIGHT: Symbol("right"),
-  STAY: Symbol("stay")
 
 });
