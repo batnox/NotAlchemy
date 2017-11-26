@@ -12,7 +12,7 @@ class CnbGame extends Game{
         this.currentLevel = 0; // 0 and 1
         this.maximumLevel = this.map.getMapLength()-1;
 
-        this.robbers = new Robber(1, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'robber');
+        this.robbers = new Robber(1, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'robber', this.grid);
 
         this.cops = [];
         this.cops.push(new Cop(7, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop'));
@@ -208,7 +208,7 @@ class CnbGame extends Game{
         this.currentLevel++;
         this.buildMap();
 
-        this.robbers = new Robber(1, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'robber');
+        this.robbers = new Robber(1, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'robber', this.grid);
 
         this.cops = [];
         this.cops.push(new Cop(7, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop'));

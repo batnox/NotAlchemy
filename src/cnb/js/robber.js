@@ -7,10 +7,11 @@ const RobberState = Object.freeze({
 });
 
 class Robber extends Character {
-    constructor(gridX, gridY, size, map, image){
-        super(gridX, gridY, size, map, image);
+    constructor(gridX, gridY, size, map, image, grid){
+        super(gridX, gridY, size, map, image, grid);
         this.getTreasure = false;
         this.state = RobberState.THINKING;
+        this.grid = grid;
     }
 
     getState(){
@@ -21,6 +22,7 @@ class Robber extends Character {
         if ( this.getTreasure === false && this.map[this.gridX][this.gridY] === 6){
             this.map[this.gridX][this.gridY] = 0;
             this.getTreasure = true;
+            this.grid.getTile(this.gridX, this.gridY).clear();
         }
 
         let neighbor = this.availableNext(opponent);
