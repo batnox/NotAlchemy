@@ -7,30 +7,29 @@ class CnbGame extends Game{
         super();
         this.TICK_PER_SECOND = TICKS_PER_SECOND;
 
-
         this.grid = new CnbGrid(GRID_NUMBER, GRID_NUMBER);
 
-        this.cops = new SpriteGroup();
-        this.cops.add(new Cop(7,1,CNB_GRID_SIZE, this.grid));
+        this.map = new MapReader("cnb/json/cnb-maps.json");
+        this.currentLevel = 0; // 0 and 1
+        this.maximumLevel = this.map.getMapLength();
+        this.condition = [500, 500, 500, 500];//condition for go to next level
 
         this.robbers = new SpriteGroup();
-        this.robbers.add(new Robber(1,1,CNB_GRID_SIZE));
-        this.key = Direction.STAY;
+        this.robbers.add(new Robber(1,1,CNB_GRID_SIZE, this.map.getMap(this.currentLevel)));
+
+        this.cops = new SpriteGroup();
+        this.cops.add(new Cop(7,1,CNB_GRID_SIZE, this.grid, this.map.getMap(this.currentLevel)));
+        this.copsMove = false;
 
         addEventListener('keydown', event => this.onKeyDown(event));
         this.addContent('images', 'cnb/json/cnb-elements.json');
-
-        this.map = new MapReader("cnb/json/cnb-maps.json");
-        this.currentLevel = 4; // 0 and 1
-        this.maximumLevel = this.map.getMapLength();
-        this.condition = [500, 1500, 3000, 5000];//condition for go to next level
 
         this.canvas.width = CNB_GRID_NUM * CNB_GRID_SIZE;
         this.canvas.height = CNB_GRID_NUM * CNB_GRID_SIZE;
 
         this.spriteLayer.addDrawable(this.grid);
-        //this.spriteLayer.addDrawable(this.cops);//draw in grid
         this.spriteLayer.addDrawable(this.robbers);
+        //this.spriteLayer.addDrawable(this.cops);//draw in grid
 
         this.scoreDisplay1 = new TextDisplay(GRID_SIZE, this.canvas.height -
             18 * 2, this.canvas.width - GRID_SIZE / 2);
@@ -72,10 +71,6 @@ class CnbGame extends Game{
     }
 
     buildMap(){
-        //let tmpMap = new MapReader("cnb/json/cnb-maps.json");
-        //this.level = [];
-
-        //for (let i = 0; i < tmpMap.getMapLength(); i++){
             let m = this.map.getMap(this.currentLevel);
             //let tmpGrid = new Grid(CNB_GRID_NUM, CNB_GRID_NUM);
             for (let x = 0; x < m.length; x++){
@@ -105,9 +100,6 @@ class CnbGame extends Game{
                     }
                 }
             }
-
-
-        //}
     }
 
     loadContent() {
@@ -138,15 +130,19 @@ class CnbGame extends Game{
         switch (event.keyCode) {
             case 37: // Left
                 this.robbers.getSpriteByIndex(0).direction = Direction.LEFT;
+                this.copsMove = true;
                 break;
             case 38: // Up
                 this.robbers.getSpriteByIndex(0).direction = Direction.UP;
+                this.copsMove = true;
                 break;
             case 39: // Right
                 this.robbers.getSpriteByIndex(0).direction = Direction.RIGHT;
+                this.copsMove = true;
                 break;
             case 40: // Down
                 this.robbers.getSpriteByIndex(0).direction = Direction.DOWN;
+                this.copsMove = true;
                 break;
         }
 
@@ -154,11 +150,42 @@ class CnbGame extends Game{
 
     update(){
         super.update();
-        this.robbers.getSpriteByIndex(0).update(this.map.getMap(this.currentLevel), this.grid);
+        this.robbers.getSpriteByIndex(0).update( this.grid);
         if (this.robbers.getSpriteByIndex(0).gameOver){
             this.gameOver.text = 'Game Over';
             this.overlayLayer.addDrawable(this.gameOver);
         }
+        else if (this.robbers.getSpriteByIndex(0).getScore() >= this.condition[this.currentLevel]
+            && this.currentLevel < this.maximumLevel){
+            this.nextLevel();
+        }
+
+        if (this.copsMove){
+            for(let i = 0; i < this.cops.size(); i++){
+                let cop = this.cops.getSpriteByIndex(i);
+                cop.update();
+            }
+            this.copsMove = false;
+        }
+
+    }
+
+    nextLevel(){
+        this.grid.clear();
+        this.robbers.clear();
+        this.grid = new CnbGrid(GRID_NUMBER, GRID_NUMBER);
+
+        this.currentLevel++;
+
+        this.robbers = new SpriteGroup();
+        this.robbers.add(new Robber(1,1,CNB_GRID_SIZE, this.map.getMap(this.currentLevel)));
+
+        this.cops = new SpriteGroup();
+        this.cops.add(new Cop(7,1,CNB_GRID_SIZE, this.grid, this.map.getMap(this.currentLevel)));
+
+        this.spriteLayer.addDrawable(this.grid);
+        this.spriteLayer.addDrawable(this.robbers);
+        this.buildMap();
 
     }
 

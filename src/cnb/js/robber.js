@@ -1,5 +1,5 @@
 class Robber extends Sprite {
-    constructor(gridX, gridY, size) {
+    constructor(gridX, gridY, size, map) {
         super();
         this.size = size;
         this.bounds = new RectangleBounds();
@@ -15,29 +15,27 @@ class Robber extends Sprite {
         this.nextCell = null;
         this.direction = null;
         this.gameOver = false;
+        this.map = map;
     }
 
     getScore(){
         return this.score;
     }
 
-    update(map, grid) {
-        if (map[this.gridX][this.gridY] === 6){
+    update(grid) {
+        if (this.map[this.gridX][this.gridY] === 6){
             this.score += this.points;
-            map[this.gridX][this.gridY] = 0;
+            this.map[this.gridX][this.gridY] = 0;
             grid.removeTile(this.gridX, this.gridY);
             console.log(this.getScore());
         }
-        let newX = this.gridX, newY = this.gridY;
 
-        let neighbor = this.getNeighbor(this.gridX, this.gridY, map, grid);
-        if (neighbor.length == 0){
+        let neighbor = this.getNeighbor(this.gridX, this.gridY, grid);
+        if (neighbor.length === 0){
             this.gameOver = true;
         }
-        else{
-            if (neighbor.indexOf(this.direction) >=0){
-                this.moveTo(this.direction);
-            }
+        else if (neighbor.indexOf(this.direction) >=0) {
+            this.moveTo(this.direction);
         }
         /*
         switch (this.direction) {
@@ -96,18 +94,18 @@ class Robber extends Sprite {
 
     }
 
-    getNeighbor(x, y, map, grid){
+    getNeighbor(x, y, grid){
         let neighbor = [];
-        if (x-1 > 0 && (map[x-1][y] === 0 || map[x-1][y] === 6 || map[x-1][y] === 2) ){
+        if (x-1 > 0 && (this.map[x-1][y] === 0 || this.map[x-1][y] === 6 || this.map[x-1][y] === 2) ){
             let sprites = grid.getTile(x-1, y).getSprites();
             if (sprites.length <= 0)
                 neighbor.push(Direction.LEFT);
-            else if (sprites[0]&&sprites[0].image.name!== 'cop')
+            else if (sprites[0]&& sprites[0].image.name!== 'cop')
                 neighbor.push(Direction.LEFT);
             else if (!sprites[0])
                 neighbor.push(Direction.LEFT);
         }
-        if (x+1 < map[0].length && (map[x+1][y] === 0 || map[x+1][y] === 6 || map[x+1][y] === 4)) {
+        if (x+1 < this.map[0].length && (this.map[x+1][y] === 0 || this.map[x+1][y] === 6 || this.map[x+1][y] === 4)) {
             let sprites = grid.getTile(x + 1, y).getSprites();
             if (sprites.length <= 0)
                 neighbor.push(Direction.RIGHT);
@@ -119,7 +117,7 @@ class Robber extends Sprite {
 
 
 
-        if (y-1 > 0 && (map[x][y-1] === 0 || map[x][y-1] === 6 || map[x][y-1] === 3)){
+        if (y-1 > 0 && (this.map[x][y-1] === 0 || this.map[x][y-1] === 6 || this.map[x][y-1] === 3)){
             let sprites = grid.getTile(x, y-1).getSprites();
             if (sprites.length <= 0)
                 neighbor.push(Direction.UP);
@@ -128,7 +126,7 @@ class Robber extends Sprite {
             else if (!sprites[0])
                 neighbor.push(Direction.UP);
         }
-        if (y+1 < map.length && (map[x][y+1] === 0 || map[x][y+1] === 6 || map[x][y+1] === 5)){
+        if (y+1 < this.map.length && (this.map[x][y+1] === 0 || this.map[x][y+1] === 6 || this.map[x][y+1] === 5)){
             let sprites = grid.getTile(x, y+1).getSprites();
             if (sprites.length <= 0)
                 neighbor.push(Direction.DOWN);
