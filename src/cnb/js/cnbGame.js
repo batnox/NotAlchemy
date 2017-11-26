@@ -92,6 +92,8 @@ class CnbGame extends Game{
                         case 6://treasure
                             this.grid.addTile(x, y, 'treasure');
                             break;
+                        case 7://out
+                            this.grid.addTile(x, y, 'out');
                         default:
                             break;
                     }
@@ -114,6 +116,7 @@ class CnbGame extends Game{
                     imageManager.addImage('left', data['images'].left);
                     imageManager.addImage('right', data['images'].right);
                     imageManager.addImage('up', data['images'].up);
+                    imageManager.addImage('out', data['images'].out);
                     resolve();
                 });
         });
@@ -137,7 +140,7 @@ class CnbGame extends Game{
             case 40: // Down
                 this.robbers.direction = Direction.DOWN;
                 break;
-            case 78:
+            case 78:// N --> quick level check
                 if (this.currentLevel < this.maximumLevel)
                     this.nextLevel();
                 else{
@@ -170,6 +173,8 @@ class CnbGame extends Game{
                 for (let cop of this.cops){
                     let a = [];
                     a.push(this.robbers);
+                    a.push(this.cops[0]);
+                    a.push(this.cops[1]);
                     cop.update(a);
                 }
 

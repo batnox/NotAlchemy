@@ -37,17 +37,6 @@ class Robber extends Character {
         else {
             this.state = RobberState.THINKING;
         }
-
-        /*
-        let neighbor = this.getNeighbor(this.gridX, this.gridY, grid);
-        if (neighbor.length === 0){
-            this.gameOver = true;
-        }
-        else if (neighbor.indexOf(this.direction) >=0) {
-            this.moveTo(this.direction);
-        }
-        this.setPosition(this.gridX, this.gridY);
-        */
     }
 
 }

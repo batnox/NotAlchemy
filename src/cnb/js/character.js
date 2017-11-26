@@ -44,9 +44,9 @@ class Character extends Sprite{
     }
 
     availableNext(opponent){
-        let neighbor = []
+        let neighbor = [];
         //LEFT
-        if (this.gridX-1 > 0 && (this.map[this.gridX-1][this.gridY] === 0 || this.map[this.gridX-1][this.gridY] === 6 || this.map[this.gridX-1][this.gridY] === 2) ){
+        if (this.gridX-1 > 0 && (this.map[this.gridX-1][this.gridY] === 0 || this.map[this.gridX-1][this.gridY] === 6 || this.map[this.gridX-1][this.gridY] === 2 || this.map[this.gridX-1][this.gridY] === 7) ){
             let overlap = false;
             for (let op of opponent) {
                 if (op.bounds.contains((this.gridX - 1)*this.size, this.gridY*this.size))
@@ -56,7 +56,7 @@ class Character extends Sprite{
                 neighbor.push(Direction.LEFT);
         }
         //RIGHT
-        if (this.gridX+1 < this.map[0].length && (this.map[this.gridX+1][this.gridY] === 0 || this.map[this.gridX+1][this.gridY] === 6 || this.map[this.gridX+1][this.gridY] === 4)) {
+        if (this.gridX+1 < this.map[0].length && (this.map[this.gridX+1][this.gridY] === 0 || this.map[this.gridX+1][this.gridY] === 6 || this.map[this.gridX+1][this.gridY] === 4 || this.map[this.gridX+1][this.gridY] === 7)) {
             let overlap = false;
             for (let op of opponent) {
                 if (op.bounds.contains((this.gridX + 1)*this.size, this.gridY*this.size))
@@ -66,7 +66,7 @@ class Character extends Sprite{
                 neighbor.push(Direction.RIGHT);
         }
         //UP
-        if (this.gridY-1 > 0 && (this.map[this.gridX][this.gridY-1] === 0 || this.map[this.gridX][this.gridY-1] === 6 || this.map[this.gridX][this.gridY-1] === 3)){
+        if (this.gridY-1 > 0 && (this.map[this.gridX][this.gridY-1] === 0 || this.map[this.gridX][this.gridY-1] === 6 || this.map[this.gridX][this.gridY-1] === 3 || this.map[this.gridX][this.gridY-1] === 7)){
             let overlap = false;
             for (let op of opponent) {
                 if (op.bounds.contains(this.gridX*this.size, (this.gridY - 1)*this.size))
@@ -76,7 +76,7 @@ class Character extends Sprite{
                 neighbor.push(Direction.UP);
         }
         //DOWN
-        if (this.gridY+1 < this.map.length && (this.map[this.gridX][this.gridY+1] === 0 || this.map[this.gridX][this.gridY+1] === 6 || this.map[this.gridX][this.gridY+1] === 5)){
+        if (this.gridY+1 < this.map.length && (this.map[this.gridX][this.gridY+1] === 0 || this.map[this.gridX][this.gridY+1] === 6 || this.map[this.gridX][this.gridY+1] === 5 || this.map[this.gridX][this.gridY+1] === 7)){
             let overlap = false;
             for (let op of opponent) {
                 if (op.bounds.contains(this.gridX*this.size, (this.gridY + 1)*this.size))

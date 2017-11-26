@@ -11,5 +11,6 @@
   "down": "cnb/assets/down.png",
   "left": "cnb/assets/left.png",
   "right": "cnb/assets/right.png",
-  "up": "cnb/assets/up.png"
+  "up": "cnb/assets/up.png",
+  "out": "cnb/assets/out.png"
 }
