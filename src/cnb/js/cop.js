@@ -1,28 +1,31 @@
-class Cop extends Character{
-    constructor(gridX, gridY, size, map, image, grid, robber) {
-        super(gridX, gridY, size, map, image, grid, robber);
-        this.robber = robber;
-        this.wander = false;
-    }
+class Cop extends Character {
+  constructor(gridX, gridY, size, map, image, grid, robber) {
+    super(gridX, gridY, size, map, image, grid, robber);
+    this.robber = robber;
+    this.wander = false;
+  }
 
-    update(opponent){
-        if (this.wander){
-            let neighbor = this.availableNext(opponent);
-            if (neighbor.length > 0) {
-                this.direction = neighbor[Math.floor(Math.random() * neighbor.length)].direction;
-                this.moveTo(this.direction);
-            }
-        } else {
-            let path = this.Astar(this.gridX, this.gridY, this.grid.robber.gridX, this.grid.robber.gridY);
-            if (path) {
-                let next = path.nextTile;
-                if (next.x !== this.grid.robber.gridX || next.y !== this.grid.robber.gridY) {
-                  this.setPosition(next.x, next.y);
-                }
-            }
-            // If there is no path, wait for one to open
+  update(opponent) {
+    if (this.wander) {
+      let neighbor = this.availableNext(opponent);
+      if (neighbor.length > 0) {
+        this.direction = neighbor[Math.floor(Math.random() *
+          neighbor.length)].direction;
+        this.moveTo(this.direction);
+      }
+    } else {
+      let path = this.Astar(this.gridX, this.gridY, this.grid.robber.gridX,
+        this.grid.robber.gridY);
+      if (path) {
+        let next = path.nextTile;
+        if (next.x !== this.grid.robber.gridX ||
+          next.y !== this.grid.robber.gridY) {
+          this.setPosition(next.x, next.y);
         }
+      }
+      // If there is no path, wait for one to open
     }
+  }
 
   Astar(startX, startY, destX, destY) {
     let open = [];

@@ -10,16 +10,30 @@ class CnbGame extends Game {
     this.currentLevel = 0; // 0 and 1
     this.maximumLevel = this.map.getMapLength() - 1;
 
-    this.grid = new CnbGrid(GRID_NUMBER, GRID_NUMBER, this.map.getMap(this.currentLevel), this.robbers, this.cops);
-    this.robbers = new Robber(1, 1, CNB_GRID_SIZE,
-      this.map.getMap(this.currentLevel), 'robber', this.grid);
+    this.grid = new CnbGrid(
+      GRID_NUMBER, GRID_NUMBER,
+      this.map.getMap(this.currentLevel),
+      this.robbers, this.cops
+    );
+    this.robbers = new Robber(
+      1, 1, CNB_GRID_SIZE,
+      this.map.getMap(this.currentLevel), 'robber', this.grid
+    );
     this.grid.robber = this.robbers;
 
     this.cops = [];
     this.cops.push(
-      new Cop(7, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop', this.grid));
+      new Cop(
+        7, 1, CNB_GRID_SIZE,
+        this.map.getMap(this.currentLevel), 'cop', this.grid
+      )
+    );
     this.cops.push(
-      new Cop(7, 7, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop', this.grid));
+      new Cop(
+        7, 7, CNB_GRID_SIZE,
+        this.map.getMap(this.currentLevel), 'cop', this.grid
+      )
+    );
     this.grid.cops = this.cops;
 
     addEventListener('keydown', event => this.onKeyDown(event));
@@ -39,19 +53,8 @@ class CnbGame extends Game {
     this.scoreDisplay1.fontName = 'Courier';
     this.scoreDisplay1.fontColor = '#fff';
     this.scoreDisplay1.text = '1. Don\'t get caught  2. Get the treasure  3. Get out';
-    //this.scoreDisplay1.text = `Score : ${this.robbers.getSpriteByIndex(0).getScore()}`;
     this.overlayLayer.addDrawable(this.scoreDisplay1);
-    /*
-            this.highScoreDisplay = new TextDisplay(this.canvas.width /
-                2, this.canvas.height -
-                18 * 2, this.canvas.width / 2 - GRID_SIZE);
-            this.highScoreDisplay.fontSize = 14;
-            this.highScoreDisplay.fontName = 'Courier';
-            this.highScoreDisplay.fontColor = '#fff';
 
-            this.highScoreDisplay.text = `High Score: ${0}`;
-            this.overlayLayer.addDrawable(this.highScoreDisplay);
-    */
     this.gameOver = new TextDisplay(GRID_SIZE * 2, GRID_SIZE * 2,
       this.canvas.width);
     this.gameOver.fontName = 'Courier';
@@ -73,7 +76,6 @@ class CnbGame extends Game {
 
   buildMap() {
     let m = this.map.getMap(this.currentLevel);
-    //let tmpGrid = new Grid(CNB_GRID_NUM, CNB_GRID_NUM);
     for (let x = 0; x < m.length; x++) {
       for (let y = 0; y < m[x].length; y++) {
         switch (m[x][y]) {
@@ -183,26 +185,6 @@ class CnbGame extends Game {
         }
 
     }
-    /*
-    this.robbers.getSpriteByIndex(0).update( this.grid);
-    if (this.robbers.getSpriteByIndex(0).gameOver){
-        this.gameOver.text = 'Game Over';
-        this.overlayLayer.addDrawable(this.gameOver);
-    }
-    else if (this.robbers.getSpriteByIndex(0).getScore() >= this.condition[this.currentLevel]
-        && this.currentLevel < this.maximumLevel){
-        this.nextLevel();
-    }
-
-    if (this.copsMove){
-        for(let i = 0; i < this.cops.size(); i++){
-            let cop = this.cops.getSpriteByIndex(i);
-            cop.update();
-        }
-        this.copsMove = false;
-    }
-    */
-
   }
 
   nextLevel() {
@@ -211,7 +193,8 @@ class CnbGame extends Game {
     this.gameOver.text = '';
 
     this.currentLevel++;
-    this.grid = new CnbGrid(GRID_NUMBER, GRID_NUMBER, this.map.getMap(this.currentLevel), this.robbers, this.cops);
+    this.grid = new CnbGrid(GRID_NUMBER, GRID_NUMBER,
+      this.map.getMap(this.currentLevel), this.robbers, this.cops);
     this.buildMap();
 
     this.robbers = new Robber(1, 1, CNB_GRID_SIZE,
@@ -220,9 +203,17 @@ class CnbGame extends Game {
 
     this.cops = [];
     this.cops.push(
-      new Cop(7, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop', this.grid));
+      new Cop(
+        7, 1, CNB_GRID_SIZE,
+        this.map.getMap(this.currentLevel), 'cop', this.grid
+      )
+    );
     this.cops.push(
-      new Cop(7, 7, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop', this.grid));
+      new Cop(
+        7, 7, CNB_GRID_SIZE,
+        this.map.getMap(this.currentLevel), 'cop', this.grid
+      )
+    );
     this.grid.cops = this.cops;
 
     this.spriteLayer.addDrawable(this.grid);
