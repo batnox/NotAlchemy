@@ -2,7 +2,7 @@ let GRID_NUMBER = 30;
 let GRID_SIZE = 30;
 let SCORE_PER_FOOD = 500;
 let TICKS_PER_SECOND = 3;
-let FOOD_LIFE = 10 * (2 / TICKS_PER_SECOND);
+let FOOD_LIFE = 10 * (3 / TICKS_PER_SECOND);
 
 const socket = io();
 
@@ -70,6 +70,9 @@ class SnakeGame extends Game {
             break;
           case 'LEVEL':
             this.newLevel();
+            break;
+          case 'OVER':
+            this.gameOver();
             break;
           default:
             let tokens = msg.split('_');
@@ -453,10 +456,15 @@ class SnakeGame extends Game {
         }
       }
     } else if (!this.gameOver.text) {
-      this.gameOver.text = 'Game Over';
-      this.overlayLayer.addDrawable(this.gameOver);
-      clearInterval(this.sendUpdate);
+      socket.emit('message', 'OVER');
+      this.gameOver();
     }
+  }
+
+  gameOver() {
+    this.gameOver.text = 'Game Over';
+    this.overlayLayer.addDrawable(this.gameOver);
+    clearInterval(this.sendUpdate);
   }
 
   draw() {
