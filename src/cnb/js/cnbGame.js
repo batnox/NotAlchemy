@@ -1,7 +1,6 @@
 let CNB_GRID_NUM = 9;
 let CNB_GRID_SIZE = 80;
 
-
 class CnbGame extends Game{
     constructor(){
         super();
@@ -11,15 +10,13 @@ class CnbGame extends Game{
 
         this.map = new MapReader("cnb/json/cnb-maps.json");
         this.currentLevel = 0; // 0 and 1
-        this.maximumLevel = this.map.getMapLength();
-        this.condition = [500, 500, 500, 500];//condition for go to next level
+        this.maximumLevel = this.map.getMapLength()-1;
 
-        this.robbers = new SpriteGroup();
-        this.robbers.add(new Robber(1,1,CNB_GRID_SIZE, this.map.getMap(this.currentLevel)));
+        this.robbers = new Robber(1, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'robber');
 
-        this.cops = new SpriteGroup();
-        this.cops.add(new Cop(7,1,CNB_GRID_SIZE, this.grid, this.map.getMap(this.currentLevel)));
-        this.copsMove = false;
+        this.cops = [];
+        this.cops.push(new Cop(7, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop'));
+        this.cops.push(new Cop(7, 7, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop'));
 
         addEventListener('keydown', event => this.onKeyDown(event));
         this.addContent('images', 'cnb/json/cnb-elements.json');
@@ -29,16 +26,18 @@ class CnbGame extends Game{
 
         this.spriteLayer.addDrawable(this.grid);
         this.spriteLayer.addDrawable(this.robbers);
-        //this.spriteLayer.addDrawable(this.cops);//draw in grid
+        this.spriteLayer.addDrawable(this.cops[0]);
+        this.spriteLayer.addDrawable(this.cops[1]);
 
         this.scoreDisplay1 = new TextDisplay(GRID_SIZE, this.canvas.height -
             18 * 2, this.canvas.width - GRID_SIZE / 2);
-        this.scoreDisplay1.fontSize = 14;
+        this.scoreDisplay1.fontSize = 16;
         this.scoreDisplay1.fontName = 'Courier';
         this.scoreDisplay1.fontColor = '#fff';
-        this.scoreDisplay1.text = `Score : ${this.robbers.getSpriteByIndex(0).getScore()}`;
+        this.scoreDisplay1.text = "1. Don't get caught  2. Get the treasure  3. Get out";
+        //this.scoreDisplay1.text = `Score : ${this.robbers.getSpriteByIndex(0).getScore()}`;
         this.overlayLayer.addDrawable(this.scoreDisplay1);
-
+/*
         this.highScoreDisplay = new TextDisplay(this.canvas.width /
             2, this.canvas.height -
             18 * 2, this.canvas.width / 2 - GRID_SIZE);
@@ -48,7 +47,7 @@ class CnbGame extends Game{
 
         this.highScoreDisplay.text = `High Score: ${0}`;
         this.overlayLayer.addDrawable(this.highScoreDisplay);
-
+*/
         this.gameOver = new TextDisplay(GRID_SIZE * 2, GRID_SIZE * 2,
             this.canvas.width);
         this.gameOver.fontName = 'Courier';
@@ -60,8 +59,6 @@ class CnbGame extends Game{
         this.gameOver.fontName = 'Courier';
         this.gameOver.fontSize = 32;
         this.gameOver.fontColor = '#fff';
-
-
 
         this.loadContent()
             .then(() => {
@@ -129,27 +126,55 @@ class CnbGame extends Game{
         'use strict';
         switch (event.keyCode) {
             case 37: // Left
-                this.robbers.getSpriteByIndex(0).direction = Direction.LEFT;
-                this.copsMove = true;
+                this.robbers.direction = Direction.LEFT;
                 break;
             case 38: // Up
-                this.robbers.getSpriteByIndex(0).direction = Direction.UP;
-                this.copsMove = true;
+                this.robbers.direction = Direction.UP;
                 break;
             case 39: // Right
-                this.robbers.getSpriteByIndex(0).direction = Direction.RIGHT;
-                this.copsMove = true;
+                this.robbers.direction = Direction.RIGHT;
                 break;
             case 40: // Down
-                this.robbers.getSpriteByIndex(0).direction = Direction.DOWN;
-                this.copsMove = true;
+                this.robbers.direction = Direction.DOWN;
                 break;
+            case 78:
+                if (this.currentLevel < this.maximumLevel)
+                    this.nextLevel();
+                else{
+                    this.gameOver.text = 'You Win';
+                    this.overlayLayer.addDrawable(this.gameOver);
+                }
+                break;
+
         }
 
     }
 
     update(){
         super.update();
+        this.robbers.update(this.cops);
+        switch (this.robbers.getState()){
+            case 'caught':
+                this.gameOver.text = 'Game Over';
+                this.overlayLayer.addDrawable(this.gameOver);
+                break;
+            case 'win':
+                if (this.currentLevel < this.maximumLevel)
+                    this.nextLevel();
+                else{
+                    this.gameOver.text = 'You Win';
+                    this.overlayLayer.addDrawable(this.gameOver);
+                }
+                break;
+            case 'copsTurn':
+                for (let cop of this.cops){
+                    let a = [];
+                    a.push(this.robbers);
+                    cop.update(a);
+                }
+
+        }
+        /*
         this.robbers.getSpriteByIndex(0).update( this.grid);
         if (this.robbers.getSpriteByIndex(0).gameOver){
             this.gameOver.text = 'Game Over';
@@ -167,105 +192,28 @@ class CnbGame extends Game{
             }
             this.copsMove = false;
         }
+        */
 
     }
 
     nextLevel(){
-        this.grid.clear();
-        this.robbers.clear();
+        this.spriteLayer.clear();
+
         this.grid = new CnbGrid(GRID_NUMBER, GRID_NUMBER);
-
         this.currentLevel++;
+        this.buildMap();
 
-        this.robbers = new SpriteGroup();
-        this.robbers.add(new Robber(1,1,CNB_GRID_SIZE, this.map.getMap(this.currentLevel)));
+        this.robbers = new Robber(1, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'robber');
 
-        this.cops = new SpriteGroup();
-        this.cops.add(new Cop(7,1,CNB_GRID_SIZE, this.grid, this.map.getMap(this.currentLevel)));
+        this.cops = [];
+        this.cops.push(new Cop(7, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop'));
+        this.cops.push(new Cop(7, 7, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop'));
 
         this.spriteLayer.addDrawable(this.grid);
         this.spriteLayer.addDrawable(this.robbers);
-        this.buildMap();
+        this.spriteLayer.addDrawable(this.cops[0]);
+        this.spriteLayer.addDrawable(this.cops[1]);
 
-    }
-
-
-    Astar(startx, starty, destx, desty, pathlength, nextTileToMove){
-        let open = [];
-        let closed = [];
-        for(let i=0; i<this.grid.width; i++){
-            for(let j=0; j<this.grid.height; j++){
-                closed[i][j]=false;
-                this.grid.getTile(i,j).heuristicCost = 0;
-                this.grid.getTile(i,j).finalCost = 0;
-                this.grid.getTile(i,j).parent = null;
-            }
-        }
-
-        open.push(this.grid.getTile(startx, starty));
-
-        let current;
-        let temp;
-        while(true){
-            current = open.shift();
-            if(current == null){
-                break;
-            }
-            closed[current.x][current.y] = true;
-            if(current == this.grid.getTile(destx, desty)){
-                break;
-            }
-
-            let tempneighbour = this.robbers.getSpriteByIndex(0).getNeighbor(current.x, current.y, this.map.getMap(this.currentLevel), this.grid);
-            for(let i=0; i<tempneighbour.length; i++){
-                this.updateCost(current, tempneighbour[i], current.finalCost+1, open, closed, destx, desty);
-            }
-
-
-        }
-
-        let tempPathLength=0;
-        let pathCurrent;
-
-        if(closed[destx][desty]){
-            //Trace back the path
-            //System.out.println("Path: ");
-            pathCurrent = this.grid.getTile(destx, desty);
-            // System.out.print(current);
-            tempPathLength += 1;
-            while(pathCurrenturrent.parent!=null){
-                tempPathLength += 1;
-                if(pathCurrent.parent() === this.grid.getTile(startx, starty)){
-                    nextTileToMove = pathCurrent;
-                }
-                pathCurrent = pathCurrent.parent;
-            }
-
-        }
-
-        pathlength = tempPathLength;
-
-
-    }
-
-    computeHeuristicCost(x, y, destx, desty){
-        return Math.abs(destx - x) + Math.abs(desty - y);
-    }
-
-
-    updateCost(currentTile, tempTile, cost, open, closed, destx, desty){
-        if(closed[tempTile.x][tempTile.y]){
-            return;
-        }
-
-        tempTile.heuristicCost = this.computeHeuristicCost(tempTile.x, tempTile.y, destx, desty);
-        let temp_final_cost = tempTile.heuristicCost+cost;
-        let inOpen = open.includes(t);
-        if(!inOpen || temp_final_cost<tempTile.finalCost){
-            tempTile.finalCost = t_final_cost;
-            tempTile.parent = currentTile;
-            if(!inOpen)open.add(tempTile);
-        }
     }
 
 
