@@ -24,24 +24,23 @@ class Robber extends Character {
       this.getTreasure = true;
       this.grid.getTile(this.gridX, this.gridY).clear();
     }
+    else if (this.getTreasure === true && this.map[this.gridX][this.gridY] === 7) {
+      this.state = RobberState.WIN;
+    }
 
     let neighborArray = this.availableNext(opponent);
     let neighbor = [];
     for (let n of neighborArray) {
       neighbor.push(n.direction);
     }
-    if (neighbor.length === 0) {
+    if (neighbor.length === 0 && this.state !== RobberState.WIN) {
       this.state = RobberState.CAUGHT;
     }
     else if (neighbor.indexOf(this.direction) >= 0) {
       this.moveTo(this.direction);
       this.state = RobberState.COPSTURN;
     }
-    else if (this.getTreasure === true && this.gridX === 1 &&
-      this.gridY === 1) {
-      this.state = RobberState.WIN;
-    }
-    else {
+    else if (this.state !== RobberState.WIN) {
       this.state = RobberState.THINKING;
     }
   }
