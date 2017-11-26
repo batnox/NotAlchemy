@@ -82,10 +82,13 @@ function handleGameSelectionMessage(clientId, msg) {
 }
 
 function handleMultiplayerSnakeMessage(clientId, msg) {
+  // let client1;
   let client2;
   if (clientId === 0) {
+    // client1 = clients[0];
     client2 = clients[1];
   } else {
+    // client1 = clients[1];
     client2 = clients[0];
   }
   client2.socket.emit('message', msg);

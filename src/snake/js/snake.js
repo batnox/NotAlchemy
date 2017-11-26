@@ -78,8 +78,8 @@ class Snake {
         break;
     }
     this.snakeHead.updatePosition(
-      this.snakeHead.gridX + dx,
-      this.snakeHead.gridY + dy,
+      Number.parseInt(this.snakeHead.gridX) + dx,
+      Number.parseInt(this.snakeHead.gridY) + dy,
       this.direction
     );
   }
