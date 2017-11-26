@@ -1,10 +1,11 @@
 class Character extends Sprite{
-    constructor(gridX, gridY, size, map, image) {
+    constructor(gridX, gridY, size, map, image, grid) {
         super();
         this.gridX = gridX;
         this.gridY = gridY;
         this.size = size;
         this.map = map;
+        this.grid = grid;
 
         this.direction = null;
 
@@ -52,8 +53,12 @@ class Character extends Sprite{
                 if (op.bounds.contains((this.gridX - 1)*this.size, this.gridY*this.size))
                     overlap = true;
             }
-            if (!overlap)
-                neighbor.push(Direction.LEFT);
+            if (!overlap) {
+                neighbor.push({
+                  tile: this.grid.getTile(this.gridX - 1, this.gridY),
+                  direction: Direction.LEFT
+                });
+            }
         }
         //RIGHT
         if (this.gridX+1 < this.map[0].length && (this.map[this.gridX+1][this.gridY] === 0 || this.map[this.gridX+1][this.gridY] === 6 || this.map[this.gridX+1][this.gridY] === 4 || this.map[this.gridX+1][this.gridY] === 7)) {
@@ -62,8 +67,12 @@ class Character extends Sprite{
                 if (op.bounds.contains((this.gridX + 1)*this.size, this.gridY*this.size))
                     overlap = true;
             }
-            if (!overlap)
-                neighbor.push(Direction.RIGHT);
+            if (!overlap) {
+              neighbor.push({
+                tile: this.grid.getTile(this.gridX + 1, this.gridY),
+                direction: Direction.RIGHT
+              });
+            }
         }
         //UP
         if (this.gridY-1 > 0 && (this.map[this.gridX][this.gridY-1] === 0 || this.map[this.gridX][this.gridY-1] === 6 || this.map[this.gridX][this.gridY-1] === 3 || this.map[this.gridX][this.gridY-1] === 7)){
@@ -72,8 +81,12 @@ class Character extends Sprite{
                 if (op.bounds.contains(this.gridX*this.size, (this.gridY - 1)*this.size))
                     overlap = true;
             }
-            if (!overlap)
-                neighbor.push(Direction.UP);
+            if (!overlap) {
+              neighbor.push({
+                tile: this.grid.getTile(this.gridX, this.gridY - 1),
+                direction: Direction.UP
+              });
+            }
         }
         //DOWN
         if (this.gridY+1 < this.map.length && (this.map[this.gridX][this.gridY+1] === 0 || this.map[this.gridX][this.gridY+1] === 6 || this.map[this.gridX][this.gridY+1] === 5 || this.map[this.gridX][this.gridY+1] === 7)){
@@ -82,8 +95,12 @@ class Character extends Sprite{
                 if (op.bounds.contains(this.gridX*this.size, (this.gridY + 1)*this.size))
                     overlap = true;
             }
-            if (!overlap)
-                neighbor.push(Direction.DOWN);
+            if (!overlap) {
+              neighbor.push({
+                tile: this.grid.getTile(this.gridX, this.gridY + 1),
+                direction: Direction.DOWN
+              });
+            }
         }
 
         return neighbor;

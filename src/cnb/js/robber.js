@@ -25,7 +25,11 @@ class Robber extends Character {
             this.grid.getTile(this.gridX, this.gridY).clear();
         }
 
-        let neighbor = this.availableNext(opponent);
+        let neighborArray = this.availableNext(opponent);
+        let neighbor = [];
+        for (let n of neighborArray) {
+            neighbor.push(n.direction);
+        }
         if (neighbor.length === 0){
             this.state = RobberState.CAUGHT;
         }

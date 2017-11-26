@@ -6,20 +6,21 @@ class CnbGame extends Game {
     super();
     this.TICK_PER_SECOND = TICKS_PER_SECOND;
 
-    this.grid = new CnbGrid(GRID_NUMBER, GRID_NUMBER);
-
     this.map = new MapReader('cnb/json/cnb-maps.json');
     this.currentLevel = 0; // 0 and 1
     this.maximumLevel = this.map.getMapLength() - 1;
 
+    this.grid = new CnbGrid(GRID_NUMBER, GRID_NUMBER, this.map.getMap(this.currentLevel), this.robbers, this.cops);
     this.robbers = new Robber(1, 1, CNB_GRID_SIZE,
       this.map.getMap(this.currentLevel), 'robber', this.grid);
+    this.grid.robber = this.robbers;
 
     this.cops = [];
     this.cops.push(
-      new Cop(7, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop'));
+      new Cop(7, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop', this.grid));
     this.cops.push(
-      new Cop(7, 7, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop'));
+      new Cop(7, 7, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop', this.grid));
+    this.grid.cops = this.cops;
 
     addEventListener('keydown', event => this.onKeyDown(event));
     this.addContent('images', 'cnb/json/cnb-elements.json');
@@ -207,18 +208,22 @@ class CnbGame extends Game {
   nextLevel() {
     this.spriteLayer.clear();
 
-    this.grid = new CnbGrid(GRID_NUMBER, GRID_NUMBER);
+    this.gameOver.text = '';
+
     this.currentLevel++;
+    this.grid = new CnbGrid(GRID_NUMBER, GRID_NUMBER, this.map.getMap(this.currentLevel), this.robbers, this.cops);
     this.buildMap();
 
     this.robbers = new Robber(1, 1, CNB_GRID_SIZE,
       this.map.getMap(this.currentLevel), 'robber', this.grid);
+    this.grid.robber = this.robbers;
 
     this.cops = [];
     this.cops.push(
-      new Cop(7, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop'));
+      new Cop(7, 1, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop', this.grid));
     this.cops.push(
-      new Cop(7, 7, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop'));
+      new Cop(7, 7, CNB_GRID_SIZE, this.map.getMap(this.currentLevel), 'cop', this.grid));
+    this.grid.cops = this.cops;
 
     this.spriteLayer.addDrawable(this.grid);
     this.spriteLayer.addDrawable(this.robbers);
