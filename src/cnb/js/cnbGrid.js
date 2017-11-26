@@ -27,5 +27,7 @@ class CnbGrid extends Grid{
     removeTile(x, y) {
         this.getTile(x, y).setSprite(0, null);
     }
+
+
 }
 
