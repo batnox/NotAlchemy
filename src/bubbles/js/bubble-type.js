@@ -9,3 +9,4 @@ const BubbleType = Object.freeze({
   JACK: 'jack',
   CLOWN: 'clown'
 });
+

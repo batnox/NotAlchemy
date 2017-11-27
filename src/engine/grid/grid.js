@@ -34,7 +34,7 @@ class Grid {
     this.tiles.forEach(row => row.forEach(tile => tile.clear()));
   }
 
-  delete(index){
+  delete(index) {
     delete this.tiles[index];
   }
 

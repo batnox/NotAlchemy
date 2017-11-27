@@ -13,6 +13,7 @@ app.use('/gallery', express.static(__dirname + '/../gallery'));
 
 app.use('/alchemy', express.static(__dirname + '/../alchemy'));
 app.use('/bubbles', express.static(__dirname + '/../bubbles'));
+app.use('/cnb', express.static(__dirname + '/../cnb'));
 app.use('/snake', express.static(__dirname + '/../snake'));
 
 app.get('/', function(req, res) {

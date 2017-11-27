@@ -25,6 +25,11 @@ function startBubbleShooter() {
   game = new BubbleGame();
 }
 
+function startCnb() {
+    stopGame();
+    game = new CnbGame();
+}
+
 function stopGame() {
   if (game) {
     game.stop();
