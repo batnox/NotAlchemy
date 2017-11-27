@@ -193,7 +193,8 @@ class CnbGame extends Game {
 
     this.robbers.update(a);
     this.robberBuddy.update(a);
-    if (this.robbers.state === RobberState.DONE && this.robberBuddy.state === RobberState.DONE) {
+    if (this.robbers.state === RobberState.DONE &&
+      this.robberBuddy.state === RobberState.DONE) {
       this.robbers.state = RobberState.COPSTURN;
       this.robberBuddy.state = RobberState.COPSTURN;
     }
@@ -225,7 +226,16 @@ class CnbGame extends Game {
           a.push(this.cops[1]);
           cop.update(a);
         }
+        break;
+    }
 
+    if (this.robberBuddy.state === RobberState.WIN) {
+      if (this.currentLevel < this.maximumLevel)
+        this.nextLevel();
+      else {
+        this.gameOver.text = 'You Win';
+        this.overlayLayer.addDrawable(this.gameOver);
+      }
     }
   }
 
