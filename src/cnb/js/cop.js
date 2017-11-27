@@ -68,7 +68,11 @@ class Cop extends Character {
         break;
       }
 
-      let tiles = this.grid.getNeighbors(current.x, current.y, this.grid.cops);
+      let a = [];
+      a.push(this.grid.robberBuddy);
+      a.push(this.grid.cops[0]);
+      a.push(this.grid.cops[1]);
+      let tiles = this.grid.getNeighbors(current.x, current.y, a);
 
       for (let i = 0; i < tiles.length; i++) {
         this.updateCost(
