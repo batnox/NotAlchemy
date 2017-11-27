@@ -34,7 +34,7 @@ class Robber extends Character {
       this.getTreasure = true;
       this.grid.getTile(this.gridX, this.gridY).clear();
     }
-    else if (this.getTreasure === true && this.map[this.gridX][this.gridY] === 7) {
+    else if ((this.getTreasure === true || opponent[1].getTreasure === true) && this.map[this.gridX][this.gridY] === 7) {
       this.state = RobberState.WIN;
     }
 
