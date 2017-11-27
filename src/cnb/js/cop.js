@@ -30,8 +30,10 @@ class Cop extends Character {
 
         if (path) {
           let next = path.nextTile;
-          if (next.x !== this.grid.robber.gridX ||
-            next.y !== this.grid.robber.gridY) {
+          if ((next.x !== this.grid.robber.gridX ||
+            next.y !== this.grid.robber.gridY) &&
+            (next.x !== this.grid.robberBuddy.gridX ||
+              next.y !== this.grid.robberBuddy.gridY)) {
             this.setPosition(next.x, next.y);
           }
         }
