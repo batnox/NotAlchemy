@@ -22,6 +22,19 @@ class Cop extends Character {
           next.y !== this.grid.robber.gridY) {
           this.setPosition(next.x, next.y);
         }
+      } else {
+        path = this.Astar(
+          this.gridX, this.gridY,
+          this.grid.robberBuddy.gridX, this.grid.robberBuddy.gridY
+        );
+
+        if (path) {
+          let next = path.nextTile;
+          if (next.x !== this.grid.robber.gridX ||
+            next.y !== this.grid.robber.gridY) {
+            this.setPosition(next.x, next.y);
+          }
+        }
       }
       // If there is no path, wait for one to open
     }

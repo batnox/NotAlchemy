@@ -15,11 +15,19 @@ class CnbGame extends Game {
       this.map.getMap(this.currentLevel),
       this.robbers, this.cops
     );
+
     this.robbers = new Robber(
       1, 1, CNB_GRID_SIZE,
-      this.map.getMap(this.currentLevel), 'robber', this.grid
+      this.map.getMap(this.currentLevel), 'robber', this.grid,
+      RobberState.THINKING
+    );
+    this.robberBuddy = new Robber(
+      1, 7, CNB_GRID_SIZE,
+      this.map.getMap(this.currentLevel), 'robber-buddy', this.grid,
+      RobberState.WAITING
     );
     this.grid.robber = this.robbers;
+    this.grid.robberBuddy = this.robberBuddy;
 
     this.cops = [];
     this.cops.push(
@@ -44,6 +52,7 @@ class CnbGame extends Game {
 
     this.spriteLayer.addDrawable(this.grid);
     this.spriteLayer.addDrawable(this.robbers);
+    this.spriteLayer.addDrawable(this.robberBuddy);
     this.spriteLayer.addDrawable(this.cops[0]);
     this.spriteLayer.addDrawable(this.cops[1]);
 
@@ -54,12 +63,6 @@ class CnbGame extends Game {
     this.scoreDisplay1.fontColor = '#fff';
     this.scoreDisplay1.text = '1. Don\'t get caught  2. Get the treasure  3. Get out';
     this.overlayLayer.addDrawable(this.scoreDisplay1);
-
-    this.gameOver = new TextDisplay(GRID_SIZE * 2, GRID_SIZE * 2,
-      this.canvas.width);
-    this.gameOver.fontName = 'Courier';
-    this.gameOver.fontSize = 32;
-    this.gameOver.fontColor = '#fff';
 
     this.gameOver = new TextDisplay(GRID_SIZE * 2, GRID_SIZE * 2,
       this.canvas.width);
@@ -113,6 +116,7 @@ class CnbGame extends Game {
         .then(data => {
           imageManager.addImage('cop', data['images'].cop);
           imageManager.addImage('robber', data['images'].robber);
+          imageManager.addImage('robber-buddy', data['images'].robberbuddy);
           imageManager.addImage('wall-0', data['images'].walls[0]);
           imageManager.addImage('wall-1', data['images'].walls[1]);
           imageManager.addImage('wall-2', data['images'].walls[2]);
@@ -135,16 +139,36 @@ class CnbGame extends Game {
     'use strict';
     switch (event.keyCode) {
       case 37: // Left
-        this.robbers.direction = Direction.LEFT;
+        if (this.robbers.state === RobberState.THINKING) {
+          this.robbers.direction = Direction.LEFT;
+        }
+        if (this.robberBuddy.state === RobberState.THINKING) {
+          this.robberBuddy.direction = Direction.LEFT;
+        }
         break;
       case 38: // Up
-        this.robbers.direction = Direction.UP;
+        if (this.robbers.state === RobberState.THINKING) {
+          this.robbers.direction = Direction.UP;
+        }
+        if (this.robberBuddy.state === RobberState.THINKING) {
+          this.robberBuddy.direction = Direction.UP;
+        }
         break;
       case 39: // Right
-        this.robbers.direction = Direction.RIGHT;
+        if (this.robbers.state === RobberState.THINKING) {
+          this.robbers.direction = Direction.RIGHT;
+        }
+        if (this.robberBuddy.state === RobberState.THINKING) {
+          this.robberBuddy.direction = Direction.RIGHT;
+        }
         break;
       case 40: // Down
-        this.robbers.direction = Direction.DOWN;
+        if (this.robbers.state === RobberState.THINKING) {
+          this.robbers.direction = Direction.DOWN;
+        }
+        if (this.robberBuddy.state === RobberState.THINKING) {
+          this.robberBuddy.direction = Direction.DOWN;
+        }
         break;
       case 78:// N --> quick level check
         if (this.currentLevel < this.maximumLevel)
@@ -156,13 +180,30 @@ class CnbGame extends Game {
         break;
 
     }
-
   }
 
   update() {
     super.update();
-    this.robbers.update(this.cops);
+
+    let a = [];
+    a.push(this.robbers);
+    a.push(this.robberBuddy);
+    a.push(this.cops[0]);
+    a.push(this.cops[1]);
+
+    this.robbers.update(a);
+    this.robberBuddy.update(a);
+    if (this.robbers.state === RobberState.DONE && this.robberBuddy.state === RobberState.DONE) {
+      this.robbers.state = RobberState.COPSTURN;
+      this.robberBuddy.state = RobberState.COPSTURN;
+    }
+
     switch (this.robbers.getState()) {
+      case 'done':
+        if (this.robberBuddy.state === 'waiting') {
+          this.robberBuddy.state = RobberState.THINKING;
+        }
+        break;
       case 'caught':
         this.gameOver.text = 'Game Over';
         this.overlayLayer.addDrawable(this.gameOver);
@@ -177,8 +218,9 @@ class CnbGame extends Game {
         break;
       case 'copsTurn':
         for (let cop of this.cops) {
-          let a = [];
+          a = [];
           a.push(this.robbers);
+          a.push(this.robberBuddy);
           a.push(this.cops[0]);
           a.push(this.cops[1]);
           cop.update(a);
@@ -197,9 +239,18 @@ class CnbGame extends Game {
       this.map.getMap(this.currentLevel), this.robbers, this.cops);
     this.buildMap();
 
-    this.robbers = new Robber(1, 1, CNB_GRID_SIZE,
-      this.map.getMap(this.currentLevel), 'robber', this.grid);
+    this.robbers = new Robber(
+      1, 1, CNB_GRID_SIZE,
+      this.map.getMap(this.currentLevel), 'robber', this.grid,
+      RobberState.THINKING
+    );
+    this.robberBuddy = new Robber(
+      1, 7, CNB_GRID_SIZE,
+      this.map.getMap(this.currentLevel), 'robber-buddy', this.grid,
+      RobberState.WAITING
+    );
     this.grid.robber = this.robbers;
+    this.grid.robberBuddy = this.robberBuddy;
 
     this.cops = [];
     this.cops.push(
@@ -218,6 +269,7 @@ class CnbGame extends Game {
 
     this.spriteLayer.addDrawable(this.grid);
     this.spriteLayer.addDrawable(this.robbers);
+    this.spriteLayer.addDrawable(this.robberBuddy);
     this.spriteLayer.addDrawable(this.cops[0]);
     this.spriteLayer.addDrawable(this.cops[1]);
 

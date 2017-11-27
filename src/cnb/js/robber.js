@@ -1,21 +1,31 @@
 const RobberState = Object.freeze({
   CAUGHT: 'caught',
+  WAITING: 'waiting',
   THINKING: 'thinking',
+  DONE: 'done',
   COPSTURN: 'copsTurn',
   WIN: 'win'
-
 });
 
 class Robber extends Character {
-  constructor(gridX, gridY, size, map, image, grid) {
+  constructor(gridX, gridY, size, map, image, grid, startState) {
     super(gridX, gridY, size, map, image, grid);
     this.getTreasure = false;
-    this.state = RobberState.THINKING;
+    this.state = startState;
     this.grid = grid;
+    this.startState = startState;
   }
 
   getState() {
     return this.state;
+  }
+
+  draw(context) {
+    if (this.state === RobberState.THINKING) {
+      context.fillStyle = '#00ffff';
+      context.fillRect(this.image.bounds.x, this.image.bounds.y, this.size, this.size);
+    }
+    super.draw(context);
   }
 
   update(opponent) {
@@ -38,10 +48,11 @@ class Robber extends Character {
     }
     else if (neighbor.indexOf(this.direction) >= 0) {
       this.moveTo(this.direction);
-      this.state = RobberState.COPSTURN;
+      this.state = RobberState.DONE;
+      console.log(this.state);
     }
-    else if (this.state !== RobberState.WIN) {
-      this.state = RobberState.THINKING;
+    else if (this.state !== RobberState.DONE && this.state !== RobberState.WIN) {
+      this.state = this.startState;
     }
   }
 

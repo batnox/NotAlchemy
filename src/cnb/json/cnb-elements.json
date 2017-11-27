@@ -1,6 +1,7 @@
 {
   "cop": "cnb/assets/Cop.png",
   "robber": "cnb/assets/Robber.png",
+  "robberbuddy": "cnb/assets/RobberBuddy.png",
   "walls": [
     "cnb/assets/stonewall1.png",
     "cnb/assets/stonewall2.png",
