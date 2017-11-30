@@ -1,12 +1,37 @@
 body {
     color: #fff;
     background-color: #333;
+    padding: 20px;
+    font: 15pt Arial;
+}
+
+p {
+    line-height: 32px;
+}
+
+code {
+    padding: 2px;
+    border: solid white;
+    border-radius: 5px;
+    background-color: #777;
+}
+
+p code {
+    font-size: 14pt;
+}
+
+a {
+    color: #00ffff;
+}
+
+a:visited {
+    color: #0099dd;
 }
 
 #game-options button {
-    font: 15pt Arial;
-    width: 120px;
-    line-height: 30px;
+    font-size: 16pt;
+    width: 200px;
+    line-height: 40px;
     border: solid #000000;
     border-radius: 10px;
     color: #000000;
