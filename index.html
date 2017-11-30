@@ -2,11 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Alchemy</title>
+    <title>NotAlchemy Engine</title>
     <link rel="stylesheet" href="gallery/css/styles.css">
 </head>
 <body>
-<h2>Gallery</h2>
+<h1>The NotAlchemy Engine</h1>
+This engine was built for CSC 481: Game Engine Foundations. It currently has four implemented games to serve as
+examples. The supported
+features of the engine are detailed below.
+<h2>Features</h2>
+<ul>
+    <li>Sprites</li>
+    <ul>
+        <li>Images (supports png, jpg, and base64 encoding)</li>
+        <li>Spritestrips</li>
+    </ul>
+    <li>Sprite Grouping</li>
+    <li>Sprite Layers</li>
+    <li>Text Display</li>
+    <li>Bounding Boxes</li>
+    <ul>
+        <li>Rectangular</li>
+        <li>Circular</li>
+    </ul>
+    <li>Collision Detection</li>
+    <ul>
+        <li>Point</li>
+        <li>Overlap</li>
+    </ul>
+    <li>Tilemaps</li>
+    <li>Level Loading</li>
+    <li>Networking (socket.io)</li>
+    <li>A* Pathfinding</li>
+</ul>
+<h2>Getting Started</h2>
+<p>
+    The engine can be downloaded from <a href="https://github.ncsu.edu/nmcgove/NotAlchemy/releases">https://github.ncsu.edu/nmcgove/NotAlchemy/releases</a>.
+    Clone the repository and run <code>npm install</code> to install all dependencies. All engine files are stored under
+    <code>src/engine</code>.
+</p>
+
+<h3>The Game Class</h3>
+<p>
+    All games extend the <code>Game</code> class. In the constructor of the subclass, all sprites must be constructed
+    and
+    registered to the game with <code>this.spriteLayer.addDrawable(sprite)</code>. External content is added using
+    <code>this.addContent(shortName,
+        path)</code>,
+    allowing it to be accessed later. The constructor must end with <code>this.loadContent().then(this.start())</code>.
+    The game must also override the <code>loadContent</code> and <code>update</code> methods. Any images used must be
+    added
+    to the image
+    manager with <code>imageManager.addImage(shortName, data[contentName].path.in.json)</code> in
+    <code>loadContent</code>.
+    Anything
+    that needs to be updated every tick must be added to <code>update</code>.
+</p>
+
+<h3>The Sprite Class</h3>
+<p>
+    All sprites extend the <code>Sprite</code> class. In the constructor of the subclass the following must be set:
+    <code>this.bounds</code>, <code>this.image</code>,
+    and <code>this.image.bounds</code>. The sprite also has to be assigned a size with <code>this.bounds.setSize(w,
+    h)</code> and position with <code>this.bounds.setPosition(x, y)</code> before it will display.
+</p>
+
+<h2>Sample Games</h2>
 <div id="game-options">
     <button onclick="startAlchemy();">Alchemy</button>
     <button onclick="startSnake();">Snake</button>
