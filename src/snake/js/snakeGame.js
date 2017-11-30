@@ -338,24 +338,28 @@ class SnakeGame extends Game {
     'use strict';
     switch (event.keyCode) {
       case 37: // Left
+        event.preventDefault();
         this.worm1.direction = Direction.LEFT;
         if (this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
           socket.emit('message', 'LEFT');
         }
         break;
       case 38: // Up
+        event.preventDefault();
         this.worm1.direction = Direction.UP;
         if (this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
           socket.emit('message', 'UP');
         }
         break;
       case 39: // Right
+        event.preventDefault();
         this.worm1.direction = Direction.RIGHT;
         if (this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
           socket.emit('message', 'RIGHT');
         }
         break;
       case 40: // Down
+        event.preventDefault();
         this.worm1.direction = Direction.DOWN;
         if (this.gameType === SnakeGameType.ONLINE_MULTIPLAYER) {
           socket.emit('message', 'DOWN');

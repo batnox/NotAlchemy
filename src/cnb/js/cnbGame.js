@@ -139,6 +139,7 @@ class CnbGame extends Game {
     'use strict';
     switch (event.keyCode) {
       case 37: // Left
+        event.preventDefault();
         if (this.robbers.state === RobberState.THINKING) {
           this.robbers.direction = Direction.LEFT;
         }
@@ -147,6 +148,7 @@ class CnbGame extends Game {
         }
         break;
       case 38: // Up
+        event.preventDefault();
         if (this.robbers.state === RobberState.THINKING) {
           this.robbers.direction = Direction.UP;
         }
@@ -155,6 +157,7 @@ class CnbGame extends Game {
         }
         break;
       case 39: // Right
+        event.preventDefault();
         if (this.robbers.state === RobberState.THINKING) {
           this.robbers.direction = Direction.RIGHT;
         }
@@ -163,6 +166,7 @@ class CnbGame extends Game {
         }
         break;
       case 40: // Down
+        event.preventDefault();
         if (this.robbers.state === RobberState.THINKING) {
           this.robbers.direction = Direction.DOWN;
         }
