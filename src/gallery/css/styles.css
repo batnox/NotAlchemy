@@ -2,7 +2,7 @@ body {
     color: #fff;
     background-color: #333;
     padding: 20px;
-    font: 15pt Arial;
+    font: 12pt Arial;
 }
 
 p {
@@ -17,7 +17,7 @@ code {
 }
 
 p code {
-    font-size: 14pt;
+    font-size: 11pt;
 }
 
 a {
@@ -29,15 +29,15 @@ a:visited {
 }
 
 #game-options button {
-    font-size: 16pt;
-    width: 200px;
-    line-height: 40px;
+    font-size: 12pt;
+    width: 170px;
+    line-height: 32px;
     border: solid #000000;
     border-radius: 10px;
     color: #000000;
-    background: #CCCCCC;
+    background: #cccccc;
 }
 
 #game-options button:hover {
-    background: #FFFFFF;
+    background: #ffffff;
 }
